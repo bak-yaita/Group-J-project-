@@ -1,4 +1,4 @@
-#this file ontains reusable Django model mixins, such as TimestampMixin, which adds
+#this file contains reusable Django model mixins, such as TimestampMixin, which adds
 # automatic timestamp fields (created_at, updated_at) to models
 # for tracking creation and modification times. 
 from django.db import models
