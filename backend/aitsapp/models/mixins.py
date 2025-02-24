@@ -18,7 +18,7 @@ class SoftDeleteMixin(models.Model):
     """
     adds soft delete to models
     """
-    is_deleted =models.boolean(default=False,db_index=True) #db_index is created for performance(softdelete).
+    is_deleted = models.BooleanField(default=False, db_index=True) #db_index is created for performance(softdelete).
     deleted_at = models.DateTimeField(null=True,blank=True)
     
     class Meta:
