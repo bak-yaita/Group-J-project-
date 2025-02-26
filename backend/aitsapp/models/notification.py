@@ -1,4 +1,5 @@
 from django.db import models
+from . import User
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
