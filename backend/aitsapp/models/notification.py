@@ -1,5 +1,5 @@
 from django.db import models
-from models.users import User
+from .models.users import User 
 
 class Department(models.Model):
     name = models.CharField(max_length=255,unique=True)
