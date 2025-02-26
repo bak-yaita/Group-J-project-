@@ -1,0 +1,10 @@
+#Ignore python cache files 
+__pycache__/
+*.pyc
+
+#ignore sqlite db file
+db.sqlite3
+
+#all automatically generated files
+*.log
+*.swp
