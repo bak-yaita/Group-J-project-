@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions, filters
-from models import Issue
-from seriliazers import IssueSerializer
+from aitsapp.models import Issue
+from aitsapp.seriliazers import IssueSerializer
 
 class IssueViewSet(viewsets.ModelViewSet):
     """API endpoint for managing issues."""
