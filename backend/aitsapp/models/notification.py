@@ -1,6 +1,7 @@
 from django.db import models
 from aitsapp.models.users import User 
 
+
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
