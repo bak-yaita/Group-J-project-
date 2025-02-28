@@ -75,12 +75,25 @@ WSGI_APPLICATION = 'aitsproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+import os
+from dotenv import load_dotenv
+
+# Loads the .env file automatically
+load_dotenv()
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'aits_db'),  
+        'USER': os.getenv('DB_USER', 'group_user'),
+        'PASSWORD': os.getenv('DB_PASSWORD', '12345'),
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
+
+
 
 
 # Password validation
