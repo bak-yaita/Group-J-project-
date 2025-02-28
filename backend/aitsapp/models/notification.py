@@ -1,5 +1,6 @@
 from django.db import models
-from .users import User
+from aitsapp.models.users import User 
+
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User  # Using Django's default User model
+from django.conf import settings
+
 
 class Issue(models.Model):
     ISSUE_TYPES = [
@@ -14,17 +15,17 @@ class Issue(models.Model):
         ('resolved', 'Resolved'),
     ]
 
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name="issues")
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="issues")
     title = models.CharField(max_length=255)  # Title of the issue
     issue_type = models.CharField(max_length=20, choices=ISSUE_TYPES)
     description = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='submitted')
-    assigned_to = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="assigned_issues")
+    assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="assigned_issues")
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)  # Tracks last modification
+    updated_at = models.DateTimeField(auto_now=True)  
 
     class Meta:
-        ordering = ['-created_at']  # Orders issues by latest created
+        ordering = ['-created_at']
 
     def __str__(self):
-        return self.title  # Returns issue title 
+        return self.title  
