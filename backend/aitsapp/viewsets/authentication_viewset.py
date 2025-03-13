@@ -5,7 +5,6 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
 from seriliazers import UserSerializer
-#need to import other serializers from auth directory
 from aitsapp.models.auth.authserializers import RegisterSerializer, LoginSerializer
 
 User = get_user_model()
