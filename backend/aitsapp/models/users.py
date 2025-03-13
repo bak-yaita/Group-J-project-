@@ -11,7 +11,7 @@ class User(AbstractUser):
     role = models.CharField(max_length=20, choices=ROLES)
     student_number = models.CharField(max_length=20,unique=True,blank=True,null=True)
     lecturer_number = models.CharField(max_length=20,unique=True,blank=True, null=True)
-    groups = mgitodels.ManyToManyField(Group, related_name="custom_user_groups", blank=True)
+    groups = models.ManyToManyField(Group, related_name="custom_user_groups", blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name="custom_user_permissions", blank=True)
 
 
