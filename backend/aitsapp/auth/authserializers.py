@@ -22,7 +22,10 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        user = authenticate(username=data['username'], password=data['password'])
-        if not user:
-            raise AuthenticationFailed("Invalid username or password")
-        return user
+        user1 = authenticate(username=data['username'])
+        if not user1:
+            raise AuthenticationFailed("Incorrect username")
+        user2 = authenticate(password=data['password'])
+        if not user2:
+            raise AuthenticationFailed("Incorrect password")
+        return user1 and user2
