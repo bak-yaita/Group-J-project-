@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
 from seriliazers import UserSerializer
-from aitsapp.models.auth.authserializers import RegisterSerializer, LoginSerializer
+from aitsapp.auth.authserializers import RegisterSerializer, LoginSerializer
 
 User = get_user_model()
 
@@ -36,8 +36,7 @@ class AuthenticationViewSet(viewsets.ViewSet):
                     'username': user.username,
                     'email': user.email,
                     'role': user.role,
-                    'student_number': user.student_number,
-                    'lecturer_number': user.lecturer_number,
+                    'user_number': user.user_number,
                 }
             })
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
