@@ -36,8 +36,7 @@ class AuthenticationViewSet(viewsets.ViewSet):
                     'username': user.username,
                     'email': user.email,
                     'role': user.role,
-                    'student_number': user.student_number,
-                    'lecturer_number': user.lecturer_number,
+                    'user_number': user.user_number,
                 }
             })
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
