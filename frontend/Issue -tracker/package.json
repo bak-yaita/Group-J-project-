@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "cross-env PORT=3000 react-scripts start",
+    "start": "vite",
+
+
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
