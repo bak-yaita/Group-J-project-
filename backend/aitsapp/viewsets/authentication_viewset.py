@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
-from seriliazers import UserSerializer
+from seriliazers import UserSerializer  
 from aitsapp.auth.authserializers import RegisterSerializer, LoginSerializer
 
 User = get_user_model()
@@ -14,11 +14,11 @@ class AuthenticationViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['post'])
     def register(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = RegisterSerializer(data=request.data)  # Use RegisterSerializer
         if serializer.is_valid():
             user = serializer.save()
             login(request, user)  # Log the user in after registration
-            return Response({'message': 'User registered successfully', 'user': serializer.data}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'User registered successfully', 'user': UserSerializer(user).data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['post'])
@@ -35,8 +35,8 @@ class AuthenticationViewSet(viewsets.ViewSet):
                     'id': user.id,
                     'username': user.username,
                     'email': user.email,
-                    'role': user.role,
-                    'user_number': user.user_number,
+                    'role': getattr(user, 'role', None),  # Ensure 'role' exists
+                    'user_number': getattr(user, 'user_number', None),  # Ensure 'user_number' exists
                 }
             })
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
@@ -53,7 +53,7 @@ class AuthenticationViewSet(viewsets.ViewSet):
             'id': user.id,
             'username': user.username,
             'email': user.email,
-            'role': user.role,
-            'student_number': user.student_number,
-            'lecturer_number': user.lecturer_number,
+            'role': getattr(user, 'role', None),  # Ensure 'role' exists
+            'student_number': getattr(user, 'student_number', None),  # Ensure 'student_number' exists
+            'lecturer_number': getattr(user, 'lecturer_number', None),  # Ensure 'lecturer_number' exists
         })
