@@ -11,5 +11,5 @@ router.register(r'notifications', NotificationViewSet, basename='notification')
 router.register(r'auth', AuthenticationViewSet, basename='auth')
 
 urlpatterns = [
-    path('api/', include(router.urls)),  # Include all ViewSet routes
+    path('api/', include(router.urls)),  # Included all ViewSet routes
 ]
