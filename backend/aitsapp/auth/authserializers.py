@@ -20,7 +20,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         return f"{obj.first_name} {obj.last_name}"
 
     def validate(self, data):
-        role = data.get('role')
+        role = data.get('role','').lower()
+        data['role'] = role
         user_number = data.get('user_number')
         registration_number = data.get('registration_number')
         college = data.get('college')
@@ -50,7 +51,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        password = validated_data.pop('password')
         user = User.objects.create_user(**validated_data)
+        user.set_password(password)
+        user.save
         return user
 
 
@@ -64,12 +68,5 @@ class LoginSerializer(serializers.Serializer):
             raise AuthenticationFailed("Incorrect credentials")
         return user
     
-class UsernameCheckSerializer(serializers.Serializer):
-    username = serializers.CharField()
 
-    def validate(self,data):
-        username = data['username']
-        user = User.objects.filter(username=username).first()
-        if not user:
-            raise AuthenticationFailed("Incorrect username")
-        return{"message: Username exists"}
+    
