@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
-from seriliazers import UserSerializer
+from aitsapp.serializers import UserSerializer
 from aitsapp.auth.authserializers import RegisterSerializer, LoginSerializer
 
 User = get_user_model()
@@ -14,7 +14,7 @@ class AuthenticationViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['post'])
     def register(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             login(request, user)  # Log the user in after registration
@@ -54,6 +54,5 @@ class AuthenticationViewSet(viewsets.ViewSet):
             'username': user.username,
             'email': user.email,
             'role': user.role,
-            'student_number': user.student_number,
-            'lecturer_number': user.lecturer_number,
+            'user_number': user.user_number,
         })
