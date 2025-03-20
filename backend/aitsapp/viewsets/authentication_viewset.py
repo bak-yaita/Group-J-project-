@@ -14,11 +14,11 @@ class AuthenticationViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['post'])
     def register(self, request):
-        serializer = RegisterSerializer(data=request.data)
+        serializer = RegisterSerializer(data=request.data)  # Use RegisterSerializer
         if serializer.is_valid():
             user = serializer.save()
             login(request, user)  # Log the user in after registration
-            return Response({'message': 'User registered successfully', 'user': serializer.data}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'User registered successfully', 'user': UserSerializer(user).data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['post'])
@@ -35,8 +35,8 @@ class AuthenticationViewSet(viewsets.ViewSet):
                     'id': user.id,
                     'username': user.username,
                     'email': user.email,
-                    'role': user.role,
-                    'user_number': user.user_number,
+                    'role': getattr(user, 'role', None),  # Ensure 'role' exists
+                    'user_number': getattr(user, 'user_number', None),  # Ensure 'user_number' exists
                 }
             })
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
@@ -46,13 +46,23 @@ class AuthenticationViewSet(viewsets.ViewSet):
         logout(request)  # Django session logout
         return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
-    def me(self, request):
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated], url_path='details')
+    def details(self, request):
         user = request.user
+        full_name = f"{user.first_name} {user.last_name}"  # Concatenate first and last names to get full name
+        
+        # Assuming `college` is a field in the `User` model or a related model
+        college = getattr(user, 'college', None)  # Adjust this if `college` is related to the user differently
+        registration_number = getattr(user, 'registration_number', None)
         return Response({
             'id': user.id,
             'username': user.username,
             'email': user.email,
-            'role': user.role,
-            'user_number': user.user_number,
-        })
+            'full_name': full_name,  # Return the full name
+            'college': college,  # Return the user's college
+            'role': getattr(user, 'role', None),  # Ensure 'role' exists
+            'registration_number': registration_number, 
+            'user_number': getattr(user, 'user_number', None),  # Ensure 'user_number' exists
+            'lecturer_number': getattr(user, 'user_number', None),  # Ensure 'lecturer_number' exists
+    })
+

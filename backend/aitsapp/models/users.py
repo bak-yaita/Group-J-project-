@@ -29,3 +29,4 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.username} - {self.role} ({self.college})"
+    
