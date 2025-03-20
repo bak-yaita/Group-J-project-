@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 User = get_user_model()
 
 class RegisterViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()  # You can adjust this if you want to limit the queryset
+    queryset = User.objects.all()  
     serializer_class = RegisterSerializer
     http_method_names = ['post']  # Only allow POST for registration (create users)
 
