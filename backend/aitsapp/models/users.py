@@ -21,7 +21,7 @@ class User(AbstractUser):
     ]
     
     email = models.EmailField(unique=True)  
-    college = models.CharField(max_length=50, choices=COLLEGE_CHOICES) 
+    college = models.CharField(max_length=50, choices=COLLEGE_CHOICES, default='Unkwon') 
     role = models.CharField(max_length=20, choices=ROLES)
     user_number = models.CharField(max_length=20,unique=True,blank=True,null=True)
     groups = models.ManyToManyField(Group, related_name="custom_user_groups", blank=True)
