@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import AuthenticationFailed
+from django.contrib.auth import authenticate  
 
 User = get_user_model()
 
@@ -64,3 +65,4 @@ class LoginSerializer(serializers.Serializer):
         if not user:
             raise AuthenticationFailed("Incorrect credentials")
         return user
+from django.contrib.auth import authenticate  # Import the authenticate function
