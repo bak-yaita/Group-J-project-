@@ -46,14 +46,23 @@ class AuthenticationViewSet(viewsets.ViewSet):
         logout(request)  # Django session logout
         return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
-    def me(self, request):
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated], url_path='details')
+    def details(self, request):
         user = request.user
+        full_name = f"{user.first_name} {user.last_name}"  # Concatenate first and last names to get full name
+        
+        # Assuming `college` is a field in the `User` model or a related model
+        college = getattr(user, 'college', None)  # Adjust this if `college` is related to the user differently
+        registration_number = getattr(user, 'registration_number', None)
         return Response({
             'id': user.id,
             'username': user.username,
             'email': user.email,
+            'full_name': full_name,  # Return the full name
+            'college': college,  # Return the user's college
             'role': getattr(user, 'role', None),  # Ensure 'role' exists
-            'student_number': getattr(user, 'student_number', None),  # Ensure 'student_number' exists
-            'lecturer_number': getattr(user, 'lecturer_number', None),  # Ensure 'lecturer_number' exists
-        })
+            'registration_number': registration_number, 
+            'user_number': getattr(user, 'user_number', None),  # Ensure 'user_number' exists
+            'lecturer_number': getattr(user, 'user_number', None),  # Ensure 'lecturer_number' exists
+    })
+
