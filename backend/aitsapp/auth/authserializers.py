@@ -20,7 +20,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         return f"{obj.first_name} {obj.last_name}"
 
     def validate(self, data):
-        role = data.get('role')
+        role = data.get('role','').lower()
+        data['role'] = role
         user_number = data.get('user_number')
         registration_number = data.get('registration_number')
         college = data.get('college')

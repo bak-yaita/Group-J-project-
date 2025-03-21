@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from aitsapp.viewsets import UserViewSet, IssueViewSet, NotificationViewSet, AuthenticationViewSet
+from aitsapp.viewsets import UserViewSet, IssueViewSet, NotificationViewSet
+from aitsapp.viewsets.authentication_viewset import AuthenticationViewSet
    
 
 # Create a router and register ViewSets
