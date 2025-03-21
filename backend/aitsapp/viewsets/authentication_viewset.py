@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
 from aitsapp.serializers import UserSerializer
 from aitsapp.auth.authserializers import RegisterSerializer, LoginSerializer
+from aitsapp.auth.authserializers import UsernameCheckSerializer
 
 User = get_user_model()
 
@@ -65,4 +66,5 @@ class AuthenticationViewSet(viewsets.ViewSet):
             'user_number': getattr(user, 'user_number', None),  # Ensure 'user_number' exists
             'lecturer_number': getattr(user, 'lecturer_number', None),  # Corrected to 'lecturer_number'
     })
+
 

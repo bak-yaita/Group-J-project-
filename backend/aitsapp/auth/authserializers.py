@@ -64,12 +64,5 @@ class LoginSerializer(serializers.Serializer):
             raise AuthenticationFailed("Incorrect credentials")
         return user
     
-class UsernameCheckSerializer(serializers.Serializer):
-    username = serializers.CharField()
 
-    def validate(self,data):
-        username = data['username']
-        user = User.objects.filter(username=username).first()
-        if not user:
-            raise AuthenticationFailed("Incorrect username")
-        return{"message: Username exists"}
+    
