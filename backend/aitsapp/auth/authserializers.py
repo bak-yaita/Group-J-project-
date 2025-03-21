@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import AuthenticationFailed
+from django.contrib.auth import authenticate
 
 User = get_user_model()
 
@@ -64,3 +65,13 @@ class LoginSerializer(serializers.Serializer):
         if not user:
             raise AuthenticationFailed("Incorrect credentials")
         return user
+    
+class UsernameCheckSerializer(serializers.Serializer):
+    username = serializers.CharField()
+
+    def validate(self,data):
+        username = data['username']
+        user = User.objects.filter(username=username).first()
+        if not user:
+            raise AuthenticationFailed("Incorrect username")
+        return{"message: Username exists"}
