@@ -46,11 +46,14 @@ class AuthenticationViewSet(viewsets.ViewSet):
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    
+
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def logout(self, request):
-        logout(request)  # Django session logout
-        return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
+        if request.user and request.user.is_authenticated:
+            logout(request) 
+            return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
+        return Response({'error': 'No active session found.'}, status=status.HTTP_400_BAD_REQUEST)
+
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated], url_path='details')
     def details(self, request):
