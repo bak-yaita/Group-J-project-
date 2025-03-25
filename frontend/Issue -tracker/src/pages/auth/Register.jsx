@@ -4,7 +4,11 @@ import issue from '../../assets/issue.jpg'
 
 function Register() {
   const [formData, setFormData] = useState({
+    email: "",
     name: "",
+    role: "",
+    user_number: "",
+    college: "",
     password: "",
   });
 
@@ -16,7 +20,7 @@ function Register() {
     });
   };
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault();   //prevent the page fron reloading
     console.log(formData);
   };
   return (
@@ -25,7 +29,7 @@ function Register() {
         <div>
           <h2 className="text-left mb-4 font-bold text-blue-400">Register</h2>
           <form onSubmit={handleSubmit}>
-            <div class="mb-5">
+            <div class="mb-1">
               <label
                 for="email"
                 class="block mb-2 text-sm text-left font-medium text-gray-600"
@@ -43,7 +47,7 @@ function Register() {
                 required
               />
             </div>
-            <div class="mb-5">
+            <div class="mb-1">
               <label
                 for="username"
                 class="block mb-2 text-sm text-left font-medium text-gray-600"
@@ -54,6 +58,60 @@ function Register() {
                 type="username"
                 id="username"
                 name="username"
+                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                value={formData.email}
+                placeholder="Enter your first and last name"
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div class="mb-1">
+              <label
+                for="role"
+                class="block mb-2 text-sm text-left font-medium text-gray-600"
+              >
+                User Role
+              </label>
+              <input
+                type="role"
+                id="role"
+                name="role"
+                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                value={formData.email}
+                placeholder="Enter your role"
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div class="mb-1">
+              <label
+                for="usernumber"
+                class="block mb-2 text-sm text-left font-medium text-gray-600"
+              >
+                User Number
+              </label>
+              <input
+                type="usernumber"
+                id="usernumber"
+                name="usernumber"
+                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                value={formData.email}
+                placeholder="Enter your user number"
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div class="mb-1">
+              <label
+                for="college"
+                class="block mb-2 text-sm text-left font-medium text-gray-600"
+              >
+                College
+              </label>
+              <input
+                type="college"
+                id="college"
+                name="college"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.username}
                 placeholder="Enter your email"
@@ -75,6 +133,7 @@ function Register() {
                 password
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.pass}
+                placeholder="Enter your password"
                 onChange={handleChange}
                 required
               />
@@ -82,7 +141,7 @@ function Register() {
             
             <button
               type="submit"
-              class="text-white mt-4 mb-4 bg-green-700 w-79  hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm  p-2.5 text-center "
+              class="text-white mt-4 mb-4 bg-blue-950 w-79  hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-400 font-medium rounded-lg text-sm  p-2.5 text-center "
             >
               R E G I S T E R
             </button>
@@ -104,7 +163,7 @@ function Register() {
             </div>
           </div>
         </div>
-        <div className="hidden md:block bg-green-300 rounded-lg overflow-hidden">
+        <div className="hidden md:block bg-blue-300 rounded-lg overflow-hidden">
           <img src={issue} alt="issue" className="h-full w-80 grayscale-100" />
         </div>
       </div>

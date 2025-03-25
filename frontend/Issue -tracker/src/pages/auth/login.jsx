@@ -57,13 +57,14 @@ function Login() {
                 name="password"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.password}
+                placeholder="Enter your password"
                 onChange={handleChange}
                 required
               />
             </div>
             <button
               type="submit"
-              class="text-white mt-4 mb-4 bg-green-700 w-79  hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm  p-2.5 text-center "
+              class="text-white mt-4 mb-4 bg-blue-950 w-79  hover:bg-blue-950 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm  p-2.5 text-center "
             >
               L O G I N
             </button>
