@@ -4,8 +4,8 @@ from rest_framework.decorators import action
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
-from aitsapp.serializers.UserSerializer import UserSerializer
-from aitsapp.auth.authserializers import RegisterSerializer, LoginSerializer
+from ..serializers.UserSerializer import UserSerializer
+from ..auth.authserializers import RegisterSerializer, LoginSerializer
 
 
 User = get_user_model()

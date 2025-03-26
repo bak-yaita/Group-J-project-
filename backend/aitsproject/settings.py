@@ -123,6 +123,7 @@ REST_FRAMEWORK = {
     ],
 }
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 3600  
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True 
 
