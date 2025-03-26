@@ -71,6 +71,5 @@ class AuthenticationViewSet(viewsets.ViewSet):
             'college': college,  # Return the user's college
             'role': getattr(user, 'role', None),  # Ensure 'role' exists
             'registration_number': registration_number, 
-            'user_number': getattr(user, 'user_number', None),  # Ensure 'user_number' exists
-            'lecturer_number': getattr(user, 'lecturer_number', None),  # Corrected to 'lecturer_number'
+            'user_number': getattr(user, 'user_number', None)  # Ensure 'user_number' exists
     })

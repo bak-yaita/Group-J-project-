@@ -12,9 +12,9 @@ class IssueViewSet(viewsets.ModelViewSet):
     serializer_class = IssueSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'description']
+    search_fields = ['issue_type', 'description']
     ordering_fields = ['created_at']
-    filterset_fields = ['status', 'priority']  # Added fields for filtering by status and priority
+    filterset_fields = ['status']  # Added fields for filtering by status
 
     def get_queryset(self):
         """
