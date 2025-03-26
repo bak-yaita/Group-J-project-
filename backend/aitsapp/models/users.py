@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
+from django.core.validators import FileExtensionValidator
 
 class User(AbstractUser):
     ROLES = [
@@ -27,6 +28,13 @@ class User(AbstractUser):
     groups = models.ManyToManyField(Group, related_name="custom_user_groups", blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name="custom_user_permissions", blank=True)
     registration_number = models.CharField(max_length=20, unique=True, blank=True, null=True)
+
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/', 
+        validators=[FileExtensionValidator(['png', 'jpg', 'jpeg'])],
+        blank=True, 
+        null=True
+    )
 
     def __str__(self):
         return f"{self.username} - {self.role} ({self.college})"
