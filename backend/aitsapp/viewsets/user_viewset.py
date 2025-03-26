@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from aitsapp.models.users import User
-from aitsapp.serializers import UserSerializer
+from aitsapp.serializers.UserSerializer import UserSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

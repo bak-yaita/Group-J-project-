@@ -1,5 +1,7 @@
 from django.db import models
-from aitsapp.models.users import User 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Notification(models.Model):

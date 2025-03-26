@@ -1,8 +1,8 @@
 from rest_framework import viewsets, status, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from aitsapp.models.issues import Issue
-from aitsapp.serializers import IssueSerializer
+from ..models.issues import Issue
+from ..serializers import IssueSerializer
 
 class IssueViewSet(viewsets.ModelViewSet):
     """
