@@ -1,0 +1,1 @@
+default_app_config = 'aitsapp.notifications.NotificationsConfig' #Ensures Django loads signals automatically.
