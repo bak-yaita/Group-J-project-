@@ -31,15 +31,15 @@ function Login() {
                 for="email"
                 class="block mb-2 text-sm text-left font-medium text-gray-600"
               >
-                User Email
+                User Name
               </label>
               <input
-                type="email"
-                id="email"
-                name="email"
+                type="name"
+                id="name"
+                name="name"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                value={formData.email}
-                placeholder="Enter your email"
+                value={formData.name}
+                placeholder="Enter your User Name"
                 onChange={handleChange}
                 required
               />

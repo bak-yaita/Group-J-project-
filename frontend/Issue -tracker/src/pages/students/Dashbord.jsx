@@ -12,11 +12,11 @@ const StudentDashboard = () => {
                 number= "12"
                 />
                 <Cards
-                title="Total Issues"
+                title="Pending Issues"
                 number= "12"
                 />
                 <Cards
-                title="Total Issues"
+                title="Resolved Issues"
                 number= "12"
                 />
        
