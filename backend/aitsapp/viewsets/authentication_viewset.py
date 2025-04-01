@@ -4,12 +4,17 @@ from rest_framework.decorators import action
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
+<<<<<<< HEAD
 from aitsapp.serializers import UserSerializer
 from aitsapp.auth.authserializers import RegisterSerializer, LoginSerializer
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
+=======
+from ..serializers.UserSerializer import UserSerializer
+from ..auth.authserializers import RegisterSerializer, LoginSerializer
+>>>>>>> ff8865ff2ca955c73f9399bf10421eccb22c6ffb
 
 
 
@@ -17,6 +22,7 @@ User = get_user_model()
 
 class AuthenticationViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
+
 
     @action(detail=False, methods=['post'])
     def register(self, request):

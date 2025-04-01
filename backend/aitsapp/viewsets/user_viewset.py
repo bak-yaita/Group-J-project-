@@ -1,6 +1,8 @@
 from rest_framework import viewsets
-from aitsapp.models.users import User
-from aitsapp.serializers import UserSerializer
+from django.contrib.auth import get_user_model
+from ..serializers.UserSerializer import UserSerializer
+
+User = get_user_model()
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

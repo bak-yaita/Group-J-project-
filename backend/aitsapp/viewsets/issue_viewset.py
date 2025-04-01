@@ -1,8 +1,9 @@
 from rest_framework import viewsets, status, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from aitsapp.models.issues import Issue
-from aitsapp.serializers import IssueSerializer
+from ..models.issues import Issue
+from ..serializers import IssueSerializer
+from rest_framework.decorators import action
 
 class IssueViewSet(viewsets.ModelViewSet):
     """
@@ -12,9 +13,9 @@ class IssueViewSet(viewsets.ModelViewSet):
     serializer_class = IssueSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'description']
+    search_fields = ['issue_type', 'description']
     ordering_fields = ['created_at']
-    filterset_fields = ['status', 'priority']  # Added fields for filtering by status and priority
+    filterset_fields = ['status']  # Added fields for filtering by status
 
     def get_queryset(self):
         """
@@ -49,3 +50,44 @@ class IssueViewSet(viewsets.ModelViewSet):
             return Response({"message": "Issue submitted successfully!"}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'])
+    def statistics(self, request):
+        """
+        Fetch key metrics: total, pending, and resolved issues.
+        """
+        user = request.user
+
+        # Check if the user belongs to a college
+        if not hasattr(user, 'college'):
+            return Response({"error": "You must belong to a college to view statistics."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Admins see all statistics
+        if user.is_staff:
+            total_issues = Issue.objects.count()
+            pending_issues = Issue.objects.filter(status='submitted').count()
+            resolved_issues = Issue.objects.filter(status='resolved').count()
+
+        # Students see only their own issue statistics
+        elif user.role == 'Student':
+            total_issues = Issue.objects.filter(student=user).count()
+            pending_issues = Issue.objects.filter(student=user, status='submitted').count()
+            resolved_issues = Issue.objects.filter(student=user, status='resolved').count()
+
+        # Lecturers see statistics for issues assigned to them only
+        elif user.role == 'Lecturer':
+            total_issues = Issue.objects.filter(assigned_to=user).count()
+            pending_issues = Issue.objects.filter(assigned_to=user, status='assigned').count()  # Pending for lecturers should be 'assigned'
+            resolved_issues = Issue.objects.filter(assigned_to=user, status='resolved').count()
+
+        # Registrars see statistics for the entire college
+        elif user.role == 'Registrar':
+            total_issues = Issue.objects.filter(student__college=user.college).count()
+            pending_issues = Issue.objects.filter(student__college=user.college, status='submitted').count()
+            resolved_issues = Issue.objects.filter(student__college=user.college, status='resolved').count()
+
+        return Response({
+            "total": total_issues,
+            "pending": pending_issues,
+            "resolved": resolved_issues
+        })

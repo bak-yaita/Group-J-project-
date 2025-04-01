@@ -54,19 +54,21 @@ class RegisterSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password')
         user = User.objects.create_user(**validated_data)
         user.set_password(password)
-        user.save
+        user.save()
         return user
-
-
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        user = authenticate(username=data['username'],password=data['password'])
+        user = authenticate(username=data['username'], password=data['password'])
         if not user:
             raise AuthenticationFailed("Incorrect credentials")
-        return user
+        
+        # Instead of returning user, return the validated data
+        data["user"] = user  
+        return data  
+
     
 
     
