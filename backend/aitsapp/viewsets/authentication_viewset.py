@@ -8,10 +8,12 @@ from ..serializers.UserSerializer import UserSerializer
 from ..auth.authserializers import RegisterSerializer, LoginSerializer
 
 
+
 User = get_user_model()
 
 class AuthenticationViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
+
 
     @action(detail=False, methods=['post'])
     def register(self, request):

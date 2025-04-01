@@ -54,7 +54,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password')
         user = User.objects.create_user(**validated_data)
         user.set_password(password)
-        user.save
+        user.save()
         return user
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
