@@ -47,8 +47,28 @@ class User(AbstractUser):
             ("assign_issues", "Can assign issues"),
             ("manage_users", "Can manage users"),
             ("configure_settings", "Can configure settings"), 
-
         ]
+    
+    def save(self, *args, **kwargs):
+        """"Assign permissions based on roles when user is created"""
+        super().save(*args,**kwargs)
+
+        group, created = Group.objects.get_or_create(name=self.role)
+        self.groups.add(group)
+
+        #Assign specific permissions based on roles
+        if self.role == 'student':
+            perms =["submit_issue", "views_own_issues"]
+        elif self.role == 'lecturer':
+            perms = ["view_assigned_issues", "update_issue_status"]
+        elif self.role == 'registrar':
+            perms = ["view_all_issues", "assign_issues", "update_issue_status"]
+        elif self.role == 'admin':
+            perms = ["manage_users", "configure_settings"]
+
+        for perm_codename in perms:
+            permissions = Permission.objects.get(codename=perm_codename)
+            self.user_permissions.add(permissions)
 
     def __str__(self):
         return f"{self.username} - {self.role} ({self.college})"
