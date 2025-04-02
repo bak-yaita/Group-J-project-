@@ -35,15 +35,15 @@ class User(AbstractUser):
     ]
     
     COLLEGE_CHOICES = [
-        ('COCIS', 'COCIS'),
-        ('CEDAT', 'CEDAT'),
-        ('CONAS', 'CONAS'),
-        ('CEES', 'CEES'),
-        ('CHUSS', 'CHUSS'),
-        ('COBAMS', 'COBAMS'),
-        ('COVAB', 'COVAB'),
-        ('SOL', 'SOL'),
-        ('CAES', 'CAES'),
+        ('COCIS', 'Computing & Information Sciences'),
+        ('CEDAT', 'Engineering, Design, Art & Technology'),
+        ('CONAS', 'Natural Sciences'),
+        ('CEES', 'Education & External Studies'),
+        ('CHUSS', 'Humanities & Social Sciences'),
+        ('COBAMS', 'Business & Management'),
+        ('COVAB', 'Veterinary Medicine'),
+        ('SOL', 'School of Law'),
+        ('CAES', 'Agriculture & Environmental Sciences'),
     ]
     
     email = models.EmailField(unique=True)  
