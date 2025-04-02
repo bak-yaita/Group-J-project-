@@ -1,6 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./index.css";
 import App from "./App.jsx";
 import Dashbord from "./pages/students/Dashbord.jsx";
@@ -9,7 +11,7 @@ import Register from "./pages/auth/Register.jsx";
 import Issues from "./pages/students/issues.jsx";
 import Profsettings from "./pages/auth/Profsettings.jsx";
 import Selectrole from "./pages/auth/Selectrole.jsx";
-
+import notifications from "./pages/notifications.jsx"
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
