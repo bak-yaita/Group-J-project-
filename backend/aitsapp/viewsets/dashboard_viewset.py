@@ -20,4 +20,7 @@ class DashboardViewSet(viewsets.ViewSet):
         return [permissions.IsAuthenticated()]
     
     @action(detail=False,methods=['get'])
-    def stude
+    def student_dashboard(self, request):
+        issues = Issue.objects.filter(student__college=request.user.college)
+        serializer = IssueSerializer(issues, many=True)
+        return Response(serializer.data)
