@@ -14,6 +14,14 @@ class Issue(models.Model):
         ('resolved', 'Resolved'),
     ]
 
+    class Meta:
+        permissions = [
+            ("can_submit_issue", "Can submit an issue"),
+            ("can_assign_issue", "Can assign an issue"),
+            ("can_resolve_issue", "Can resolve an issue"),
+            ("can_manage_users", "Can manage users"),
+        ]
+
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="issues")
     user_number = models.CharField(max_length=20, default="0000000000")  
     registration_number = models.CharField(max_length=20, default="Not Assigned")  
