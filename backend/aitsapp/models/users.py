@@ -51,27 +51,30 @@ class User(AbstractUser):
     
     def save(self, *args, **kwargs):
         """"Assign permissions based on roles when user is created"""
+        is_new = self.pk is None  # Check if this is a new user
         super().save(*args,**kwargs)
 
-        group, created = Group.objects.get_or_create(name=self.role)
-        self.groups.add(group)
+        if is_new: 
+            group, created = Group.objects.get_or_create(name=self.role)
+            self.groups.add(group)
 
-        #Assign specific permissions based on roles
-        if self.role == 'student':
-            perms =["submit_issue", "views_own_issues"]
-        elif self.role == 'lecturer':
-            perms = ["view_assigned_issues", "update_issue_status"]
-        elif self.role == 'registrar':
-            perms = ["view_all_issues", "assign_issues", "update_issue_status"]
-        elif self.role == 'admin':
-            perms = ["manage_users", "configure_settings"]
+            #Assign specific permissions based on roles
+            if self.role == 'student':
+                perms =["submit_issue", "views_own_issues"]
+            elif self.role == 'lecturer':
+                perms = ["view_assigned_issues", "update_issue_status"]
+            elif self.role == 'registrar':
+                perms = ["view_all_issues", "assign_issues", "update_issue_status"]
+            elif self.role == 'admin':
+                perms = ["manage_users", "configure_settings"]
 
-        group.permissions.clear()
-        for perm_codename in perms:
-            permissions = Permission.objects.get(codename=perm_codename)
-            self.user_permissions.add(permissions)
-
-        self.groups.add(group)
+            group.permissions.clear()
+            for perm_codename in perms:
+                try:
+                    permissions = Permission.objects.get(codename=perm_codename)
+                    self.user_permissions.add(permissions)
+                except Permission.DoesNotExist:
+                    print(f"Permission {perm_codename} does not exist")
 
     def __str__(self):
         return f"{self.username} - {self.role} ({self.college})"

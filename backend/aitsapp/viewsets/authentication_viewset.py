@@ -12,6 +12,16 @@ User = get_user_model()
 
 class AuthenticationViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
+    
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action == 'logout' or self.action == 'details':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
 
 
     @action(detail=False, methods=['post'])
