@@ -66,9 +66,12 @@ class User(AbstractUser):
         elif self.role == 'admin':
             perms = ["manage_users", "configure_settings"]
 
+        group.permissions.clear()
         for perm_codename in perms:
             permissions = Permission.objects.get(codename=perm_codename)
             self.user_permissions.add(permissions)
+
+        self.groups.add(group)
 
     def __str__(self):
         return f"{self.username} - {self.role} ({self.college})"
