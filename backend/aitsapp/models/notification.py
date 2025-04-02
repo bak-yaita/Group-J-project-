@@ -8,6 +8,9 @@ class Notification(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     is_read = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return f"Notification for {self.user.username} - {self.message[:50]}"
