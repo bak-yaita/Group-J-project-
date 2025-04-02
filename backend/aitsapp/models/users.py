@@ -37,6 +37,19 @@ class User(AbstractUser):
         null=True
     )
 
+    class Meta:
+        permissions = [
+            ("submit_issue", "Can submit issues"),
+            ("view_own_issues", "Can view own issues"),
+             ("view_assigned_issues", "Can view assigned issues"),
+            ("update_issue_status", "Can update issue status"),
+             ("view_all_issues", "Can view all issues"),
+            ("assign_issues", "Can assign issues"),
+            ("manage_users", "Can manage users"),
+            ("configure_settings", "Can configure settings"), 
+
+        ]
+
     def __str__(self):
         return f"{self.username} - {self.role} ({self.college})"
     
