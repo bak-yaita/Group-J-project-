@@ -76,8 +76,9 @@ class User(AbstractUser):
     
     def save(self, *args, **kwargs):
         """"Assign permissions based on roles when user is created"""
+        perms = getattr(self, 'perms', [])
         is_new = self.pk is None  # Check if this is a new user
-        super().save(*args,**kwargs)
+        
 
         if is_new: 
             group, created = Group.objects.get_or_create(name=self.role)
@@ -100,7 +101,8 @@ class User(AbstractUser):
                     self.user_permissions.add(permissions)
                 except Permission.DoesNotExist:
                     print(f"Permission {perm_codename} does not exist")
-
+                    
+            super().save(*args,**kwargs)
     def __str__(self):
         return f"{self.username} - {self.role} ({self.college})"
     

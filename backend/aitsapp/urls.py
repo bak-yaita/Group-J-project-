@@ -13,7 +13,7 @@ router.register(r'auth', AuthenticationViewSet, basename='auth')
 router.register(r'profile', UserProfileViewSet, basename='profile')
 router.register(r'dashboard', DashboardViewSet, basename='dashboard')
 
-
+ 
 
 urlpatterns = [
     path('api/', include(router.urls)),  # Included all ViewSet routes
