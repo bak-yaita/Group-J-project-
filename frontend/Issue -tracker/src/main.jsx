@@ -9,6 +9,8 @@ import Register from "./pages/auth/Register.jsx";
 import Issues from "./pages/students/issues.jsx";
 import Profsettings from "./pages/auth/Profsettings.jsx";
 import Selectrole from "./pages/auth/Selectrole.jsx";
+import Submission from "./pages/students/Submission.jsx";
+import Dashboardd from "./pages/registrar/Dashboardd.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -20,6 +22,8 @@ createRoot(document.getElementById("root")).render(
         <Route path="issues/" element={<Issues />} />
         <Route path="profsettings/" element={<Profsettings />} />
         <Route path="selectrole/" element={<Selectrole />} />
+        <Route path="submission/" element={<Submission />} />
+        <Route path="registrardashboard/" element={<Dashboardd />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

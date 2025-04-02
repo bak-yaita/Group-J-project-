@@ -38,7 +38,7 @@ function Register() {
                 User Email
               </label>
               <input
-                type="email"
+                type="text"
                 id="email"
                 name="email"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -56,7 +56,7 @@ function Register() {
                 User Name
               </label>
               <input
-                type="username"
+                type="text"
                 id="username"
                 name="username"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -74,7 +74,7 @@ function Register() {
                 User Role
               </label>
               <input
-                type="role"
+                type="text"
                 id="role"
                 name="role"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -92,7 +92,7 @@ function Register() {
                 User Number
               </label>
               <input
-                type="usernumber"
+                type="text"
                 id="usernumber"
                 name="usernumber"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -110,7 +110,7 @@ function Register() {
                 Registration Number
               </label>
               <input
-                type="registrationnumber"
+                type="text"
                 id="registrationnumber"
                 name="registrationnumber"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -128,7 +128,7 @@ function Register() {
                 College
               </label>
               <input
-                type="college"
+                type="text"
                 id="college"
                 name="college"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -146,7 +146,7 @@ function Register() {
                 Password
               </label>
               <input
-                type="password"
+                type="text"
                 id="password"
                 name="password"
                 password
