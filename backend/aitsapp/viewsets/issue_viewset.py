@@ -6,6 +6,7 @@ from ..models.issues import Issue
 from ..serializers import IssueSerializer
 from rest_framework.decorators import action
 from aitsapp.models import Notification
+from aitsapp.permissions import IsAdmin,IsLecturer, IsRegistrar,IsOwnerOrStaff,IsStudent
 
 class IssueViewSet(viewsets.ModelViewSet):
     """
@@ -13,7 +14,16 @@ class IssueViewSet(viewsets.ModelViewSet):
     """
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes_by_action = {
+        'create': [IsAuthenticated, IsStudent],  
+        'list': [IsAuthenticated],  
+        'retrieve': [IsAuthenticated, IsOwnerOrStaff], 
+        'update': [IsAuthenticated, IsOwnerOrStaff], 
+        'partial_update': [IsAuthenticated, IsOwnerOrStaff],  
+        'destroy': [IsAuthenticated, IsAdmin],  
+        'assign': [IsAuthenticated, IsRegistrar],  
+        'resolve': [IsAuthenticated, IsLecturer|IsRegistrar],  
+    }
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['issue_type', 'description','full_name', 'registration_number', 'subject', 'course_code']
     ordering_fields = ['created_at', 'updated_at', 'status']
@@ -26,26 +36,26 @@ class IssueViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        Restrict queryset based on user role and college.
+        Filter queryset based on user role.
         """
         user = self.request.user
-
-        if user.is_staff:  # Admins can view all issues
-            return Issue.objects.all()
         
-        if hasattr(user, 'college'):
-            if user.role == 'Registrar':
-                return Issue.objects.filter(student__college=user.college)
-            elif user.role == 'Lecturer':
-                return Issue.objects.filter(
-                    student__college=user.college
-                ).filter(
-                    assigned_to=user
-                )
-            elif user.role == 'Student':
-                return Issue.objects.filter(student=user)
-
-        return Issue.objects.none()  # Default: No access if no college is assigned
+        if not user.is_authenticated:
+            return Issue.objects.none()
+            
+        if user.is_staff or user.role == 'admin':
+            return Issue.objects.all()
+            
+        if user.role == 'registrar':
+            return Issue.objects.filter(student__college=user.college)
+            
+        if user.role == 'lecturer':
+            return Issue.objects.filter(assigned_to=user)
+            
+        if user.role == 'student':
+            return Issue.objects.filter(student=user)
+            
+        return Issue.objects.none()
 
     def create(self, request, *args, **kwargs):
         """
