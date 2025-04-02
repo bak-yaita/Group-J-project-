@@ -24,3 +24,21 @@ class DashboardViewSet(viewsets.ViewSet):
         issues = Issue.objects.filter(student__college=request.user.college)
         serializer = IssueSerializer(issues, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False,methods=['get'])
+    def lecturer_dashboard(self, request):
+        issues = Issue.objects.filter(student__college=request.user.college)
+        serializer = IssueSerializer(issues, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False,methods=['get'])
+    def registrar_dashboard(self, request):
+        issues = Issue.objects.filter(student__college=request.user.college)
+        serializer = IssueSerializer(issues, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False,methods=['get'])
+    def admin_dashboard(self, request):
+        issues = Issue.objects.filter(student__college=request.user.college)
+        serializer = IssueSerializer(issues, many=True)
+        return Response(serializer.data)
