@@ -4,9 +4,8 @@ from rest_framework.decorators import action
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
-from ..serializers.UserSerializer import UserSerializer
-from ..auth.authserializers import RegisterSerializer, LoginSerializer
-
+from aitsapp.serializers import UserSerializer
+from aitsapp.auth.authserializers import RegisterSerializer, LoginSerializer
 
 
 User = get_user_model()
@@ -61,8 +60,6 @@ class AuthenticationViewSet(viewsets.ViewSet):
     def details(self, request):
         user = request.user
         full_name = f"{user.first_name} {user.last_name}"  # Concatenate first and last names to get full name
-        
-        # Assuming `college` is a field in the `User` model or a related model
         college = getattr(user, 'college', None)  # Adjust this if `college` is related to the user differently
         registration_number = getattr(user, 'registration_number', None)
         return Response({
@@ -73,5 +70,8 @@ class AuthenticationViewSet(viewsets.ViewSet):
             'college': college,  # Return the user's college
             'role': getattr(user, 'role', None),  # Ensure 'role' exists
             'registration_number': registration_number, 
-            'user_number': getattr(user, 'user_number', None)  # Ensure 'user_number' exists
+            'user_number': getattr(user, 'user_number', None),  # Ensure 'user_number' exists
+            'lecturer_number': getattr(user, 'lecturer_number', None),  # Corrected to 'lecturer_number'
     })
+
+    
