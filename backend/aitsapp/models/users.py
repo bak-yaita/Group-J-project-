@@ -7,6 +7,7 @@ class User(AbstractUser):
         ('student', 'Student'),
         ('lecturer', 'Lecturer'),
         ('registrar', 'Academic Registrar'),
+        ('admin', 'Administrator'),
     ]
     
     COLLEGE_CHOICES = [
