@@ -1,27 +1,23 @@
-from rest_framework import viewsets 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets, permissions
+from rest_framework.decorators import action 
 from rest_framework.response import Response
-from aitsapp.permissions import IsStudent, IsRegistrar, IsLecturer
+from aitsapp.models.issues import Issue
+from aitsapp.serializers import IssueSerializer
+from aitsapp.permissions import IsStudent, IsLecturer, IsRegistrar, IsAdmin
 
-class StudentViewset(viewsets.ViewSet):
-    permission_classes= [IsAuthenticated,IsStudent]
+class DashboardViewSet(viewsets.ViewSet):
+    """Viewsets for fetching role-based dashboards"""
 
-    def list(self,request):
-        username = request.user.username
-        return Response({"message": f"welcome, {username}"})
+    def get_permissions(self):
+        if self.action == "student_dashboard":
+            return [permissions.IsAuthenticated(), IsStudent()]
+        elif self.action == "lecturer_dashboard":
+            return [permissions.IsAuthenticated(), IsLecturer()]
+        elif self.action == "registrar_dashboard":
+            return [permissions.IsAuthenticated(), IsRegistrar()]
+        elif self.action == "admin_dashboard":
+            return [permissions.IsAuthenticated(), IsAdmin()]
+        return [permissions.IsAuthenticated()]
     
-class LecturerViewset(viewsets.ViewSet):
-    permission_classes =[IsAuthenticated,IsLecturer]
-
-    def list(self,request):
-        username = request.user.username
-        return Response({"message": f"Welcome, {username}"})
-    
-class RegistrarViewset(viewsets.ViewSet):
-    permission_classes =[IsAuthenticated,IsRegistrar]
-
-    def list(self,request):
-        username = request.user.username
-        return Response({"message": f"Welcome, {username}"})
-    
-
+    @action(detail=False,methods=['get'])
+    def stude
