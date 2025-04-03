@@ -1,10 +1,12 @@
 import React from 'react'
 import Sidebar from './components/Sidebar'
 import StudentDashboard from './pages/students/Dashbord'
-import { fetchUserData } from './API';
+import { useState, useEffect } from 'react';
 
 
 const App = () => {
+
+   const fetchUserData = async () => {   
   return (
     <div>
      
@@ -25,6 +27,7 @@ const App = () => {
 
     </div>
   )
+}
 }
 
 export default App

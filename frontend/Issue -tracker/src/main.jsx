@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./index.css";
@@ -16,12 +16,13 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="dashbord/" element={<Dashbord />} />
-        <Route path="login/" element={<Login />} />
-        <Route path="register/" element={<Register />} />
-        <Route path="issues/" element={<Issues />} />
-        <Route path="profsettings/" element={<Profsettings />} />
-        <Route path="selectrole/" element={<Selectrole />} />
+        <Route path="/" element={<Dashbord />} /> {/* Default route */}
+        <Route path="dashbord" element={<Dashbord />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="issues" element={<Issues />} />
+        <Route path="profsettings" element={<Profsettings />} />
+        <Route path="selectrole" element={<Selectrole />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
