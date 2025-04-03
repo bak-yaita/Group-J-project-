@@ -1,193 +1,158 @@
-import { Link } from "react-router"
 import React, { useState } from "react";
-import issue from '../../assets/issue.jpg'
+import { Eye, EyeOff } from "lucide-react";
+import api from "../../API"; // Import the axios instance
 
-function Register() {
+export default function RegisterForm() {
   const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    username: "",
     email: "",
-    name: "",
-    role: "",
-    user_number: "",
-    college: "",
     password: "",
-    registrationnumber:"",
+    role: "",
+    college: "",
+    user_number: "",
+    registration_number: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();   //prevent the page fron reloading
-    console.log(formData);
+
+  const handleSelectChange = (name, value) => {
+    setFormData({ ...formData, [name]: value });
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const response = await api.post("https://loaclhost:8000/auth/register/", formData);
+      setSuccess(true);
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const colleges = [
+    "COCIS",
+    "CEDAT",
+    "CONAS",
+    "CAES",
+    "CHUSS",
+    "COBAMS",
+    "COVAB",
+    "SOL",
+    "KAES",
+  ];
+
   return (
-    <div className="h-screen  flex  justify-center items-center bg-gray-100">
-      <div className="bg-white p-4 flex gap-4 rounded-lg shadow-2xl ">
-        <div>
-          <h2 className="text-left mb-4 font-bold text-blue-400">Register</h2>
-          <form onSubmit={handleSubmit}>
-            <div class="mb-1">
-              <label
-                for="email"
-                class="block mb-2 text-sm text-left font-medium text-gray-600"
-              >
-                User Email
-              </label>
-              <input
-                type="text"
-                id="email"
-                name="email"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                value={formData.email}
-                placeholder="Enter your email"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div class="mb-1">
-              <label
-                for="username"
-                class="block mb-2 text-sm text-left font-medium text-gray-600"
-              >
-                User Name
-              </label>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                value={formData.name}
-                placeholder="Enter your first and last name"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div class="mb-1">
-              <label
-                for="role"
-                class="block mb-2 text-sm text-left font-medium text-gray-600"
-              >
-                User Role
-              </label>
-              <input
-                type="text"
-                id="role"
-                name="role"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                value={formData.role}
-                placeholder="Enter your role"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div class="mb-1">
-              <label
-                for="usernumber"
-                class="block mb-2 text-sm text-left font-medium text-gray-600"
-              >
-                User Number
-              </label>
-              <input
-                type="text"
-                id="usernumber"
-                name="usernumber"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                value={formData.user_number}
-                placeholder="Enter your user number"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div class="mb-1">
-              <label
-                for="registrationnumber"
-                class="block mb-2 text-sm text-left font-medium text-gray-600"
-              >
-                Registration Number
-              </label>
-              <input
-                type="text"
-                id="registrationnumber"
-                name="registrationnumber"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                value={formData.registrationnumber}
-                placeholder="Enter your user number"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div class="mb-1">
-              <label
-                for="college"
-                class="block mb-2 text-sm text-left font-medium text-gray-600"
-              >
-                College
-              </label>
-              <input
-                type="text"
-                id="college"
-                name="college"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                value={formData.college}
-                placeholder="Enter your email"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block mb-2 text-sm text-left  font-medium text-gray-600"
-              >
-                Password
-              </label>
-              <input
-                type="text"
-                id="password"
-                name="password"
-                password
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                value={formData.pass}
-                placeholder="Enter your password"
-                onChange={handleChange}
-                required
-              />
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center">Register</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {success ? (
+          <div className="p-4 bg-green-50 text-green-700 rounded-md">
+            Registration successful! You can now log in.
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="p-3 text-sm bg-red-50 border border-red-200 text-red-600 rounded-md">
+                {error}
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="first_name">First Name</Label>
+                <Input id="first_name" name="first_name" value={formData.first_name} onChange={handleChange} required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="last_name">Last Name</Label>
+                <Input id="last_name" name="last_name" value={formData.last_name} onChange={handleChange} required />
+              </div>
             </div>
 
-            <button
-              type="submit"
-              class="text-white mt-4 mb-4 bg-blue-950 w-79  hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-400 font-medium rounded-lg text-sm  p-2.5 text-center "
-            >
-              R E G I S T E R
-            </button>
-          </form>
-          <div>
-            <div class="flex items-start mb-5">
-              <label
-                for="terms"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                You have an account ?{" "}
-                <Link
-                  to={"/login"}
-                  class="text-blue-600 hover:underline dark:text-blue-500"
-                >
-                  Login
-                </Link>
-              </label>
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input id="username" name="username" value={formData.username} onChange={handleChange} required />
             </div>
-          </div>
-        </div>
-        <div className="hidden md:block bg-blue-300 rounded-lg overflow-hidden">
-          <img src={issue} alt="issue" className="h-full w-80 grayscale-100" />
-        </div>
-      </div>
-    </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-0 top-0 h-full px-3"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="role">Role</Label>
+              <Select onValueChange={(value) => handleSelectChange("role", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="student">Student</SelectItem>
+                  <SelectItem value="lecturer">Lecturer</SelectItem>
+                  <SelectItem value="registrar">Registrar</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="college">College</Label>
+              <Select onValueChange={(value) => handleSelectChange("college", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select College" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colleges.map((college) => (
+                    <SelectItem key={college} value={college}>
+                      {college}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "Registering..." : "Register"}
+            </Button>
+          </form>
+        )}
+      </CardContent>
+    </Card>
   );
 }
-
-export default Register;

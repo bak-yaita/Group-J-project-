@@ -1,11 +1,22 @@
 import axios from 'axios';
 
-export const fetchUserData = async () => {
-  try {
-    const response = await axios.get('https://jsonplaceholder.typicode.com/users/1');
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-    throw error;
+const API = axios.create({
+  baseURL: "http://127.0.1:8000",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json"
   }
-};
+})
+
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 403) {
+      console.error("Session expired. Redirecting to login.");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default API;

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import issue from "../../assets/issue.jpg";
 import { Link } from "react-router";
 import axios from "axios";
+import API from "../../API";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ function Login() {
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost", formData);
+      const response = await axios.post("http://localhost:8000/auth/login", formData);
       console.log("Login successful:", response.data);
 
       if (response.data.token) {

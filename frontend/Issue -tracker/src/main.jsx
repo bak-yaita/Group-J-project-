@@ -10,7 +10,8 @@ import Issues from "./pages/students/issues.jsx";
 import Profsettings from "./pages/auth/Profsettings.jsx";
 import Selectrole from "./pages/auth/Selectrole.jsx";
 import Submission from "./pages/students/Submission.jsx";
-import Dashboardd from "./pages/registrar/Dashboardd.jsx";
+import Registrardash from "./pages/registrar/Registrardash.jsx";
+import Assign from "./pages/registrar/Assign.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -23,7 +24,8 @@ createRoot(document.getElementById("root")).render(
         <Route path="profsettings/" element={<Profsettings />} />
         <Route path="selectrole/" element={<Selectrole />} />
         <Route path="submission/" element={<Submission />} />
-        <Route path="registrardashboard/" element={<Dashboardd />} />
+        <Route path="regdash/" element={<Registrardash />} />
+        <Route path="assign/" element={<Assign />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
