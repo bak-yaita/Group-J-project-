@@ -57,29 +57,29 @@ class IssueViewSet(viewsets.ModelViewSet):
             
         return Issue.objects.none()
 
-    # In your IssueViewSet
-def create(self, request, *args, **kwargs):
-    """
-    Handle issue submission with role-based validation.
-    """
-    user = request.user
+    
+    def create(self, request, *args, **kwargs):
+        """
+        Handle issue submission with role-based validation.
+        """
+        user = request.user
 
-    if not hasattr(user, 'college'):
-        return Response({"error": "You must belong to a college to submit an issue."}, status=status.HTTP_400_BAD_REQUEST)
+        if not hasattr(user, 'college'):
+            return Response({"error": "You must belong to a college to submit an issue."}, status=status.HTTP_400_BAD_REQUEST)
 
-    serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer = self.get_serializer(data=request.data, context={'request': request})
 
-    if serializer.is_valid():
-        issue = serializer.save()  # Save first, then use the issue object
-        
-        # Create notification for registrar
-        self._create_notification_for_registrars(issue, f"New issue submitted by {user.first_name} {user.last_name}")
-        
-        return Response({"message": "Issue submitted successfully!"}, status=status.HTTP_201_CREATED)
+        if serializer.is_valid():
+            issue = serializer.save()  # Save first, then use the issue object
+            
+            # Create notification for registrar
+            self._create_notification_for_registrars(issue, f"New issue submitted by {user.first_name} {user.last_name}")
+            
+            return Response({"message": "Issue submitted successfully!"}, status=status.HTTP_201_CREATED)
 
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['POST'])
     def assign(self, request, pk=None):
         """
         Assign an issue to a lecturer.

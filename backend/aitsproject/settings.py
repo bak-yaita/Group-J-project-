@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'axes.backends.AxesStandaloneBackend', 
+    #'axes.backends.AxesStandaloneBackend', 
     'django.contrib.auth.backends.ModelBackend', 
 ]
 
@@ -134,7 +134,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
-    'EXCEPTION_HANDLER': 'aitsapp.utils.custom_exception_handler',
+    
 }
 
 
