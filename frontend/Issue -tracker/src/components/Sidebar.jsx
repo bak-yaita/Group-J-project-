@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router'
+import React from "react";
+import { Link } from "react-router";
 
 const Sidebar = () => {
   return (
@@ -9,7 +9,7 @@ const Sidebar = () => {
         class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar"
       >
-        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-blue-950">
           <ul class="space-y-2 font-medium">
             <li>
               <Link
@@ -49,7 +49,7 @@ const Sidebar = () => {
 
             <li>
               <Link
-                to="/profsettings"
+                to="/profile"
                 href="#"
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
@@ -66,8 +66,7 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link
-                to="/issues"
+              <a
                 href="#"
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
@@ -84,11 +83,11 @@ const Sidebar = () => {
                 <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
                   3
                 </span>
-              </Link>
+              </a>
             </li>
             <li>
-              <Link
-                to="/issues"
+              <a
+                
                 href="#"
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
@@ -102,14 +101,13 @@ const Sidebar = () => {
                   <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
                 </svg>
                 <span class="flex-1 ms-3 whitespace-nowrap">Logout</span>
-              </Link>
+              </a>
             </li>
-
           </ul>
         </div>
       </aside>
     </div>
   );
-}
+};
 
-export default Sidebar
+export default Sidebar;
