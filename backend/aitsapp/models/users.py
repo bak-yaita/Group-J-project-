@@ -78,7 +78,7 @@ class User(AbstractUser):
         """"Assign permissions based on roles when user is created"""
         perms = getattr(self, 'perms', [])
         is_new = self.pk is None  # Check if this is a new user
-        
+        super().save(*args,**kwargs)
 
         if is_new: 
             group, created = Group.objects.get_or_create(name=self.role)
@@ -86,7 +86,7 @@ class User(AbstractUser):
 
             #Assign specific permissions based on roles
             if self.role == 'student':
-                perms =["submit_issue", "views_own_issues"]
+                perms =["submit_issue", "view_own_issues"]
             elif self.role == 'lecturer':
                 perms = ["view_assigned_issues", "update_issue_status"]
             elif self.role == 'registrar':
@@ -101,8 +101,12 @@ class User(AbstractUser):
                     self.user_permissions.add(permissions)
                 except Permission.DoesNotExist:
                     print(f"Permission {perm_codename} does not exist")
+<<<<<<< HEAD
 
             super().save(*args,**kwargs)
+=======
+                    
+>>>>>>> 2a547a49143aaf0d2638ea1f08d89a41d1224cda
     def __str__(self):
         return f"{self.username} - {self.role} ({self.college})"
     

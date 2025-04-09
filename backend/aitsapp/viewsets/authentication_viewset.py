@@ -1,11 +1,12 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
 from aitsapp.serializers import UserSerializer
 from aitsapp.auth.authserializers import RegisterSerializer, LoginSerializer
+from django.contrib.auth import login as django_login
 
 
 User = get_user_model()
@@ -35,15 +36,19 @@ class AuthenticationViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['post'])
     def login(self, request):
-        serializer = LoginSerializer(data=request.data)
+        # Pass the request context to the serializer
+        serializer = LoginSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
             username = serializer.validated_data['username']
             password = serializer.validated_data['password']
 
-            user = authenticate(username=username, password=password)
+            # Authenticate the user
+            user = authenticate(request=request, username=username, password=password)
             if user:
-                login(request, user)  # Django session login
+                django_login(request, user)  # Django session login
+
+                # Return response with user data (avoid exposing sensitive data)
                 return Response({
                     'message': 'Login successful',
                     'user': {
@@ -55,7 +60,6 @@ class AuthenticationViewSet(viewsets.ViewSet):
                     }
                 })
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])

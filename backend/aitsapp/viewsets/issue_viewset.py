@@ -3,10 +3,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from ..models.issues import Issue
-from ..serializers import IssueSerializer
+from ..serializers import IssueSerializer, IssueAssignmentSerializer, IssueResolutionSerializer
 from rest_framework.decorators import action
 from aitsapp.models import Notification
-from aitsapp.permissions import IsAdmin,IsLecturer, IsRegistrar,IsOwnerOrStaff,IsStudent
+from aitsapp.permissions import IsAdmin,IsLecturer, IsRegistrar,IsOwnerOrStaff,IsStudent,CanResolveIssue
+
 
 class IssueViewSet(viewsets.ModelViewSet):
     """
@@ -14,16 +15,6 @@ class IssueViewSet(viewsets.ModelViewSet):
     """
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
-    permission_classes_by_action = {
-        'create': [IsAuthenticated, IsStudent],  
-        'list': [IsAuthenticated],  
-        'retrieve': [IsAuthenticated, IsOwnerOrStaff], 
-        'update': [IsAuthenticated, IsOwnerOrStaff], 
-        'partial_update': [IsAuthenticated, IsOwnerOrStaff],  
-        'destroy': [IsAuthenticated, IsAdmin],  
-        'assign': [IsAuthenticated, IsRegistrar],  
-        'resolve': [IsAuthenticated, IsLecturer|IsRegistrar],  
-    }
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['issue_type', 'description','full_name', 'registration_number', 'subject', 'course_code']
     ordering_fields = ['created_at', 'updated_at', 'status']
@@ -32,8 +23,31 @@ class IssueViewSet(viewsets.ModelViewSet):
         'issue_type': ['exact'],
         'assigned_to': ['exact', 'isnull'],
         'student__college': ['exact'],
-    }  # Added fields for filtering by status
+    }
 
+    def get_permissions(self):
+        """
+        Override to return appropriate permissions for each action.
+        """
+        if self.action == 'create':
+            permission_classes = [IsAuthenticated, IsStudent]
+        elif self.action == 'list':
+            permission_classes = [IsAuthenticated]
+        elif self.action == 'retrieve' or self.action == 'update' or self.action == 'partial_update':
+            permission_classes = [IsAuthenticated, IsOwnerOrStaff]
+        elif self.action == 'destroy':
+            permission_classes = [IsAuthenticated, IsAdmin]
+        elif self.action == 'assign':
+            permission_classes = [IsAuthenticated, IsRegistrar]
+        elif self.action == 'resolve':
+            permission_classes = [IsAuthenticated, CanResolveIssue]
+        elif self.action == 'statistics':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAuthenticated]
+        
+        return [permission() for permission in permission_classes]
+    
     def get_queryset(self):
         """
         Filter queryset based on user role.
@@ -56,7 +70,7 @@ class IssueViewSet(viewsets.ModelViewSet):
             return Issue.objects.filter(student=user)
             
         return Issue.objects.none()
-
+    
     def create(self, request, *args, **kwargs):
         """
         Handle issue submission with role-based validation.
@@ -69,22 +83,24 @@ class IssueViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
-            serializer.save(student=user)  # Assign the logged-in student to the issue
-            #create Notification for registrars
+            issue = serializer.save()  # Save first, then use the issue object
+            
+            # Create notification for registrar
             self._create_notification_for_registrars(issue, f"New issue submitted by {user.first_name} {user.last_name}")
+            
             return Response({"message": "Issue submitted successfully!"}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['POST'])
     def assign(self, request, pk=None):
         """
         Assign an issue to a lecturer.
         """
         issue = self.get_object()
         
-        # Check if user is authorized (registrar or admin)
-        if not request.user.is_staff and request.user.role != 'Registrar':
+        # This check is now redundant due to get_permissions(), but kept for extra safety
+        if not request.user.is_staff and request.user.role != 'registrar':
             return Response(
                 {"error": "You do not have permission to assign issues."}, 
                 status=status.HTTP_403_FORBIDDEN
@@ -101,6 +117,13 @@ class IssueViewSet(viewsets.ModelViewSet):
             
             try:
                 lecturer = User.objects.get(id=lecturer_id)
+                
+                # Check if the assigned user is actually a lecturer
+                if lecturer.role != 'lecturer':
+                    return Response(
+                        {"error": "Issues can only be assigned to lecturers."}, 
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
                 
                 issue.assigned_to = lecturer
                 issue.status = 'assigned'
@@ -135,9 +158,9 @@ class IssueViewSet(viewsets.ModelViewSet):
         """
         issue = self.get_object()
         
-        # Check if user is authorized (registrar, assigned lecturer, or admin)
+        # Using the CanResolveIssue permission class now, but keeping this check for safety
         if not (request.user.is_staff or 
-                request.user.role == 'Registrar' or 
+                request.user.role == 'registrar' or 
                 (issue.assigned_to and issue.assigned_to == request.user)):
             return Response(
                 {"error": "You do not have permission to resolve this issue."}, 
@@ -182,7 +205,7 @@ class IssueViewSet(viewsets.ModelViewSet):
             return Response({"error": "You must belong to a college to view statistics."}, status=status.HTTP_400_BAD_REQUEST)
 
         # Admins see all statistics
-        if user.is_staff:
+        if user.is_staff or user.role == 'admin':
             total_issues = Issue.objects.count()
             submitted_issues = Issue.objects.filter(status='submitted').count()
             assigned_issues = Issue.objects.filter(status='assigned').count()
@@ -190,7 +213,7 @@ class IssueViewSet(viewsets.ModelViewSet):
             resolved_issues = Issue.objects.filter(status='resolved').count()
 
         # Students see only their own issue statistics
-        elif user.role == 'Student':
+        elif user.role == 'student':
             total_issues = Issue.objects.filter(student=user).count()
             submitted_issues = Issue.objects.filter(student=user, status='submitted').count()
             assigned_issues = Issue.objects.filter(student=user, status='assigned').count()
@@ -198,7 +221,7 @@ class IssueViewSet(viewsets.ModelViewSet):
             resolved_issues = Issue.objects.filter(student=user, status='resolved').count()
 
         # Lecturers see statistics for issues assigned to them only
-        elif user.role == 'Lecturer':
+        elif user.role == 'lecturer':
             total_issues = Issue.objects.filter(assigned_to=user).count()
             submitted_issues = 0  # Lecturers don't see submitted issues until assigned
             assigned_issues = Issue.objects.filter(assigned_to=user, status='assigned').count()
@@ -206,7 +229,7 @@ class IssueViewSet(viewsets.ModelViewSet):
             resolved_issues = Issue.objects.filter(assigned_to=user, status='resolved').count()
 
         # Registrars see statistics for the entire college
-        elif user.role == 'Registrar':
+        elif user.role == 'registrar':
             total_issues = Issue.objects.filter(student__college=user.college).count()
             submitted_issues = Issue.objects.filter(student__college=user.college, status='submitted').count()
             assigned_issues = Issue.objects.filter(student__college=user.college, status='assigned').count()
@@ -236,7 +259,7 @@ class IssueViewSet(viewsets.ModelViewSet):
         
         # Get all registrars in the same college as the issue's student
         registrars = User.objects.filter(
-            role='Registrar',
+            role='registrar',  # lowercase to match role choices
             college=issue.student.college
         )
         
