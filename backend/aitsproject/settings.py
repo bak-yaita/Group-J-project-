@@ -115,8 +115,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    #'axes.backends.AxesStandaloneBackend', 
-    'django.contrib.auth.backends.ModelBackend', 
+    'axes.backends.AxesStandaloneBackend', 
+    'django.contrib.auth.backends.ModelBackend'
 ]
 
 AUTH_USER_MODEL = "aitsapp.User"
