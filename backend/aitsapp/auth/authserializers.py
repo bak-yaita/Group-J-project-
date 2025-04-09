@@ -61,8 +61,12 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        user = authenticate(username=data['username'], password=data['password'])
-        if not user:
+        request = self.context.get('request')  # Get the request object from the serializer context
+        if not request:
+            raise serializers.ValidationError("Request object is missing.")
+        # Pass the request object to the authenticate function
+        user = authenticate(request=request, username=data['username'], password=data['password'])
+        if user is None:
             raise AuthenticationFailed("Incorrect credentials")
         
         # Instead of returning user, return the validated data
