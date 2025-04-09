@@ -101,7 +101,7 @@ class User(AbstractUser):
                     self.user_permissions.add(permissions)
                 except Permission.DoesNotExist:
                     print(f"Permission {perm_codename} does not exist")
-                    
+
             super().save(*args,**kwargs)
     def __str__(self):
         return f"{self.username} - {self.role} ({self.college})"
