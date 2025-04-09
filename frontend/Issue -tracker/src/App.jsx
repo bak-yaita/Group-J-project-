@@ -1,7 +1,7 @@
 import React from 'react'
 import Sidebar from './components/Sidebar'
 import StudentDashboard from './pages/students/Dashbord'
-import { fetchUserData } from './API';
+// import { fetchUserData } from './API';
 
 
 const App = () => {
@@ -15,6 +15,7 @@ const App = () => {
    </svg>
 </button>
 <Sidebar/>
+
 
 <div class="p-4 sm:ml-64">
    <div class="p-4 rounded-lg dark:border-gray-700">
