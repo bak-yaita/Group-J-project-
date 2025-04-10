@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(),tailwindcss(),],
-  server: {
+ /* server: {
     historyApiFallback: true, // Redirect all routes to index.html
-  }, 
+  }, */
 })
