@@ -83,7 +83,7 @@ class IssueViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
-            issue = serializer.save()  # Save first, then use the issue object
+            issue = serializer.save()  
             
             # Create notification for registrar
             self._create_notification_for_registrars(issue, f"New issue submitted by {user.first_name} {user.last_name}")
@@ -99,7 +99,7 @@ class IssueViewSet(viewsets.ModelViewSet):
         """
         issue = self.get_object()
         
-        # This check is now redundant due to get_permissions(), but kept for extra safety
+    
         if not request.user.is_staff and request.user.role != 'registrar':
             return Response(
                 {"error": "You do not have permission to assign issues."}, 
@@ -118,7 +118,7 @@ class IssueViewSet(viewsets.ModelViewSet):
             try:
                 lecturer = User.objects.get(id=lecturer_id)
                 
-                # Check if the assigned user is actually a lecturer
+               
                 if lecturer.role != 'lecturer':
                     return Response(
                         {"error": "Issues can only be assigned to lecturers."}, 
@@ -238,7 +238,7 @@ class IssueViewSet(viewsets.ModelViewSet):
 
         return Response({
             "total": total_issues,
-            "pending": submitted_issues,  # Frontend expects "pending" instead of "submitted"
+            "pending": submitted_issues,  
             "assigned": assigned_issues,
             "in_progress": in_progress_issues,
             "resolved": resolved_issues
@@ -259,7 +259,7 @@ class IssueViewSet(viewsets.ModelViewSet):
         
         # Get all registrars in the same college as the issue's student
         registrars = User.objects.filter(
-            role='registrar',  # lowercase to match role choices
+            role='registrar', 
             college=issue.student.college
         )
         
