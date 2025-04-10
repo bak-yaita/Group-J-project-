@@ -39,7 +39,7 @@ class Issue(models.Model):
 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='submitted')
     assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="assigned_issues")
-    # New fields for resolution and assignment
+
     resolution_notes = models.TextField(blank=True, null=True)
     assignment_notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
