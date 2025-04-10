@@ -99,7 +99,7 @@ class IssueViewSet(viewsets.ModelViewSet):
         """
         issue = self.get_object()
         
-        # This check is now redundant due to get_permissions(), but kept for extra safety
+    
         if not request.user.is_staff and request.user.role != 'registrar':
             return Response(
                 {"error": "You do not have permission to assign issues."}, 
