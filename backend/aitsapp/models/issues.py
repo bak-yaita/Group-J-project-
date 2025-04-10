@@ -52,7 +52,7 @@ class Issue(models.Model):
         return f"{self.subject} - {self.student.username}"
     
     def save(self, *args, **kwargs):
-        # Update lecturer_name when assigned_to changes
+        # Update lecturer_name when assigned_to issues
         if self.assigned_to and (not self.lecturer_name or self.lecturer_name == "Not Assigned"):
             self.lecturer_name = f"{self.assigned_to.first_name} {self.assigned_to.last_name}"
         
