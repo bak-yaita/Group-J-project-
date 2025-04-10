@@ -204,7 +204,7 @@ const Submission = () => {
                         value={formData.category}
                         placeholder="Enter issue category"
                         onChange={handleChange}
-                        disabled
+                        required
                     />
                     </div>
                     <div className="mb-1">
