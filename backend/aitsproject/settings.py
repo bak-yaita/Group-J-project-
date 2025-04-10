@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'aitsapp',
+    'aitsapp.apps.AitsappConfig',
     'rest_framework',
     'axes',
     'django_extensions',

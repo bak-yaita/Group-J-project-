@@ -1,0 +1,1 @@
+default_app_config = 'aitsapp.apps.YourAppConfig' #Ensures Django loads signals automatically.
