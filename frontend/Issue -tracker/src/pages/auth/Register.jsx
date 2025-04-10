@@ -1,7 +1,5 @@
 import api from "../../API";
-import React, { useState } from "react";
-
-// Import the axios instance
+import { useState } from "react";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -51,10 +49,22 @@ export default function RegisterForm() {
 
     try {
       const response = await api.post(
-        "https://localhost:8000/auth/register/",
-        dataToSend
+        "/auth/register/", 
+        dataToSend,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
       );
-      setSuccess(true);
+      
+      if (response.data && response.data.user) {
+        setSuccess(true);
+        // Store the received token if available
+        if (response.data.token) {
+          localStorage.setItem('access_token', response.data.token);
+        }
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
     } finally {
