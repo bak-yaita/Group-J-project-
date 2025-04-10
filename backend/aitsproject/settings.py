@@ -182,13 +182,14 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 # Media files (profile pictures, etc.)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Ensure the media directory exists
-if not os.path.exists(MEDIA_ROOT):
-    os.makedirs(MEDIA_ROOT)
+# Automatically ensure the media directory exists
+os.makedirs(MEDIA_ROOT, exist_ok=True)  # This will not raise an error if the directory already exists
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
