@@ -1,5 +1,7 @@
-import api from "../../API";
-import { useState } from "react";
+import API from "../../API";
+import React, { useState } from "react";
+
+// Import the axios instance
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -45,23 +47,8 @@ export default function RegisterForm() {
     }
 
     try {
-      const response = await api.post(
-        "/auth/register/", 
-        dataToSend,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-      
-      if (response.data && response.data.user) {
-        setSuccess(true);
-        // Store the received token if available
-        if (response.data.token) {
-          localStorage.setItem('access_token', response.data.token);
-        }
-      }
+      const response = await API.post("/api/auth/register/", dataToSend);
+      setSuccess(true);
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
     } finally {
@@ -318,5 +305,4 @@ export default function RegisterForm() {
     </div>
   );
 }
-
 
