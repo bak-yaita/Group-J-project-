@@ -11,18 +11,17 @@ import Register from "./pages/auth/Register.jsx";
 import Issues from "./pages/students/issues.jsx";
 import Profsettings from "./pages/auth/Profsettings.jsx";
 import Selectrole from "./pages/auth/Selectrole.jsx";
-import notifications from "./pages/notifications.jsx"
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashbord />} /> {/* Default route */}
-        <Route path="dashbord" element={<Dashbord />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="issues" element={<Issues />} />
-        <Route path="profsettings" element={<Profsettings />} />
-        <Route path="selectrole" element={<Selectrole />} />
+        <Route path="dashbord/" element={<Dashbord />} />
+        <Route path="login/" element={<Login />} />
+        <Route path="register/" element={<Register />} />
+        <Route path="issues/" element={<Issues />} />
+        <Route path="profsettings/" element={<Profsettings />} />
+        <Route path="selectrole/" element={<Selectrole />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

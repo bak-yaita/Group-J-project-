@@ -8,3 +8,4 @@ db.sqlite3
 #all automatically generated files
 *.log
 *.swp
+.env.backup
