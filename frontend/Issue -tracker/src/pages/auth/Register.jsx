@@ -1,4 +1,4 @@
-import api from "../../API";
+import API from "../../API";
 import React, { useState } from "react";
 
 // Import the axios instance
@@ -12,10 +12,8 @@ export default function RegisterForm() {
     password: "",
     role: "",
     college: "",
-    student_number: "",
+    user_number: "",
     registration_number: "",
-    lecturer_number: "",
-    registrar_number: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -37,23 +35,19 @@ export default function RegisterForm() {
 
     // Remove irrelevant fields based on role
     if (formData.role === "student") {
-      delete dataToSend.lecturer_number;
-      delete dataToSend.registrar_number;
+      // Keep user_number and registration_number, remove fields not relevant to students
+      delete dataToSend.lecturer_number; // Remove any irrelevant fields
     } else if (formData.role === "lecturer") {
-      delete dataToSend.student_number;
+      // Keep only user_number for lecturers, remove registration_number and any other irrelevant fields
       delete dataToSend.registration_number;
-      delete dataToSend.registrar_number;
     } else if (formData.role === "registrar") {
-      delete dataToSend.student_number;
+      // Registrars have no user_number or registration_number, so we don't add those fields
+      delete dataToSend.user_number;
       delete dataToSend.registration_number;
-      delete dataToSend.lecturer_number;
     }
 
     try {
-      const response = await api.post(
-        "https://localhost:8000/auth/register/",
-        dataToSend
-      );
+      const response = await API.post("/api/auth/register/", dataToSend);
       setSuccess(true);
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
@@ -81,17 +75,17 @@ export default function RegisterForm() {
         <>
           <div className="space-y-2">
             <label
-              htmlFor="student_number"
+              htmlFor="user_number"
               className="block text-sm font-medium"
             >
               Student Number
             </label>
             <input
-              id="student_number"
-              name="student_number"
+              id="user_number"
+              name="user_number"
               type="text"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={formData.student_number}
+              value={formData.user_number}
               onChange={handleChange}
               required
             />
@@ -119,46 +113,30 @@ export default function RegisterForm() {
       return (
         <div className="space-y-2">
           <label
-            htmlFor="lecturer_number"
+            htmlFor="user_number"
             className="block text-sm font-medium"
           >
             Lecturer Number
           </label>
           <input
-            id="lecturer_number"
-            name="lecturer_number"
+            id="user_number"
+            name="user_number"
             type="text"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={formData.lecturer_number}
+            value={formData.user_number}
             onChange={handleChange}
             required
           />
         </div>
       );
     } else if (formData.role === "registrar") {
-      return (
-        <div className="space-y-2">
-          <label
-            htmlFor="registrar_number"
-            className="block text-sm font-medium"
-          >
-            Registrar Number
-          </label>
-          <input
-            id="registrar_number"
-            name="registrar_number"
-            type="text"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={formData.registrar_number}
-            onChange={handleChange}
-            required
-          />
-        </div>
-      );
-    }
+      // No additional fields for registrars
+      return null;
+  }
 
-    return null;
-  };
+  return null;
+};
+  
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -327,3 +305,5 @@ export default function RegisterForm() {
     </div>
   );
 }
+
+
