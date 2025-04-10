@@ -3,6 +3,8 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import AbstractUser, BaseUserManager, Group
+from django.utils.translation import gettext_lazy as _
+import os
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
@@ -24,6 +26,12 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(username, email, password, **extra_fields)
+
+
+
+def user_profile_picture_path(instance, filename):
+    # Saves image to: media/profile_pictures/user_<id>/<filename>
+    return f'profile_pictures/user_{instance.id}/{filename}'
 
 
 class User(AbstractUser):
@@ -55,10 +63,11 @@ class User(AbstractUser):
     registration_number = models.CharField(max_length=20, unique=True, blank=True, null=True)
 
     profile_picture = models.ImageField(
-        upload_to='profile_pictures/', 
-        validators=[FileExtensionValidator(['png', 'jpg', 'jpeg'])],
-        blank=True, 
-        null=True
+        upload_to=user_profile_picture_path,
+        null=True, 
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
+        verbose_name=_("Profile Picture")
     )
     objects = CustomUserManager()
 
