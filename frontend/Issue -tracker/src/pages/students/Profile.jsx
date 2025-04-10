@@ -67,7 +67,7 @@ const ProfilePage = () => {
       const formDataFile = new FormData();
       formDataFile.append("profile_picture", file);
       const response = await API.post(
-        "/userprofile/profile-picture/", //waiting for api
+        "/api/profile/profile_picture/",
         formDataFile,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -91,7 +91,7 @@ const ProfilePage = () => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      const response = await API.put("/userprofile/", formData); //waiting for api
+      const response = await API.put("/api/profile/", formData); //waiting for api
       setUser((prev) => ({ ...prev, ...response.data }));
       setEditing(false);
     } catch (err) {
