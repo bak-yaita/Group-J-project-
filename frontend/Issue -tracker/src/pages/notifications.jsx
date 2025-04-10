@@ -12,11 +12,7 @@ const Notifications = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await API.get('/api/notifications/', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-          }
-        });
+        const response = await API.get('/api/notifications/');
         setNotifications(response.data);
       } catch (err) {
         setError(err.message);
