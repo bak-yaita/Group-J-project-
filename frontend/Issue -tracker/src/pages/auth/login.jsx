@@ -30,15 +30,9 @@ function Login() {
     setError(null);
 
     try {
-      const response = await axios.post(
-        "jessymay.pythonanywhere.com/api/auth/login/",
+      const response = await API.post(
+        "api/auth/login/",
         formData,
-        {
-          withCredentials: true, // Ensure cookies are sent/received
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
       );
 
       console.log("Login successful:", response.data);
@@ -51,9 +45,7 @@ function Login() {
       setError(
         err.response?.data?.message || "Login failed. Please try again."
       );
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   return (
