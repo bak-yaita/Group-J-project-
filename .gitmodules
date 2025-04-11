@@ -1,0 +1,3 @@
+[submodule "frontend/Issue-tracker/ui"]
+	path = frontend/Issue-tracker/ui
+	url = https://github.com/bak-yaita/Group-J-project-.git
