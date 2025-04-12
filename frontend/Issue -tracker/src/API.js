@@ -1,8 +1,17 @@
 import axios from 'axios';
 
 
-const API = axios.create({
-  baseURL: "jessymay.pythonanywhere.com/",
+
+export const API = axios.create({
+  baseURL: import.meta.env.BASE_URL_PROD,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export const Auth = axios.create({
+  baseURL: import.meta.env.BASE_URL_PROD,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

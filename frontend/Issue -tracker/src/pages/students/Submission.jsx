@@ -3,6 +3,7 @@ import Wrapper from "../../components/wrapper";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 
+
 const Submission = () => {
   const [formData, setFormData] = useState({
     user_number: "",
@@ -23,7 +24,7 @@ const Submission = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await API.get("/api/issues/"); // Replace with actual API endpoint
+        const response = await API.get("/api/auth/details/"); // Replace with actual API endpoint
         const data = response.data;
         setFormData((prevData) => ({
           ...prevData,

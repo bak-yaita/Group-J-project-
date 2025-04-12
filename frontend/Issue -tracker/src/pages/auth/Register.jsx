@@ -1,5 +1,6 @@
-import api from "../../API";
+import { Auth } from "../../API";
 import React, { useState } from "react";
+
 
 // Import the axios instance
 
@@ -50,8 +51,8 @@ export default function RegisterForm() {
     }
 
     try {
-      const response = await api.post(
-        "https://localhost:8000/auth/register/",
+      const response = await Auth.post(
+        "/api/auth/register/",
         dataToSend
       );
       setSuccess(true);
