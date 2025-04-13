@@ -22,5 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-frontend/Issue -tracker/ui/
-package-lock.json"node_modules/" 
+package-lock.json
+node_modules/ 
+.env
