@@ -36,7 +36,7 @@ class User(AbstractUser):
         ('COBAMS', 'COBAMS'),
         ('COVAB', 'COVAB'),
         ('SOL', 'SOL'),
-        ('CAES', 'CEAS')
+        ('CAES', 'CAES')
     ]
 
     email = models.EmailField(unique=True)  
@@ -68,47 +68,44 @@ class User(AbstractUser):
             ("configure_settings", "Can configure settings"), 
         ]
 
+    def assign_role_and_permissions(self):
+        if self.role == 'admin':
+            group_name = "Admin"
+        else:
+            group_name = f"{self.role.capitalize()}_{self.college.upper()}"
+
+        group, created = Group.objects.get_or_create(name=group_name)
+        self.groups.add(group)
+
+        # Define permissions
+        if self.role == 'student':
+            perms = ["submit_issue", "view_own_issues"]
+        elif self.role == 'lecturer':
+            perms = ["view_assigned_issues", "update_issue_status"]
+        elif self.role == 'registrar':
+            perms = ["view_all_issues", "assign_issues", "update_issue_status"]
+        elif self.role == 'admin':
+            perms = ["manage_users", "configure_settings"]
+        else:
+            perms = []
+
+        # Assign permissions to group
+        group.permissions.clear()
+        for codename in perms:
+            try:
+                perm = Permission.objects.get(codename=codename)
+                group.permissions.add(perm)
+            except Permission.DoesNotExist:
+                print(f"⚠️ Permission '{codename}' does not exist.")
+
     def save(self, *args, **kwargs):
-        """Assign group and permissions based on role and college when user is created"""
-        perms = getattr(self, 'perms', [])
         is_new = self.pk is None
         super().save(*args, **kwargs)
-
         if is_new:
-            if self.role == 'admin':
-                group_name = "Admin"
-            else:
-                group_name = f"{self.role.capitalize()}_{self.college.upper()}"
-
-            group, created = Group.objects.get_or_create(name=group_name)
-            self.groups.add(group)
-
-            # Assign role-specific permissions
-            if self.role == 'student':
-                perms = ["submit_issue", "view_own_issues"]
-            elif self.role == 'lecturer':
-                perms = ["view_assigned_issues", "update_issue_status"]
-            elif self.role == 'registrar':
-                perms = ["view_all_issues", "assign_issues", "update_issue_status"]
-            elif self.role == 'admin':
-                perms = ["manage_users", "configure_settings"]
-
-            group.permissions.clear()
-            for perm_codename in perms:
-                try:
-                    permissions = Permission.objects.get(codename=perm_codename)
-                    group.permissions.add(permissions)
-                except Permission.DoesNotExist:
-                    print(f"Permission {perm_codename} does not exist")
-
-            
-                #     permission = Permission.objects.get(codename=perm_codename)
-                #     self.user_permissions.add(permission)
-                # except Permission.DoesNotExist:
-                #     print(f"⚠️ Permission {perm_codename} does not exist")
+            self.assign_role_and_permissions()
 
     def __str__(self):
         return f"{self.username} - {self.role.capitalize()} ({self.college})"
-    
+
 
 auditlog.register(User)
