@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .utils import send_notification_email
-from aitsapp.models.issues import Issue  
+from ..models.issues import Issue  
 
 @receiver(post_save, sender=Issue)
 def issue_notification(sender, instance, created, **kwargs):
