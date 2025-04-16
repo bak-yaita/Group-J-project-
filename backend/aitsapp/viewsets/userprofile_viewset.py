@@ -9,38 +9,37 @@ from ..serializers import UserProfileSerializer, PasswordChangeSerializer
 
 User = get_user_model()
 
-class UserProfileViewSet(viewsets.ModelViewSet):
+class UserProfileViewSet(viewsets.ViewSet):
     """
     ViewSet for managing user profiles.
     Supports:
-    - Retrieving own profile
-    - Updating username, email, profile picture
-    - Changing password
+    - GET /api/profile/
+    - PATCH /api/profile/
+    - POST /api/profile/change_password/
+    - POST /api/profile/profile-picture/
     """
-    queryset = User.objects.all()
-    serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_serializer(self, *args, **kwargs):
+        return UserProfileSerializer(*args, **kwargs)
+
     def get_object(self):
-        """
-        Override this so requests like PATCH /api/profile/
-        will target the logged-in user's profile.
-        """
         return self.request.user
 
-    def update(self, request, *args, **kwargs):
-        """
-        Handles PUT/PATCH requests to update user profile.
-        """
+    def retrieve_profile(self, request):
+        serializer = self.get_serializer(self.get_object())
+        return Response(serializer.data)
+
+    def update_profile(self, request):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        # Handle profile picture (optional)
+        # Handle profile picture upload (optional)
         if 'profile_picture' in request.FILES:
             if instance.profile_picture:
-                instance.profile_picture.delete()  # Remove old one
-            instance.profile_picture = request.FILES['profile_picture']
+                instance.profile_picture.delete()
+            instance.profile_picture = request.FILES['profile-picture']
 
         # Update other fields
         instance.username = serializer.validated_data.get('username', instance.username)
@@ -49,12 +48,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['post'], url_path='change-password')
+    @action(detail=False, methods=['post'], url_path='change_password')
     def change_password(self, request):
-        """
-        POST /api/profile/change-password/
-        Requires: current_password, new_password, confirm_new_password
-        """
         serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
 
@@ -65,7 +60,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         user.set_password(serializer.validated_data['new_password'])
         user.save()
 
-        # Send email notification
+        # Send confirmation email
         subject = "Password Change Confirmation"
         recipient_email = user.email
         name = f"{user.first_name} {user.last_name}".strip() or user.username
@@ -78,13 +73,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         )
 
         try:
-            send_mail(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                [recipient_email],
-                fail_silently=False,
-            )
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
         except BadHeaderError:
             return Response(
                 {"error": "Invalid header found while sending email."},
@@ -92,13 +81,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
             )
 
         return Response({"detail": "Password successfully changed and confirmation email sent."}, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=['post'], url_path='upload-profile-picture')
-    def upload_profile_picture(self, request):
-        """
-        POST /api/profile/upload-profile-picture/
-        Form-data: profile_picture
-        """
+    #upload_profile_picture
+    @action(detail=False, methods=['post'], url_path='profile-picture')
+    def profile_picture(self, request):
         user = self.get_object()
 
         if 'profile_picture' not in request.FILES:
