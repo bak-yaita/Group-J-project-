@@ -4,6 +4,7 @@ from .viewsets import UserViewSet, IssueViewSet, NotificationViewSet
 from .viewsets.authentication_viewset import AuthenticationViewSet
 from .viewsets.userprofile_viewset import UserProfileViewSet 
 from .viewsets.dashboard_viewset import DashboardViewSet
+from .viewsets.auditlog_viewset import AuditLogViewSet
 
 
 router = DefaultRouter()
