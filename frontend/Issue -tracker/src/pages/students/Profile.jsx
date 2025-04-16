@@ -1,6 +1,7 @@
-import API from "../../API"
-import React, { useState, useEffect } from "react";
+import API from "../../API";
 import Wrapper from "../../components/wrapper";
+import React, { useState, useEffect } from "react";
+
 // Your configured Axios instance
 
 const ProfilePage = () => {
@@ -27,7 +28,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await api.get("/userprofile/");
+        const response = await API.get("/api/profile/");
         const userData = response.data;
         setUser(userData);
         setFormData({
@@ -65,8 +66,8 @@ const ProfilePage = () => {
     try {
       const formDataFile = new FormData();
       formDataFile.append("profile_picture", file);
-      const response = await api.post(
-        "/userprofile/profile-picture/",
+      const response = await API.post(
+        "/api/profile/profile_picture/",
         formDataFile,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -90,7 +91,7 @@ const ProfilePage = () => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      const response = await api.put("/userprofile/", formData);
+      const response = await API.put("/api/profile/", formData); //waiting for api
       setUser((prev) => ({ ...prev, ...response.data }));
       setEditing(false);
     } catch (err) {
@@ -115,7 +116,7 @@ const ProfilePage = () => {
 
     setLoading(true);
     try {
-      const response = await api.post("/userprofile/change_password/", {
+      const response = await API.post("/api/profile/change_password/", {
         current_password: passwordData.currentPassword,
         new_password: passwordData.newPassword,
         confirm_new_password: passwordData.confirmPassword,
@@ -135,8 +136,6 @@ const ProfilePage = () => {
         err.response?.data?.detail ||
           "Failed to update password. Check your current password."
       );
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -208,7 +207,9 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+          >
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Full Name
@@ -383,7 +384,9 @@ const ProfilePage = () => {
                     />
                     <button
                       type="button"
-                      onClick={() => togglePasswordVisibility("currentPassword")}
+                      onClick={() =>
+                        togglePasswordVisibility("currentPassword")
+                      }
                       style={{
                         position: "absolute",
                         right: "8px",
@@ -455,7 +458,9 @@ const ProfilePage = () => {
                     />
                     <button
                       type="button"
-                      onClick={() => togglePasswordVisibility("confirmPassword")}
+                      onClick={() =>
+                        togglePasswordVisibility("confirmPassword")
+                      }
                       style={{
                         position: "absolute",
                         right: "8px",

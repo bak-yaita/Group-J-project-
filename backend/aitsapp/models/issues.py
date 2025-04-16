@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from .users import User
 
 class Issue(models.Model):
     ISSUE_TYPES = [
@@ -39,11 +40,12 @@ class Issue(models.Model):
 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='submitted')
     assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="assigned_issues")
-    # New fields for resolution and assignment
+
     resolution_notes = models.TextField(blank=True, null=True)
     assignment_notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)  
+    updated_at = models.DateTimeField(auto_now=True)
+    college = models.CharField(max_length=50, choices=User.COLLEGE_CHOICES, default="UNKNOWN")
 
     class Meta:
         ordering = ['-created_at']
@@ -52,7 +54,7 @@ class Issue(models.Model):
         return f"{self.subject} - {self.student.username}"
     
     def save(self, *args, **kwargs):
-        # Update lecturer_name when assigned_to changes
+        # Update lecturer_name when assigned_to issues
         if self.assigned_to and (not self.lecturer_name or self.lecturer_name == "Not Assigned"):
             self.lecturer_name = f"{self.assigned_to.first_name} {self.assigned_to.last_name}"
         

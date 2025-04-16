@@ -1,12 +1,22 @@
 import axios from 'axios';
 
-const API = axios.create({
-  baseURL: "http://127.0.1:8000",
+
+
+export const API = axios.create({
+  baseURL: import.meta.env.BASE_URL_PROD,
   withCredentials: true,
   headers: {
-    "Content-Type": "application/json"
-  }
-})
+    "Content-Type": "application/json",
+  },
+});
+
+export const Auth = axios.create({
+  baseURL: import.meta.env.BASE_URL_PROD,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 API.interceptors.response.use(
   (response) => response,

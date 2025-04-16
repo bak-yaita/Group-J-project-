@@ -4,7 +4,7 @@ from ..models import Issue
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
-        read_only_fields = ['student', 'user_number', 'registration_number', 'full_name']
+        read_only_fields = ['student', 'user_number', 'registration_number', 'full_name', 'college']
         fields = '__all__'
 
     def create(self, validated_data):
@@ -18,11 +18,19 @@ class IssueSerializer(serializers.ModelSerializer):
             validated_data['registration_number'] = 'N/A'
             
         validated_data['full_name'] = f"{user.first_name} {user.last_name}"
+
+        # Ensure the issue is linked to the user's college
+        validated_data['college'] = user.college  # Assuming the user model has a college field
+
         return super().create(validated_data)
-        
+
+        # serializers.py
+
+
 class IssueAssignmentSerializer(serializers.Serializer):
     assigned_to = serializers.IntegerField()
-    notes = serializers.CharField(required=False, allow_blank=True)
+    notes = serializers.CharField(required=False)
 
 class IssueResolutionSerializer(serializers.Serializer):
-    resolution_notes = serializers.CharField(required=False, allow_blank=True)
+    resolution_notes = serializers.CharField()
+
