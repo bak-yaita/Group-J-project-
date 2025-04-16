@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'axes',
     'django_filters',
     'corsheaders',
+    'auditlog',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'auditlog.middleware.AuditlogMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
