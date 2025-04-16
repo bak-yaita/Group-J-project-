@@ -6,8 +6,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from ..models.issues import Issue
 from ..serializers import IssueSerializer, IssueAssignmentSerializer, IssueResolutionSerializer
-from aitsapp.models import Notification
-from aitsapp.permissions import (
+from ..models import Notification
+from ..permissions import (
     IsAdmin, IsLecturer, IsRegistrar,
     IsOwnerOrStaff, IsStudent, CanResolveIssue, IsSameCollege
 )

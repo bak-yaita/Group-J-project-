@@ -14,12 +14,12 @@ def validate_profile_picture(value):
     - Max file size: 2MB.
     - Ensures the file is an actual image.
     """
-    allowed_types = ["image/jpeg", "image/png"]
+    allowed_types = ["image/jpeg", "image/png", "image/jpg"]
     max_size = 2 * 1024 * 1024  # 2MB
 
     # Check file type
     if value.content_type not in allowed_types:
-        raise ValidationError("Only JPEG and PNG images are allowed.")
+        raise ValidationError("Only JPEG,JPG and PNG images are allowed.")
 
     # Check file size
     if value.size > max_size:

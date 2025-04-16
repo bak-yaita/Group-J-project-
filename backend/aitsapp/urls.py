@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .viewsets import UserViewSet, IssueViewSet, NotificationViewSet
 from .viewsets.authentication_viewset import AuthenticationViewSet
 from .viewsets.userprofile_viewset import UserProfileViewSet 
-from aitsapp.viewsets.dashboard_viewset import DashboardViewSet
+from .viewsets.dashboard_viewset import DashboardViewSet
 
 
 router = DefaultRouter()

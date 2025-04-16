@@ -1,32 +1,32 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from ..models import Issue, Notification
 from .utils import send_notification_email
 from django.contrib.auth import get_user_model
-from models import Issue, Notification
 
-User = get_user_model() 
+User = get_user_model()
 
 @receiver(post_save, sender=Issue)
-def comprehensive_notification_handler(sender, instance, created, **kwargs):
+def comprehensive_notification_handler(sender, instance, submitted, **kwargs):
     """Send notifications when an issue is created or updated"""
     
     # Determine notification content based on status
     if submitted:
         status_message = "submitted"
-    elif instance.status == 'assigned':
+    elif instance.status == 'ASSIGNED':
         status_message = "assigned"
-    elif instance.status == 'in_progress':
+    elif instance.status == 'IN_PROGRESS':
         status_message = "in progress"
-    elif instance.status == 'resolved':
+    elif instance.status == 'RESOLVED':
         status_message = "resolved"
     else:
         status_message = "updated"
     
-    subject = f"Issue {status_message}: {instance.ISSUE_TYPES}"
+    subject = f"Issue {status_message}: {instance.ISSUE_TYPE}"
     
     # Base message for all recipients
     base_message = f"Issue ID: {instance.id}\n"
-    base_message += f"ISSUE_TYPES: {instance.ISSUE_TYPES}\n"
+    base_message += f"ISUE_TYPE: {instance.ISSUE_TYPE}\n"
     base_message += f"Status: {instance.status}\n"
     base_message += f"Last Updated: {instance.updated_at}\n\n"
     
@@ -36,7 +36,7 @@ def comprehensive_notification_handler(sender, instance, created, **kwargs):
         student_message += "Your issue has been received and is being processed."
         
         # Send email notification
-        send_issue_notification(instance.student.email, subject, student_message)
+        send_notification_email(instance.reported_by.email, subject, student_message)
         
         # Create database notification
         Notification.objects.create(
@@ -50,12 +50,12 @@ def comprehensive_notification_handler(sender, instance, created, **kwargs):
         lecturer_message += f"You have been assigned to handle this issue. Please review and update accordingly."
         
         # Send email notification
-        send_issue_notification(instance.assigned_to.email, subject, lecturer_message)
+        send_notification_email(instance.assigned_to.email, subject, lecturer_message)
         
         # Create database notification
         Notification.objects.create(
             user=instance.assigned_to,
-            message=f"You have been assigned to issue '{instance.title}'."
+            message=f"You have been assigned to issue '{instance.ISSUE_TYPE}'."
         )
     
     # Send to academic registrar for oversight
@@ -66,7 +66,7 @@ def comprehensive_notification_handler(sender, instance, created, **kwargs):
         registrar_message += f"This notification is for your information and oversight."
         
         # Send email notification
-        send_issue_notification(registrar.email, subject, registrar_message)
+        send_notification_email(registrar.email, subject, registrar_message)
         
         # Create database notification
         Notification.objects.create(
