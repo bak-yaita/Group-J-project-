@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from .users import User
+from auditlog.registry import auditlog
 
 class Issue(models.Model):
     ISSUE_TYPES = [
@@ -59,3 +60,6 @@ class Issue(models.Model):
             self.lecturer_name = f"{self.assigned_to.first_name} {self.assigned_to.last_name}"
         
         super().save(*args, **kwargs)
+
+
+auditlog.register(Issue)

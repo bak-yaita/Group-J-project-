@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager, Group, Permission
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from auditlog.registry import auditlog
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
@@ -108,3 +109,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.username} - {self.role.capitalize()} ({self.college})"
+    
+
+auditlog.register(User)

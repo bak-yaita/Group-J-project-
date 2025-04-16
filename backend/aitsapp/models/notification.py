@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from auditlog.registry import auditlog
 
 User = get_user_model()
 
@@ -19,3 +20,5 @@ class Notification(models.Model):
         """Marks the notification as read."""
         self.is_read = True
         self.save()
+
+auditlog.register(Notification)
