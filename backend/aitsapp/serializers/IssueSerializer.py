@@ -23,3 +23,14 @@ class IssueSerializer(serializers.ModelSerializer):
         validated_data['college'] = user.college  # Assuming the user model has a college field
 
         return super().create(validated_data)
+
+        # serializers.py
+
+
+class IssueAssignmentSerializer(serializers.Serializer):
+    assigned_to = serializers.IntegerField()
+    notes = serializers.CharField(required=False)
+
+class IssueResolutionSerializer(serializers.Serializer):
+    resolution_notes = serializers.CharField()
+
