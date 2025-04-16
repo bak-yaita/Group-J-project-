@@ -4,6 +4,7 @@ from .viewsets import UserViewSet, IssueViewSet, NotificationViewSet
 from .viewsets.authentication_viewset import AuthenticationViewSet
 from .viewsets.userprofile_viewset import UserProfileViewSet 
 from aitsapp.viewsets.dashboard_viewset import DashboardViewSet
+from aitsapp.viewsets.auditlog_viewset import AuditLogViewSet
 
 
 router = DefaultRouter()
@@ -12,6 +13,7 @@ router.register(r'issues', IssueViewSet, basename='issue')
 router.register(r'notifications', NotificationViewSet, basename='notification')
 router.register(r'auth', AuthenticationViewSet, basename='auth')
 router.register(r'dashboard', DashboardViewSet, basename='dashboard')
+router.register(r'audit-logs',AuditLogViewSet, basename='auditlog')
 
 urlpatterns = [
     path('api/', include(router.urls)),
