@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from .users import User
+from auditlog.registry import auditlog
 
 class Issue(models.Model):
     ISSUE_TYPES = [
@@ -43,7 +45,8 @@ class Issue(models.Model):
     resolution_notes = models.TextField(blank=True, null=True)
     assignment_notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)  
+    updated_at = models.DateTimeField(auto_now=True)
+    college = models.CharField(max_length=50, choices=User.COLLEGE_CHOICES, default="UNKNOWN")
 
     class Meta:
         ordering = ['-created_at']
@@ -57,3 +60,6 @@ class Issue(models.Model):
             self.lecturer_name = f"{self.assigned_to.first_name} {self.assigned_to.last_name}"
         
         super().save(*args, **kwargs)
+
+
+auditlog.register(Issue)

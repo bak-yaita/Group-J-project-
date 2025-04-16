@@ -4,8 +4,8 @@ from rest_framework.decorators import action
 from django.contrib.auth import authenticate, logout
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
-from aitsapp.serializers import UserSerializer
-from aitsapp.auth.authserializers import RegisterSerializer, LoginSerializer
+from ..serializers import UserSerializer
+from ..auth.authserializers import RegisterSerializer, LoginSerializer
 from django.contrib.auth import login as django_login
 
 
@@ -30,7 +30,8 @@ class AuthenticationViewSet(viewsets.ViewSet):
         serializer = RegisterSerializer(data=request.data)  # Use RegisterSerializer
         if serializer.is_valid():
             user = serializer.save()
-            login(request, user)  # Log the user in after registration
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            django_login(request, user)  # Log the user in after registration
             return Response({'message': 'User registered successfully', 'user': UserSerializer(user).data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

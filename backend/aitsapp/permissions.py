@@ -76,4 +76,29 @@ class CanResolveIssue(BasePermission):
     def has_object_permission(self, request, view, obj):
         return (request.user.is_staff or 
                 request.user.role == 'registrar' or 
-                (hasattr(obj, 'assigned_to') and obj.assigned_to == request.user))   
+                (hasattr(obj, 'assigned_to') and obj.assigned_to == request.user)) 
+
+
+class IsSameCollege(BasePermission):
+    """
+    Allows access only if the user's college matches the object's college.
+    Admins bypass this check.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Admins can access all
+        if request.user.role == 'admin' or request.user.is_superuser:
+            return True
+
+        user_college = request.user.college
+
+        # Check college from different object structures
+        if hasattr(obj, 'college'):
+            return obj.college == user_college
+        elif hasattr(obj, 'student') and hasattr(obj.student, 'college'):
+            return obj.student.college == user_college
+        elif hasattr(obj, 'assigned_to') and hasattr(obj.assigned_to, 'college'):
+            return obj.assigned_to.college == user_college
+
+        # Default deny
+        return False

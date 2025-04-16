@@ -20,7 +20,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         return f"{obj.first_name} {obj.last_name}"
 
     def validate(self, data):
+        valid_roles = ['student', 'lecturer', 'registrar']
         role = data.get('role','').lower()
+
+        if role not in valid_roles:
+            raise serializers.ValidationError(f"Role must be one of: {','.join(valid_roles)}")
+        
         data['role'] = role
         user_number = data.get('user_number')
         registration_number = data.get('registration_number')
