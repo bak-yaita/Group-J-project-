@@ -30,7 +30,8 @@ class AuthenticationViewSet(viewsets.ViewSet):
         serializer = RegisterSerializer(data=request.data)  # Use RegisterSerializer
         if serializer.is_valid():
             user = serializer.save()
-            login(request, user)  # Log the user in after registration
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            django_login(request, user)  # Log the user in after registration
             return Response({'message': 'User registered successfully', 'user': UserSerializer(user).data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

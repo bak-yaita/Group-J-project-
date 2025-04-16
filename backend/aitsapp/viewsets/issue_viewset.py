@@ -3,16 +3,19 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from ..models.issues import Issue
-from ..serializers import IssueSerializer, IssueAssignmentSerializer, IssueResolutionSerializer
+from ..serializers import IssueSerializer
 from rest_framework.decorators import action
 from aitsapp.models import Notification
-from aitsapp.permissions import IsAdmin,IsLecturer, IsRegistrar,IsOwnerOrStaff,IsStudent,CanResolveIssue
+from aitsapp.permissions import IsAdmin,IsLecturer, IsRegistrar,IsOwnerOrStaff,IsStudent,CanResolveIssue, IsSameCollege
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class IssueViewSet(viewsets.ModelViewSet):
-    """
-    A viewset for submitting and managing issues with role-based access control.
-    """
+    
+    #A viewset for submitting and managing issues with role-based access control.
+    
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -26,55 +29,63 @@ class IssueViewSet(viewsets.ModelViewSet):
     }
 
     def get_permissions(self):
-        """
-        Override to return appropriate permissions for each action.
-        """
+        
+        #Override to return appropriate permissions for each action.
+        
         if self.action == 'create':
-            permission_classes = [IsAuthenticated, IsStudent]
+            permission_classes = [IsAuthenticated, IsStudent, IsSameCollege]
         elif self.action == 'list':
-            permission_classes = [IsAuthenticated]
-        elif self.action == 'retrieve' or self.action == 'update' or self.action == 'partial_update':
-            permission_classes = [IsAuthenticated, IsOwnerOrStaff]
+            permission_classes = [IsAuthenticated, IsSameCollege]
+        elif self.action in ['retrieve', 'update', 'partial_update']:
+            permission_classes = [IsAuthenticated, IsOwnerOrStaff, IsSameCollege]
         elif self.action == 'destroy':
             permission_classes = [IsAuthenticated, IsAdmin]
         elif self.action == 'assign':
-            permission_classes = [IsAuthenticated, IsRegistrar]
+            permission_classes = [IsAuthenticated, IsRegistrar, IsSameCollege]
         elif self.action == 'resolve':
-            permission_classes = [IsAuthenticated, CanResolveIssue]
+            permission_classes = [IsAuthenticated, CanResolveIssue, IsSameCollege]
         elif self.action == 'statistics':
-            permission_classes = [IsAuthenticated]
+            permission_classes = [IsAuthenticated, IsSameCollege]
         else:
             permission_classes = [IsAuthenticated]
-        
+
         return [permission() for permission in permission_classes]
-    
+
     def get_queryset(self):
-        """
-        Filter queryset based on user role.
-        """
-        user = self.request.user
         
+        #Override to filter queryset based on user role and college.
+        
+        return self._filter_queryset_by_role()
+        #Filter queryset based on user role and college.
+        
+        user = self.request.user
+
         if not user.is_authenticated:
             return Issue.objects.none()
-            
+
+        # Admins and staff see all
         if user.is_staff or user.role == 'admin':
             return Issue.objects.all()
-            
+
+        # Registrars see all issues in their college
         if user.role == 'registrar':
             return Issue.objects.filter(student__college=user.college)
-            
+
+        # Lecturers see issues assigned to them
         if user.role == 'lecturer':
-            return Issue.objects.filter(assigned_to=user)
-            
+            return Issue.objects.filter(assigned_to=user, student__college=user.college)
+
+        # Students see only their own issues
         if user.role == 'student':
             return Issue.objects.filter(student=user)
-            
-        return Issue.objects.none()
+
+        Issue.objects.none()
+
     
     def create(self, request, *args, **kwargs):
-        """
-        Handle issue submission with role-based validation.
-        """
+        
+        #Handle issue submission with role-based validation.
+        
         user = request.user
 
         if not hasattr(user, 'college'):
@@ -94,9 +105,9 @@ class IssueViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def assign(self, request, pk=None):
-        """
-        Assign an issue to a lecturer.
-        """
+        
+        #Assign an issue to a lecturer.
+        
         issue = self.get_object()
         
     
@@ -153,9 +164,9 @@ class IssueViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def resolve(self, request, pk=None):
-        """
-        Mark an issue as resolved.
-        """
+        
+        #Mark an issue as resolved.
+        
         issue = self.get_object()
         
         # Using the CanResolveIssue permission class now, but keeping this check for safety
@@ -195,9 +206,9 @@ class IssueViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def statistics(self, request):
-        """
-        Fetch key metrics: total, pending, and resolved issues.
-        """
+        
+        #Fetch key metrics: total, pending, and resolved issues.
+        
         user = request.user
 
         # Check if the user belongs to a college
@@ -245,7 +256,7 @@ class IssueViewSet(viewsets.ModelViewSet):
         })
     
     def _create_notification_for_user(self, user, message):
-        """Helper method to create a notification for a specific user."""
+        #Helper method to create a notification for a specific user.
         Notification.objects.create(
             user=user,
             message=message,
@@ -253,10 +264,7 @@ class IssueViewSet(viewsets.ModelViewSet):
         )
     
     def _create_notification_for_registrars(self, issue, message):
-        """Helper method to create notifications for all registrars in the college."""
-        from django.contrib.auth import get_user_model
-        User = get_user_model()
-        
+        # Helper method to create notifications for all registrars in the college. 
         # Get all registrars in the same college as the issue's student
         registrars = User.objects.filter(
             role='registrar', 

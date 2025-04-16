@@ -29,6 +29,7 @@ def validate_profile_picture(value):
     try:
         image = Image.open(io.BytesIO(value.read()))
         image.verify()
+        value.seek(0)
     except Exception:
         raise ValidationError("Invalid image file.")
 
