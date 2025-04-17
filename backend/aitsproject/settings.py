@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'aitsapp',
     'rest_framework',
-    'axes',
+    #'axes',
     'django_filters',
     'corsheaders',
     'auditlog',
@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'axes.middleware.AxesMiddleware',
+    #'axes.middleware.AxesMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'auditlog.middleware.AuditlogMiddleware',
 ]
@@ -133,7 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'axes.backends.AxesStandaloneBackend', 
+    #'axes.backends.AxesStandaloneBackend', 
     'django.contrib.auth.backends.ModelBackend'
 ]
 
