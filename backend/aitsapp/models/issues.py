@@ -39,7 +39,7 @@ class Issue(models.Model):
     semester = models.IntegerField(default=1)   
     lecturer_name = models.CharField(max_length=255, default="Not Assigned")  
 
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='submitted')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='submitted'
     assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="assigned_issues")
 
     resolution_notes = models.TextField(blank=True, null=True)
