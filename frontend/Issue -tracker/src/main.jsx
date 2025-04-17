@@ -13,6 +13,7 @@ import Submission from "./pages/students/Submission.jsx";
 import Issues from "./pages/students/issues.jsx";
 import Profile from "./pages/students/Profile.jsx";
 import Notifications from "./pages/notifications.jsx";
+import Lectdash from "./pages/Lecturer/Lectdash.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -28,6 +29,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="regdash/" element={<Registrardash />} />
         <Route path="assign/" element={<Assign />} />
         <Route path="notifications/" element={<Notifications />} />
+        <Route path="lectdash/" element={<Lectdash />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
