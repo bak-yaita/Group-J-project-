@@ -80,7 +80,7 @@ class IssueViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post',])
     def assign(self, request, pk=None):
         issue = self.get_object()
 
@@ -113,7 +113,7 @@ class IssueViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post','get'])
     def resolve(self, request, pk=None):
         issue = self.get_object()
 
