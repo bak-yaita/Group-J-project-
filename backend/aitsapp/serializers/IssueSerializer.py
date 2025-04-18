@@ -24,7 +24,7 @@ class IssueSerializer(serializers.ModelSerializer):
 
         return super().create(validated_data)
 
-        # serializers.py
+        
 
 
 class IssueAssignmentSerializer(serializers.Serializer):
