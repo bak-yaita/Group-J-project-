@@ -1,11 +1,7 @@
 import React from 'react'
 import Sidebar from './components/Sidebar'
 import StudentDashboard from './pages/students/Dashbord'
-<<<<<<< HEAD
-import { useState, useEffect } from 'react';
-=======
 // import { fetchUserData } from './API';
->>>>>>> ec830b0558bb7ba6ef8d9edafd5958e6acbcc4ca
 
 
 const App = () => {

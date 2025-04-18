@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django_extensions',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -40,6 +41,9 @@ INSTALLED_APPS = [
     'aitsapp',
     'rest_framework',
     'axes',
+    'django_filters',
+    'corsheaders',
+    'auditlog',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +55,21 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'auditlog.middleware.AuditlogMiddleware',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "https://your-app-name.vercel.app",
+    "https://studentportal.com",
+]
+
 
 ROOT_URLCONF = 'aitsproject.urls'
 
