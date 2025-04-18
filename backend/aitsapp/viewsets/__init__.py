@@ -5,3 +5,5 @@ from .userprofile_viewset import UserProfileViewSet
 from .authentication_viewset import AuthenticationViewSet
 from .dashboard_viewset import DashboardViewSet
 from .auditlog_viewset import AuditLogViewSet
+from .ForgotPasswordViewSet import ForgotPasswordViewSet
+from .PasswordResetViewSet import PasswordResetConfirmViewSet
