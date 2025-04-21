@@ -5,7 +5,7 @@ from .viewsets.authentication_viewset import AuthenticationViewSet
 from .viewsets.userprofile_viewset import UserProfileViewSet 
 from .viewsets.dashboard_viewset import DashboardViewSet
 from .viewsets.auditlog_viewset import AuditLogViewSet
-
+from .viewsets import ForgotPasswordViewSet, PasswordResetConfirmViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
@@ -14,6 +14,8 @@ router.register(r'notifications', NotificationViewSet, basename='notification')
 router.register(r'auth', AuthenticationViewSet, basename='auth')
 router.register(r'dashboard', DashboardViewSet, basename='dashboard')
 router.register(r'audit-logs',AuditLogViewSet, basename='auditlog')
+router.register(r'forgot-password', ForgotPasswordViewSet, basename='forgot-password')
+router.register(r'reset-password', PasswordResetConfirmViewSet, basename='reset-password')
 
 urlpatterns = [
     path('api/', include(router.urls)),
