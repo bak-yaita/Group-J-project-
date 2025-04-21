@@ -1,7 +1,9 @@
 import React from "react";
+import WrapL from "../../components/WrapL";
 
 const Lectdash = () => {
   return (
+    <WrapL>
     <div>
       <header className="bg-blue-950 border-b border-gray-200 px-6 py-4">
         <div className="flex justify-between items-center">
@@ -59,7 +61,11 @@ const Lectdash = () => {
           </div>
         </div>
       </header>
-    </div>
+      </div>
+      <div>
+        
+      </div>
+    </WrapL>
   );
 };
 
