@@ -19,7 +19,7 @@ const Lectdash = () => {
       student: "John Doe",
       course: "CSC101",
       issueType: "Missing Marks",
-      status: "Submitted",
+      status: "Assigned",
       dateSubmitted: "4/2/2025",
     },
     {
@@ -27,9 +27,8 @@ const Lectdash = () => {
       student: "Jane Smith",
       course: "CSC101",
       issueType: "Registration",
-      status: "Pending",
+      status: "In progress6",
       dateSubmitted: "4/1/2025",
-      assignedTo: "Not Assigned",
     },
     {
       subject: "Grade Appeal for PHY201",
@@ -38,7 +37,6 @@ const Lectdash = () => {
       issueType: "Grade Appeal",
       status: "Assigned",
       dateSubmitted: "3/28/2025",
-      assignedTo: "Dr. Wilson",
     },
     {
       subject: "Missing Attendance Record",
@@ -47,7 +45,6 @@ const Lectdash = () => {
       issueType: "Attendance",
       status: "Resolved",
       dateSubmitted: "3/25/2025",
-      assignedTo: "Prof. Garcia",
     },
   ];
   //State for issues and filters
@@ -61,7 +58,7 @@ const Lectdash = () => {
   // Calculate dashboard statistics
   const totalIssues = allIssues.length;
   const pendingIssues = allIssues.filter(
-    (issue) => issue.status === "Pending"
+    (issue) => issue.status === "In Progress"
   ).length;
   const assignedIssues = allIssues.filter(
     (issue) => issue.status === "Assigned"
@@ -90,7 +87,6 @@ const Lectdash = () => {
       result = result.filter(
         (issue) =>
           issue.student.name.toLowerCase().includes(query) ||
-          issue.student.id.toLowerCase().includes(query) ||
           issue.subject.toLowerCase().includes(query)
       );
     }
@@ -177,8 +173,7 @@ const Lectdash = () => {
             </div>
           </div>
         </header>
-      </div>
-      <div>
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-blue-950 rounded-lg shadow p-6 flex items-start justify-between">
             <div>
@@ -238,6 +233,280 @@ const Lectdash = () => {
             <div className="p-3 bg-green-100 rounded-full">
               <CheckCircle size={20} className="text-green-600" />
             </div>
+          </div>
+        </div>
+        {/* Filter Section */}
+        <div className="bg-blue-950 rounded-lg shadow mb-8">
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm  font-medium text-white mb-1">
+                  Status
+                </label>
+                <select
+                  className="w-full border border-gray-300  bg-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  <option>All Statuses</option>
+                  <option>Submitted</option>
+                  <option>Pending</option>
+                  <option>Assigned</option>
+                  <option>Resolved</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  Issue Type
+                </label>
+                <select
+                  className="w-full border border-gray-300 bg-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                >
+                  <option>All Types</option>
+                  <option>Missing Marks</option>
+                  <option>Registration</option>
+                  <option>Grade Appeal</option>
+                  <option>Attendance</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  Search
+                </label>
+                <div className="flex space-x-2">
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      placeholder="Search by student name, ID, or description..."
+                      className="w-full border border-gray-300 bg-white rounded-md pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                      <Search size={16} />
+                    </div>
+                  </div>
+                  <button
+                    className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md text-sm font-medium transition-colors"
+                    onClick={handleReset}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Issues Table */}
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-blue-950">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    Subject
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    Student
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    Course
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    Issue Type
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    Status
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    Date Submitted
+                  </th>
+
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {filteredIssues.map((issue) => (
+                  <tr key={issue.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {issue.subject}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {issue.student}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {issue.course}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getBadgeClass(
+                          issue.issueType
+                        )}`}
+                      >
+                        {issue.issueType}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {issue.status}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {issue.dateSubmitted}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="m-1.5">
+                        {/* Button to open the modal */}
+                        <button
+                          className="btn bg-gray-500 hover:bg-indigo-600 text-white p-2 rounded-2xl"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCookiesModalOpen(true); // ALTERATION: Opens modal by setting state
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24px"
+                            viewBox="0 -960 960 960"
+                            width="24px"
+                            fill="#e3e3e3"
+                          >
+                            <path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z" />
+                          </svg>
+                        </button>
+
+                        {/* Modal structure, rendered conditionally based on state */}
+                        {cookiesModalOpen && (
+                          <div
+                            className="fixed inset-0 z-50 flex justify-center items-center w-full h-full  overflow-y-auto" // ALTERATION: Overlay with proper styling
+                            onClick={() => setCookiesModalOpen(false)} // ALTERATION: Close modal on overlay click
+                          >
+                            <div
+                              className="relative p-4 w-full max-w-md max-h-full"
+                              onClick={(e) => e.stopPropagation()} // ALTERATION: Prevent closing when clicking inside modal
+                            >
+                              <div className="relative bg-white rounded-lg shadow-sm dark:bg-white border dark:border-gray-700">
+                                {/* Close button */}
+                                <button
+                                  type="button"
+                                  className="absolute top-3 right-2.5 text-gray-700 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                  onClick={() => setCookiesModalOpen(false)} // ALTERATION: Close modal on button click
+                                >
+                                  <svg
+                                    className="w-3 h-3"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 14 14"
+                                  >
+                                    <path
+                                      stroke="currentColor"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                    />
+                                  </svg>
+                                  <span className="sr-only">Close modal</span>
+                                </button>
+
+                                {/* Modal content */}
+                                <div className="p-4 md:p-5 text-center">
+                                  <svg
+                                    className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-500*"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      stroke="currentColor"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                    />
+                                  </svg>
+                                  <h3 className="mb-5 text-lg font-normal text-gray-700 dark:text-gray-700">
+                                    What action do you want to do?
+                                  </h3>
+                                  <ul className="space-y-2 font-medium">
+                                    <li>
+                                      <button
+                                        className="text-white bg-blue-950 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                                        onClick={() => {
+                                          console.log(
+                                            `View details for issue: ${issue.subject}`
+                                          ); // ALTERATION: Placeholder action
+                                          setCookiesModalOpen(false); // Close modal
+                                        }}
+                                      >
+                                        View details
+                                      </button>
+                                    </li>
+                                    <li>
+                                      <button
+                                        className="text-white bg-blue-950 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                                        onClick={() => {
+                                          console.log(
+                                            `Mark as in Progress for issue: ${issue.subject}`
+                                          ); // ALTERATION: Placeholder action
+                                          setCookiesModalOpen(false); // Close modal
+                                        }}
+                                      >
+                                        Mark as in Progress
+                                      </button>
+                                    </li>
+                                    <li>
+                                      <button
+                                        className="text-white bg-blue-950 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                                        onClick={() => {
+                                          console.log(
+                                            `Mark as Resolved for issue: ${issue.subject}`
+                                          ); // ALTERATION: Placeholder action
+                                          setCookiesModalOpen(false); // Close modal
+                                        }}
+                                      >
+                                        Mark as Resolved
+                                      </button>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
