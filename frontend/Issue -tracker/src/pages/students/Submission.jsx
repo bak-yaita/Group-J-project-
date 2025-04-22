@@ -24,7 +24,7 @@ const Submission = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await API.get("/api/auth/details/"); // Replace with actual API endpoint
+        const response = await API.get("/api/auth/details/"); 
         const data = response.data;
         setFormData((prevData) => ({
           ...prevData,
