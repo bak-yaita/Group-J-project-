@@ -1,15 +1,7 @@
 import WrapL from "../../components/WrapL";
-import {
-  Search,
-  CheckCircle,
-  Clock,
-  Users,
-  FileText,
-  Bell,
-  User,
-  MoreHorizontal,
-} from "lucide-react";
+import { Search, CheckCircle, Clock, Users, FileText, Bell, User, MoreHorizontal } from "lucide-react";
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router";
 
 const Lectdash = () => {
   //Mock data
@@ -54,6 +46,7 @@ const Lectdash = () => {
   const [typeFilter, setTypeFilter] = useState("All Types");
   const [searchQuery, setSearchQuery] = useState("");
   const [cookiesModalOpen, setCookiesModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("recent");
 
   // Calculate dashboard statistics
   const totalIssues = allIssues.length;
@@ -70,6 +63,22 @@ const Lectdash = () => {
   // Apply filters when any filter changes
   useEffect(() => {
     let result = [...allIssues];
+
+    // Apply tab filter
+    if (activeTab === "urgent") {
+      // Define what makes an issue "urgent" - for example:
+      result = result.filter(
+        (issue) =>
+          issue.status === "Assigned" &&
+          new Date(issue.dateSubmitted) >
+            new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      );
+    } else {
+      // For "recent" tab - sort by date
+      result.sort(
+        (a, b) => new Date(b.dateSubmitted) - new Date(a.dateSubmitted)
+      );
+    }
 
     // Apply status filter
     if (statusFilter !== "All Statuses") {
@@ -234,6 +243,39 @@ const Lectdash = () => {
               <CheckCircle size={20} className="text-green-600" />
             </div>
           </div>
+        </div>
+        {/* Tab section for Recent/Urgent Issues */}
+        <div className="flex justify-between items-center mb-4">
+          <div className="inline-flex rounded-md shadow-sm" role="group">
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium border border-gray-600 rounded-l-lg focus:z-10 focus:ring-2 focus:ring-blue-700 ${
+                activeTab === "recent"
+                  ? "text-white bg-blue-950 hover:bg-blue-800"
+                  : "text-gray-400 bg-gray-800 hover:bg-gray-700 hover:text-white"
+              }`}
+              onClick={() => setActiveTab("recent")}
+            >
+              Recent Issues
+            </button>
+            <button
+              type="button"
+              className={`px-4 py-2 text-sm font-medium border border-gray-600 rounded-r-lg focus:z-10 focus:ring-2 focus:ring-blue-700 ${
+                activeTab === "urgent"
+                  ? "text-white bg-blue-950 hover:bg-blue-800"
+                  : "text-gray-400 bg-gray-800 hover:bg-gray-700 hover:text-white"
+              }`}
+              onClick={() => setActiveTab("urgent")}
+            >
+              Urgent Issues
+            </button>
+          </div>
+          <a
+            href="#"
+            className="text-sm font-medium text-blue-500 hover:underline"
+          >
+            View all issues
+          </a>
         </div>
         {/* Filter Section */}
         <div className="bg-blue-950 rounded-lg shadow mb-8">
@@ -457,17 +499,19 @@ const Lectdash = () => {
                                   </h3>
                                   <ul className="space-y-2 font-medium">
                                     <li>
-                                      <button
-                                        className="text-white bg-blue-950 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                                        onClick={() => {
-                                          console.log(
-                                            `View details for issue: ${issue.subject}`
-                                          ); // ALTERATION: Placeholder action
-                                          setCookiesModalOpen(false); // Close modal
-                                        }}
-                                      >
-                                        View details
-                                      </button>
+                                      <Link to="/viewdetails">
+                                        <button
+                                          className="text-white bg-blue-950 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                                          // onClick={() => {
+                                          //   console.log(
+                                          //     `View details for issue: ${issue.subject}`
+                                          //   ); // ALTERATION: Placeholder action
+                                          //   setCookiesModalOpen(false); // Close modal
+                                          // }}
+                                        >
+                                          View details
+                                        </button>
+                                      </Link>
                                     </li>
                                     <li>
                                       <button
