@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'aitsapp',
+    'aitsapp.notifications.apps.NotificationsConfig',
     'rest_framework',
     #'axes',
     'django_filters',
