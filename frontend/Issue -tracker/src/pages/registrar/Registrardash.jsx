@@ -4,8 +4,8 @@ import {
   CheckCircle,
   Clock,
   Users,
-    FileText,
-    Bell,
+  FileText,
+  Bell,
   User,
   MoreHorizontal,
 } from "lucide-react";
@@ -159,24 +159,24 @@ const AcademicRegistrarDashboard = () => {
               </button>
             </div>
             <Link to="/rprofile">
-            <button className="p-2">
-              <span className="sr-only">Profile</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
+              <button className="p-2">
+                <span className="sr-only">Profile</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
               </button>
-              </Link>
+            </Link>
           </div>
         </div>
       </header>
@@ -416,7 +416,7 @@ const AcademicRegistrarDashboard = () => {
                             setCookiesModalOpen(true);
                           }}
                         >
-                         Action
+                          Action
                         </button>
                         <Model
                           id="cookies-modal"
@@ -426,16 +426,23 @@ const AcademicRegistrarDashboard = () => {
                         >
                           <div className="text-sm mb-5">
                             <div className="space-y-2">
-                                <Link to= '/assign'>
-                                    <button type="button" className="py-2.5 w-full px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                                        Assign to lecturer
-                                    </button>
-                                </Link>
-                              <button type="button" className="py-2.5 w-full px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                                    Mark as resolved
+                              <Link to="/assign">
+                                <button
+                                  type="button"
+                                  className="py-2.5 w-full px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                >
+                                  Assign to lecturer
                                 </button>
+                              </Link>
+                              
+                              <button
+                                type="button"
+                                className="py-2.5 w-full px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                              >
+                                Resolve
+                              </button>
                             </div>
-                          </div>                     
+                          </div>
                         </Model>
                       </div>
                     </td>
