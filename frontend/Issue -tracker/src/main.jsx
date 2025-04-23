@@ -17,6 +17,7 @@ import Lectdash from "./pages/Lecturer/Lectdash.jsx";
 import Details from "./pages/Lecturer/details.jsx";
 import Issuess from "./pages/Lecturer/Issuess.jsx";
 import LProfile from "./pages/Lecturer/LProfile.jsx";
+import RProfile from "./pages/registrar/RProfile.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -36,6 +37,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="viewdetails/" element={<Details />} />
         <Route path="issue/" element={<Issuess />} />
         <Route path="lprofile/" element={<LProfile />} />
+        <Route path="rprofile/" element={<RProfile />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

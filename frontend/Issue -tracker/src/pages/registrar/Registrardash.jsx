@@ -158,7 +158,7 @@ const AcademicRegistrarDashboard = () => {
                 </svg>
               </button>
             </div>
-            <Link to="/profile">
+            <Link to="/rprofile">
             <button className="p-2">
               <span className="sr-only">Profile</span>
               <svg

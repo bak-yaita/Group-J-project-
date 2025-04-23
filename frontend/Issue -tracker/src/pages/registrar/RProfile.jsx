@@ -1,6 +1,7 @@
 import API from "../../API";
-
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 
 // Your configured Axios instance
 
@@ -148,187 +149,166 @@ const ProfilePage = () => {
   };
 
   return (
-      <WrapL>
-          
-      <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-center">My Profile</h2>
-        </div>
-        <div>
-          {error && (
-            <div
+    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
+      <div className="flex items-center space-x-4">
+        <Link to="/regdash">
+          <button className="p-2 bg-blue-950">
+            <span className="sr-only">Dashboard</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#e3e3e3"
+            >
+              <path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
+            </svg>
+          </button>
+        </Link>
+      </div>
+
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-center">My Profile</h2>
+      </div>
+      <div>
+        {error && (
+          <div
+            style={{
+              backgroundColor: "#FEE2E2",
+              color: "#B91C1C",
+              padding: "12px",
+              borderRadius: "6px",
+              marginBottom: "16px",
+            }}
+          >
+            {error}
+          </div>
+        )}
+
+        <div className="flex flex-col items-center mb-6">
+          <div style={{ position: "relative" }}>
+            <img
+              src={user.profile_picture || "/default-profile.png"}
+              alt="Profile"
               style={{
-                backgroundColor: "#FEE2E2",
-                color: "#B91C1C",
-                padding: "12px",
-                borderRadius: "6px",
+                width: "128px",
+                height: "128px",
+                borderRadius: "50%",
+                objectFit: "cover",
                 marginBottom: "16px",
               }}
+            />
+            <input
+              type="file"
+              accept="image/jpeg, image/png"
+              onChange={handleProfilePictureChange}
+              disabled={loading}
+              style={{ display: "none" }}
+              id="profile-picture-upload"
+            />
+            <label
+              htmlFor="profile-picture-upload"
+              style={{
+                position: "absolute",
+                bottom: "0",
+                right: "0",
+                backgroundColor: "#172554",
+                color: "white",
+                padding: "8px",
+                borderRadius: "50%",
+                cursor: "pointer",
+              }}
             >
-              {error}
+              Edit
+            </label>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Full Name
+            </label>
+            <p className="mt-1 text-sm">{user.full_name}</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Username
+            </label>
+            {editing ? (
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleInputChange}
+                disabled={loading}
+                style={{
+                  marginTop: "4px",
+                  width: "100%",
+                  padding: "8px 12px",
+                  borderRadius: "6px",
+                  border: "1px solid #D1D5DB",
+                  outline: "none",
+                  boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                }}
+              />
+            ) : (
+              <p className="mt-1 text-sm">{user.username}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            {editing ? (
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                disabled={loading}
+                style={{
+                  marginTop: "4px",
+                  width: "100%",
+                  padding: "8px 12px",
+                  borderRadius: "6px",
+                  border: "1px solid #D1D5DB",
+                  outline: "none",
+                  boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                }}
+              />
+            ) : (
+              <p className="mt-1 text-sm">{user.email}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Role
+            </label>
+            <p className="mt-1 text-sm">{user.role}</p>
+          </div>
+
+          {user.role !== "admin" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                College
+              </label>
+              <p className="mt-1 text-sm">{user.college}</p>
             </div>
           )}
 
-          <div className="flex flex-col items-center mb-6">
-            <div style={{ position: "relative" }}>
-              <img
-                src={user.profile_picture || "/default-profile.png"}
-                alt="Profile"
-                style={{
-                  width: "128px",
-                  height: "128px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  marginBottom: "16px",
-                }}
-              />
-              <input
-                type="file"
-                accept="image/jpeg, image/png"
-                onChange={handleProfilePictureChange}
-                disabled={loading}
-                style={{ display: "none" }}
-                id="profile-picture-upload"
-              />
-              <label
-                htmlFor="profile-picture-upload"
-                style={{
-                  position: "absolute",
-                  bottom: "0",
-                  right: "0",
-                  backgroundColor: "#172554",
-                  color: "white",
-                  padding: "8px",
-                  borderRadius: "50%",
-                  cursor: "pointer",
-                }}
-              >
-                Edit
-              </label>
-            </div>
-          </div>
-
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
-          >
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Full Name
-              </label>
-              <p className="mt-1 text-sm">{user.full_name}</p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Username
-              </label>
-              {editing ? (
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleInputChange}
-                  disabled={loading}
-                  style={{
-                    marginTop: "4px",
-                    width: "100%",
-                    padding: "8px 12px",
-                    borderRadius: "6px",
-                    border: "1px solid #D1D5DB",
-                    outline: "none",
-                    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                  }}
-                />
-              ) : (
-                <p className="mt-1 text-sm">{user.username}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Email
-              </label>
-              {editing ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  disabled={loading}
-                  style={{
-                    marginTop: "4px",
-                    width: "100%",
-                    padding: "8px 12px",
-                    borderRadius: "6px",
-                    border: "1px solid #D1D5DB",
-                    outline: "none",
-                    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                  }}
-                />
-              ) : (
-                <p className="mt-1 text-sm">{user.email}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Role
-              </label>
-              <p className="mt-1 text-sm">{user.role}</p>
-            </div>
-
-            {user.role !== "admin" && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  College
-                </label>
-                <p className="mt-1 text-sm">{user.college}</p>
-              </div>
-            )}
-
-            <div style={{ display: "flex", gap: "16px", marginTop: "24px" }}>
-              {editing ? (
-                <button
-                  onClick={handleSave}
-                  disabled={loading}
-                  style={{
-                    flex: 1,
-                    padding: "8px 16px",
-                    backgroundColor: "#172554",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    opacity: loading ? 0.5 : 1,
-                  }}
-                >
-                  {loading ? "Saving..." : "Save"}
-                </button>
-              ) : (
-                <button
-                  onClick={() => setEditing(true)}
-                  disabled={loading}
-                  style={{
-                    flex: 1,
-                    padding: "8px 16px",
-                    backgroundColor: "#172554",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    opacity: loading ? 0.5 : 1,
-                  }}
-                >
-                  Edit Profile
-                </button>
-              )}
+          <div style={{ display: "flex", gap: "16px", marginTop: "24px" }}>
+            {editing ? (
               <button
-                onClick={() => setShowPasswordForm(!showPasswordForm)}
+                onClick={handleSave}
                 disabled={loading}
                 style={{
                   flex: 1,
                   padding: "8px 16px",
-                  backgroundColor: "#6B7280",
+                  backgroundColor: "#172554",
                   color: "white",
                   border: "none",
                   borderRadius: "6px",
@@ -336,193 +316,222 @@ const ProfilePage = () => {
                   opacity: loading ? 0.5 : 1,
                 }}
               >
-                Change Password
+                {loading ? "Saving..." : "Save"}
               </button>
-            </div>
-
-            {showPasswordForm && (
-              <div
+            ) : (
+              <button
+                onClick={() => setEditing(true)}
+                disabled={loading}
                 style={{
-                  marginTop: "24px",
-                  padding: "16px",
-                  backgroundColor: "#F9FAFB",
+                  flex: 1,
+                  padding: "8px 16px",
+                  backgroundColor: "#172554",
+                  color: "white",
+                  border: "none",
                   borderRadius: "6px",
+                  cursor: "pointer",
+                  opacity: loading ? 0.5 : 1,
                 }}
               >
-                <h3
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: 600,
-                    marginBottom: "16px",
-                  }}
-                >
-                  Change Password
-                </h3>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "16px",
-                  }}
-                >
-                  <div style={{ position: "relative" }}>
-                    <input
-                      type={showPassword.currentPassword ? "text" : "password"}
-                      name="currentPassword"
-                      placeholder="Current Password"
-                      value={passwordData.currentPassword}
-                      onChange={handlePasswordChange}
-                      disabled={loading}
-                      style={{
-                        width: "100%",
-                        padding: "8px 12px",
-                        paddingRight: "40px",
-                        borderRadius: "6px",
-                        border: "1px solid #D1D5DB",
-                        outline: "none",
-                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        togglePasswordVisibility("currentPassword")
-                      }
-                      style={{
-                        position: "absolute",
-                        right: "8px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        color: "#6B7280",
-                      }}
-                    >
-                      {showPassword.currentPassword ? "Hide" : "Show"}
-                    </button>
-                  </div>
+                Edit Profile
+              </button>
+            )}
+            <button
+              onClick={() => setShowPasswordForm(!showPasswordForm)}
+              disabled={loading}
+              style={{
+                flex: 1,
+                padding: "8px 16px",
+                backgroundColor: "#6B7280",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+                opacity: loading ? 0.5 : 1,
+              }}
+            >
+              Change Password
+            </button>
+          </div>
 
-                  <div style={{ position: "relative" }}>
-                    <input
-                      type={showPassword.newPassword ? "text" : "password"}
-                      name="newPassword"
-                      placeholder="New Password"
-                      value={passwordData.newPassword}
-                      onChange={handlePasswordChange}
-                      disabled={loading}
-                      style={{
-                        width: "100%",
-                        padding: "8px 12px",
-                        paddingRight: "40px",
-                        borderRadius: "6px",
-                        border: "1px solid #D1D5DB",
-                        outline: "none",
-                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => togglePasswordVisibility("newPassword")}
-                      style={{
-                        position: "absolute",
-                        right: "8px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        color: "#6B7280",
-                      }}
-                    >
-                      {showPassword.newPassword ? "Hide" : "Show"}
-                    </button>
-                  </div>
-
-                  <div style={{ position: "relative" }}>
-                    <input
-                      type={showPassword.confirmPassword ? "text" : "password"}
-                      name="confirmPassword"
-                      placeholder="Confirm New Password"
-                      value={passwordData.confirmPassword}
-                      onChange={handlePasswordChange}
-                      disabled={loading}
-                      style={{
-                        width: "100%",
-                        padding: "8px 12px",
-                        paddingRight: "40px",
-                        borderRadius: "6px",
-                        border: "1px solid #D1D5DB",
-                        outline: "none",
-                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        togglePasswordVisibility("confirmPassword")
-                      }
-                      style={{
-                        position: "absolute",
-                        right: "8px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        color: "#6B7280",
-                      }}
-                    >
-                      {showPassword.confirmPassword ? "Hide" : "Show"}
-                    </button>
-                  </div>
-
-                  {passwordError && (
-                    <p
-                      style={{
-                        color: "#EF4444",
-                        fontSize: "14px",
-                        marginTop: "8px",
-                      }}
-                    >
-                      {passwordError}
-                    </p>
-                  )}
-                  {passwordSuccess && (
-                    <p
-                      style={{
-                        color: "#10B981",
-                        fontSize: "14px",
-                        marginTop: "8px",
-                      }}
-                    >
-                      {passwordSuccess}
-                    </p>
-                  )}
-
-                  <button
-                    onClick={handleChangePassword}
+          {showPasswordForm && (
+            <div
+              style={{
+                marginTop: "24px",
+                padding: "16px",
+                backgroundColor: "#F9FAFB",
+                borderRadius: "6px",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "18px",
+                  fontWeight: 600,
+                  marginBottom: "16px",
+                }}
+              >
+                Change Password
+              </h3>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "16px",
+                }}
+              >
+                <div style={{ position: "relative" }}>
+                  <input
+                    type={showPassword.currentPassword ? "text" : "password"}
+                    name="currentPassword"
+                    placeholder="Current Password"
+                    value={passwordData.currentPassword}
+                    onChange={handlePasswordChange}
                     disabled={loading}
                     style={{
                       width: "100%",
-                      padding: "8px 16px",
-                      backgroundColor: "#172554",
-                      color: "white",
-                      border: "none",
+                      padding: "8px 12px",
+                      paddingRight: "40px",
                       borderRadius: "6px",
+                      border: "1px solid #D1D5DB",
+                      outline: "none",
+                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility("currentPassword")}
+                    style={{
+                      position: "absolute",
+                      right: "8px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "none",
+                      border: "none",
                       cursor: "pointer",
-                      opacity: loading ? 0.5 : 1,
+                      color: "#6B7280",
                     }}
                   >
-                    {loading ? "Updating..." : "Update Password"}
+                    {showPassword.currentPassword ? "Hide" : "Show"}
                   </button>
                 </div>
+
+                <div style={{ position: "relative" }}>
+                  <input
+                    type={showPassword.newPassword ? "text" : "password"}
+                    name="newPassword"
+                    placeholder="New Password"
+                    value={passwordData.newPassword}
+                    onChange={handlePasswordChange}
+                    disabled={loading}
+                    style={{
+                      width: "100%",
+                      padding: "8px 12px",
+                      paddingRight: "40px",
+                      borderRadius: "6px",
+                      border: "1px solid #D1D5DB",
+                      outline: "none",
+                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility("newPassword")}
+                    style={{
+                      position: "absolute",
+                      right: "8px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      color: "#6B7280",
+                    }}
+                  >
+                    {showPassword.newPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+
+                <div style={{ position: "relative" }}>
+                  <input
+                    type={showPassword.confirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    placeholder="Confirm New Password"
+                    value={passwordData.confirmPassword}
+                    onChange={handlePasswordChange}
+                    disabled={loading}
+                    style={{
+                      width: "100%",
+                      padding: "8px 12px",
+                      paddingRight: "40px",
+                      borderRadius: "6px",
+                      border: "1px solid #D1D5DB",
+                      outline: "none",
+                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility("confirmPassword")}
+                    style={{
+                      position: "absolute",
+                      right: "8px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      color: "#6B7280",
+                    }}
+                  >
+                    {showPassword.confirmPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+
+                {passwordError && (
+                  <p
+                    style={{
+                      color: "#EF4444",
+                      fontSize: "14px",
+                      marginTop: "8px",
+                    }}
+                  >
+                    {passwordError}
+                  </p>
+                )}
+                {passwordSuccess && (
+                  <p
+                    style={{
+                      color: "#10B981",
+                      fontSize: "14px",
+                      marginTop: "8px",
+                    }}
+                  >
+                    {passwordSuccess}
+                  </p>
+                )}
+
+                <button
+                  onClick={handleChangePassword}
+                  disabled={loading}
+                  style={{
+                    width: "100%",
+                    padding: "8px 16px",
+                    backgroundColor: "#172554",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    opacity: loading ? 0.5 : 1,
+                  }}
+                >
+                  {loading ? "Updating..." : "Update Password"}
+                </button>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
-    </WrapL>
+    </div>
   );
 };
 
