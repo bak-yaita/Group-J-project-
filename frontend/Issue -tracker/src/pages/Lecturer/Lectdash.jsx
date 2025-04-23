@@ -66,7 +66,7 @@ const Lectdash = () => {
           ? response.data
           : response.data.issues || [];
 
-        setAllIssues(issues); // Fixed: Set the processed issues array
+        setAllIssues(issues); //Set the processed issues array
         setFilteredIssues(issues);
       } catch (err) {
         setError("Failed to fetch issues");
