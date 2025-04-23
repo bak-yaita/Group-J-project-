@@ -61,15 +61,18 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://aits-alpha.vercel.app",
+    "https://studentportal.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://aits-alpha.vercel.app"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-
-CORS_ALLOWED_ORIGINS = [
-    "https://your-app-name.vercel.app",
-    "https://studentportal.com",
-]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 
 ROOT_URLCONF = 'aitsproject.urls'
