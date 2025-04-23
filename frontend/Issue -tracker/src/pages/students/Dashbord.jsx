@@ -2,38 +2,46 @@ import API from "../../API";
 import Cards from "../../components/cards";
 import Wrapper from "../../components/wrapper";
 import React, { useEffect, useState } from "react";
+import { Search } from "lucide-react";
 
 const StudentDashboard = () => {
-  const [allIssues, setAllIssues] = useState();
-  const [filteredIssues, setFilteredIssues] = useState([]);
-  const [statistics, setStatistics] = useState({
-    totalIssues: 0,
-    pendingIssues: 0,
-    resolvedIssues: 0,
-  });
-  const [statusFilter, setStatusFilter] = useState("All Statuses");
-  const [typeFilter, setTypeFilter] = useState("All Types");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+    const [allIssues, setAllIssues] = useState();
+    const [filteredIssues, setFilteredIssues] = useState([]);
+    const [statistics, setStatistics] = useState({
+        totalIssues: 0,
+        pendingIssues: 0,
+        resolvedIssues: 0,
+    });
+    const [statusFilter, setStatusFilter] = useState("All Statuses");
+    const [typeFilter, setTypeFilter] = useState("All Types");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
+    const handleReset = () => {
+        setStatusFilter("All Statuses");
+        setTypeFilter("All Types");
+        setSearchQuery("");
+        setFilteredIssues(allIssues); // Reset to all issues
+    };
 
-  //Fetching statistics
-  useEffect(() => {
-    const fetchStatistics = async () => {
-      try {
-        const response = await API.get("/api/issues/statistics/");
-        console.log("Statistics for Dashboard:", response.data);
-        setStatistics({
-          totalIssues: response.data.total || 0,
-          pendingIssues: response.data.pending || 0,
-          assignedIssues: response.data.assigned || 0,
-          resolvedIssues: response.data.resolved || 0,
-        });
-      } catch (err) {
-        console.error("Failed to fetch statistics:", err);
-      }
-      };
-      fetchStatistics();
-  }, []);
+    //Fetching statistics
+    useEffect(() => {
+        const fetchStatistics = async () => {
+            try {
+                const response = await API.get("/api/issues/statistics/");
+                console.log("Statistics for Dashboard:", response.data);
+                setStatistics({
+                    totalIssues: response.data.total || 0,
+                    pendingIssues: response.data.pending || 0,
+                    assignedIssues: response.data.assigned || 0,
+                    resolvedIssues: response.data.resolved || 0,
+                });
+            } catch (err) {
+                console.error("Failed to fetch statistics:", err);
+            }
+        };
+        fetchStatistics();
+    }, []);
     
     //Fetching issues
     useEffect(() => {
@@ -46,14 +54,67 @@ const StudentDashboard = () => {
                     ? response.data
                     : response.data.issues || [];
 
-            setAllIssues(issues); //Set the processed issues array
-            setFilteredIssues(issues);
+                setAllIssues(issues); //Set the processed issues array
+                setFilteredIssues(issues);
+                setLoading(false);
             } catch (err) {
                 setError("Failed to fetch issues");
-                console.error("Failed to fetch issues:", err);  
+                console.error("Failed to fetch issues:", err);
+                const mockIssues = [
+                    {
+                        id: 1,
+                        course_code: "CS101",
+                        issue_type: "Missing Marks",
+                        status: "Pending",
+                        last_update: "2023-10-01",
+                    },
+                    {
+                        id: 2,
+                        course_code: "CS102",
+                        issue_type: "Registration",
+                        status: "Resolved",
+                        last_update: "2023-09-15",
+                    },
+                ];
+                setAllIssues(mockIssues);
+                setFilteredIssues(mockIssues);
+            } finally {
+                setLoading(false);
             }
+        };
+        fetchIssues();
+    }, []);
+
+    useEffect(() => {
+        if (!Array.isArray(allIssues)) {
+            setFilteredIssues([]);
+            return;
         }
-    })
+        let result = [...allIssues];
+
+        try {
+            if (statusFilter !== "All Statuses") {
+                result = result.filter((issue) => issue.status === statusFilter);
+            }
+            if (typeFilter !== "All Types") {
+                result = result.filter((issue) => issue.issue_type === typeFilter);
+            }
+            if (searchQuery.trim() !== "") {
+                const query = searchQuery.toLowerCase();
+                result = result.filter(issue =>
+                    (issue.student_name && issue.student_name.toLowerCase().includes(query)) ||
+                    (issue.student_id && issue.student_id.toLowerCase().includes(query)) ||
+                    (issue.description && issue.description.toLowerCase().includes(query))
+                );
+            }
+                
+        
+            setFilteredIssues(result);
+        } catch (err) {
+            console.error("Error filtering issues:", err);
+        }
+    },
+   [allIssues, statusFilter, typeFilter, searchQuery]);
   return (
     <Wrapper>
       <div className="m-2">
@@ -66,17 +127,17 @@ const StudentDashboard = () => {
         <div className="mt-4 mb-4 flex flex-col gap-2 md:flex-row flexgap-4 md:justify-between">
           <Cards
             title="Total Issues"
-            number="12"
+            number={statistics.totalIssues}
             text="The Total Number of Issues You Have"
           />
           <Cards
             title="Pending Issues"
-            number="12"
+            number={statistics.pendingIssues}
             text="The Number of Your Unresolved Issues"
           />
           <Cards
             title="Resolved Issues"
-            number="12"
+            number={statistics.resolvedIssues}
             text="The Number of Your Resolved Issues"
           />
         </div>
@@ -156,42 +217,61 @@ const StudentDashboard = () => {
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-blue-950 dark:text-gray-400">
                 <tr>
                   <th scope="col" className="px-6 py-3">
-                    Issue_id
+                    Issue ID
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Course_code
+                    Course Code
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Issue_type
+                    Issue Type
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Status
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Last_update
+                    Last Update
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Actions
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                <tr className="bg-white border-b dark:bg-white dark:border-gray-700 border-gray-200">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                    Apple MacBook Pro 17"
-                  </th>
-                  <td className="px-6 py-4">Silver</td>
-                  <td className="px-6 py-4">Laptop</td>
-                  <td className="px-6 py-4">$2999</td>
-                  <td className="px-6 py-4">
+              <tbody> {loading ? (
+                <tr>
+            <td colSpan="6" className="px-6 py-4 text-center">
+              Loading...
+            </td>
+          </tr>
+        ) : filteredIssues.length > 0 ? (
+          filteredIssues.map((issue) => (
+            <tr key={issue.id} className="bg-white border-b dark:bg-white dark:border-gray-700 border-gray-200">
+              <th
+                scope="row"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-gray-700"
+              >
+                {issue.id}
+              </th>
+              <td className="px-6 py-4">{issue.course_code}</td>
+              <td className="px-6 py-4">{issue.issue_type}</td>
+              <td className="px-6 py-4">{issue.status}</td>
+              <td className="px-6 py-4">{issue.last_update}</td>
+              <td className="px-6 py-4">
                     <a
-                      href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
+                      href={`/issues/${issue.id}`}
+                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                >
+                  View
+                </a>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="6" className="px-6 py-4 text-center">
+              No issues found
+            </td>
+          </tr>
+        )}
               </tbody>
             </table>
           </div>
