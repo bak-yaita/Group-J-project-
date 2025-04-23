@@ -1,8 +1,9 @@
 import API from "../../API";
 import Cards from "../../components/cards";
 import Wrapper from "../../components/wrapper";
-import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
+import React, { useEffect, useState } from "react";
+
 
 const StudentDashboard = () => {
     const [allIssues, setAllIssues] = useState();
@@ -45,44 +46,77 @@ const StudentDashboard = () => {
     
     //Fetching issues
     useEffect(() => {
-        const fetchIssues = async () => {
-            try {
-                setLoading(true);
-                const response = await API.get('/api/issues/')
-                console.log("Issues from api;", response.data)
-                const issues = Array.isArray(response.data)
-                    ? response.data
-                    : response.data.issues || [];
+      // Modify the fetchIssues function to use your API import and the specified endpoints
+      const fetchIssues = async () => {
+        try {
+          setLoading(true);
 
-                setAllIssues(issues); //Set the processed issues array
-                setFilteredIssues(issues);
-                setLoading(false);
-            } catch (err) {
-                setError("Failed to fetch issues");
-                console.error("Failed to fetch issues:", err);
-                const mockIssues = [
-                    {
-                        id: 1,
-                        course_code: "CS101",
-                        issue_type: "Missing Marks",
-                        status: "Pending",
-                        last_update: "2023-10-01",
-                    },
-                    {
-                        id: 2,
-                        course_code: "CS102",
-                        issue_type: "Registration",
-                        status: "Resolved",
-                        last_update: "2023-09-15",
-                    },
-                ];
-                setAllIssues(mockIssues);
-                setFilteredIssues(mockIssues);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchIssues();
+          // Start with the base endpoint
+          let endpoint = "/api/issues/";
+          let queryParams = [];
+
+          // Add status filter parameter if selected
+          if (statusFilter !== "All Statuses") {
+            queryParams.push(`status=${statusFilter}`);
+          }
+
+          // Add issue type filter parameter if selected
+          if (typeFilter !== "All Types") {
+            queryParams.push(`issue_type=${typeFilter}`);
+          }
+
+          // Add description search parameter if there's a search query
+          if (searchQuery.trim() !== "") {
+            queryParams.push(
+              `description=${encodeURIComponent(searchQuery.trim())}`
+            );
+          }
+
+          // Append all query parameters to the endpoint
+          if (queryParams.length > 0) {
+            endpoint += "?" + queryParams.join("&");
+          }
+
+          console.log("Fetching from endpoint:", endpoint);
+
+          // Use the imported API object to make the request
+          const response = await API.get(endpoint);
+          console.log("Issues from API:", response.data);
+
+          const issues = Array.isArray(response.data)
+            ? response.data
+            : response.data.issues || [];
+
+          setAllIssues(issues);
+          setFilteredIssues(issues);
+        } catch (err) {
+          setError("Failed to fetch issues");
+          console.error("Failed to fetch issues:", err);
+
+          // Mock data for testing
+          const mockIssues = [
+            {
+              id: 1,
+              course_code: "CS101",
+              issue_type: "Missing Marks",
+              status: "Pending",
+              last_update: "2023-10-01",
+            },
+            {
+              id: 2,
+              course_code: "CS102",
+              issue_type: "Registration",
+              status: "Resolved",
+              last_update: "2023-09-15",
+            },
+          ];
+          setAllIssues(mockIssues);
+          setFilteredIssues(mockIssues);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchIssues();
     }, []);
 
     useEffect(() => {
