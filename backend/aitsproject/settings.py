@@ -63,7 +63,6 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://aits-alpha.vercel.app",
-    "https://studentportal.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
