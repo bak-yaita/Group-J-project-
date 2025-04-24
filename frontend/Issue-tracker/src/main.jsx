@@ -39,7 +39,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="lprofile/" element={<LProfile />} />
         <Route path="rprofile/" element={<RProfile />} />
         <Route path="resolve/" element={<Resolve />} />
-        <Route path="home/" element={<Home />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

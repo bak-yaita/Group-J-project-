@@ -1,5 +1,5 @@
 import API from "../../API";
-import Cards from "../../components/Cards";
+import Cards from "../../components/cards";
 import Wrapper from "../../components/wrapper";
 import { Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
