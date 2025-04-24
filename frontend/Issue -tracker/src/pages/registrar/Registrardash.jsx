@@ -1,4 +1,5 @@
 import Model from "../../components/model";
+import API from "../../API";
 import {
   Search,
   CheckCircle,
@@ -54,59 +55,158 @@ const AcademicRegistrarDashboard = () => {
   ];
 
   // State for issues and filters
-  const [allIssues, setAllIssues] = useState(initialIssues);
-  const [filteredIssues, setFilteredIssues] = useState(initialIssues);
+  const [allIssues, setAllIssues] = useState([]);
+  const [filteredIssues, setFilteredIssues] = useState([]);
+   const [statistics, setStatistics] = useState({
+      totalIssues: 0,
+      pendingIssues: 0,
+      assignedIssues: 0,
+      resolvedIssues: 0,
+    });
   const [statusFilter, setStatusFilter] = useState("All Statuses");
   const [typeFilter, setTypeFilter] = useState("All Types");
   const [searchQuery, setSearchQuery] = useState("");
   const [cookiesModalOpen, setCookiesModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("recent");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  // Calculate dashboard statistics
-  const totalIssues = allIssues.length;
-  const pendingIssues = allIssues.filter(
-    (issue) => issue.status === "Pending"
-  ).length;
-  const assignedIssues = allIssues.filter(
-    (issue) => issue.status === "Assigned"
-  ).length;
-  const resolvedIssues = allIssues.filter(
-    (issue) => issue.status === "Resolved"
-  ).length;
+  // Fetch dashboard statistics
+    useEffect(() => {
+      const fetchStatistics = async () => {
+        try {
+          const response = await API.get("/api/issues/statistics/");
+          console.log("Statistics API response:", response.data);
+  
+          setStatistics({
+            totalIssues: response.data.total || 0,
+            pendingIssues: response.data.in_progress || 0,
+            assignedIssues: response.data.assigned || 0,
+            resolvedIssues: response.data.resolved || 0,
+          });
+        } catch (err) {
+          console.error("Failed to fetch statistics:", err);
+          // Keep default values from state initialization if API fails
+        }
+      };
+
+      fetchStatistics();
+    }, []);
+  
+  // Fetch all issues
+  
 
   // Apply filters when any filter changes
   useEffect(() => {
+    // Ensure allIssues is an array before proceeding
+    if (!Array.isArray(allIssues)) {
+      setFilteredIssues([]);
+      return;
+    }
+  
     let result = [...allIssues];
+  
+    try {
+      // Apply tab filter
+      if (activeTab === "urgent") {
+        // Defining what makes an issue "urgent" - i.e:
+        result = result.filter((issue) => {
+          // Safely handle date parsing
+          try {
+            const submittedDate = new Date(issue.dateSubmitted);
+            const cutoffDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+            return issue.status === "Assigned" && submittedDate > cutoffDate;
+          } catch (e) {
+            console.error("Date parsing error:", e);
+            return false; // Skip items with invalid dates
+          }
+        });
+      } else {
+        // For "recent" tab - sort by date with error handling
+        result.sort((a, b) => {
+          try {
+            return new Date(b.dateSubmitted) - new Date(a.dateSubmitted);
+          } catch (e) {
+            console.error("Date sorting error:", e);
+            return 0; // Maintain original order if date parsing fails
+          }
+        });
+      }
+  
+      // Apply status filter
+      if (statusFilter !== "All Statuses") {
+        result = result.filter((issue) => issue.status === statusFilter);
+      }
 
-    // Apply status filter
-    if (statusFilter !== "All Statuses") {
-      result = result.filter((issue) => issue.status === statusFilter);
+      // Apply type filter
+      if (typeFilter !== "All Types") {
+        result = result.filter((issue) => issue.issueType === typeFilter);
+      }
+
+      // Apply search query
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        result = result.filter(
+          (issue) =>
+            issue.student.name.toLowerCase().includes(query) ||
+            issue.student.id.toLowerCase().includes(query) ||
+            issue.subject.toLowerCase().includes(query)
+        );
+      }
+    } catch (error) {
+      console.error("Error applying filters:", error);
     }
 
-    // Apply type filter
-    if (typeFilter !== "All Types") {
-      result = result.filter((issue) => issue.issueType === typeFilter);
-    }
-
-    // Apply search query
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(
-        (issue) =>
-          issue.student.name.toLowerCase().includes(query) ||
-          issue.student.id.toLowerCase().includes(query) ||
-          issue.subject.toLowerCase().includes(query)
-      );
-    }
-
-    setFilteredIssues(result);
-  }, [statusFilter, typeFilter, searchQuery, allIssues]);
-
+      setFilteredIssues(result);
+    }, [statusFilter, typeFilter, searchQuery, allIssues]);
+  
   // Reset filters
   const handleReset = () => {
     setStatusFilter("All Statuses");
     setTypeFilter("All Types");
     setSearchQuery("");
   };
+
+  const updateIssueStatus = async (issueId, newStatus) => {
+      try {
+        await API.patch(`/api/issues/${issueId}/`, {
+          status: newStatus,
+        });
+  
+        // Update local state
+        const updatedIssues = allIssues.map((issue) =>
+          issue.id === issueId ? { ...issue, status: newStatus } : issue
+        );
+  
+        setAllIssues(updatedIssues);
+  
+        // Re-fetch statistics to keep them updated
+        try {
+          const statsResponse = await API.get("/api/issues/statistics/");
+          setStatistics({
+            totalIssues: statsResponse.data.total || 0,
+            pendingIssues: statsResponse.data.in_progress || 0,
+            assignedIssues: statsResponse.data.assigned || 0,
+            resolvedIssues: statsResponse.data.resolved || 0,
+          });
+        } catch (statsErr) {
+          console.error(
+            "Failed to update statistics after status change:",
+            statsErr
+          );
+          // Don't update statistics if the API call fails
+        }
+  
+        setCookiesModalOpen(false);
+      } catch (err) {
+        console.error("Failed to update issue status:", err);
+        // Show some feedback to the user
+        setError("Failed to update issue status. Please try again.");
+        // Clear error after 3 seconds
+        setTimeout(() => setError(null), 3000);
+      }
+    };
+  
 
   // Get badge color based on issue type
   const getBadgeClass = (type) => {
@@ -185,7 +285,7 @@ const AcademicRegistrarDashboard = () => {
             <div>
               <p className="text-sm font-medium text-white">Total Issues</p>
               <p className="text-3xl font-bold text-white mt-1">
-                {totalIssues}
+                {statistics.totalIssues}
               </p>
               <p className="text-xs text-gray-500 mt-1">All submitted issues</p>
             </div>
@@ -198,7 +298,7 @@ const AcademicRegistrarDashboard = () => {
             <div>
               <p className="text-sm font-medium text-white">Pending Issues</p>
               <p className="text-3xl font-bold text-white mt-1">
-                {pendingIssues}
+                {statistics.pendingIssues}
               </p>
               <p className="text-xs text-gray-500 mt-1">
                 Awaiting assignment or resolution
@@ -213,7 +313,7 @@ const AcademicRegistrarDashboard = () => {
             <div>
               <p className="text-sm font-medium text-white">Assigned Issues</p>
               <p className="text-3xl font-bold text-white mt-1">
-                {assignedIssues}
+                {statistics?.assignedIssues}
               </p>
               <p className="text-xs text-gray-500 mt-1">
                 Assigned to lecturers
@@ -228,7 +328,7 @@ const AcademicRegistrarDashboard = () => {
             <div>
               <p className="text-sm font-medium text-white">Resolved Issues</p>
               <p className="text-3xl font-bold text-white mt-1">
-                {resolvedIssues}
+                {statistics.resolvedIssues}
               </p>
               <p className="text-xs text-gray-500 mt-1">
                 Successfully resolved

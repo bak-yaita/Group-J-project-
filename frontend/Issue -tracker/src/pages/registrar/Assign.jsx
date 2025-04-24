@@ -1,5 +1,7 @@
 import React from "react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+
 
 const Assign = () => {
     const [formData, setFormData] = useState({
@@ -27,6 +29,22 @@ const Assign = () => {
     };
     return (
         <div className="m-2">
+            <div className="relative">
+                      <Link to="/regdash">
+                        <button className="p-2 bg-blue-950 rounded-full hover:bg-blue-700 transition duration-300 ease-in-out">
+                          <span className="sr-only"></span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24px"
+                            viewBox="0 -960 960 960"
+                            width="24px"
+                            fill="#e3e3e3"
+                          >
+                            <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+                          </svg>
+                        </button>
+                      </Link>
+                    </div>
             <div className="m-2">
                 <header className="bg-blue-950 border-b border-gray-200 px-6 py-4">
                 <div className="flex justify-between items-center">

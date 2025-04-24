@@ -25,7 +25,7 @@ const Resolve = () => {
       <div className="flex items-center space-x-4">
         <div className="relative">
           <Link to="/regdash">
-            <button className="p-2">
+            <button className="p-2 bg-blue-950 rounded-full hover:bg-blue-700 transition duration-300 ease-in-out">
               <span className="sr-only"></span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
