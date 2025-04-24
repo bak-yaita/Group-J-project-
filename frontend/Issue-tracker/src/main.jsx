@@ -14,7 +14,7 @@ import Issues from "./pages/students/issues.jsx";
 import Profile from "./pages/students/Profile.jsx";
 import Notifications from "./pages/notifications.jsx";
 import Lectdash from "./pages/Lecturer/Lectdash.jsx";
-import Details from "./pages/Lecturer/details.jsx";
+import Details from "./pages/Lecturer/Details.jsx";
 import Issuess from "./pages/Lecturer/Issuess.jsx";
 import LProfile from "./pages/Lecturer/LProfile.jsx";
 import RProfile from "./pages/registrar/RProfile.jsx";
