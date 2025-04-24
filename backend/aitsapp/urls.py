@@ -16,6 +16,7 @@ router.register(r'dashboard', DashboardViewSet, basename='dashboard')
 router.register(r'audit-logs',AuditLogViewSet, basename='auditlog')
 router.register(r'forgot-password', ForgotPasswordViewSet, basename='forgot-password')
 router.register(r'reset-password', PasswordResetConfirmViewSet, basename='reset-password')
+from .views import set_csrf_token 
 
 urlpatterns = [
     path('api/', include(router.urls)),
@@ -32,4 +33,6 @@ urlpatterns = [
     path('api/profile/profile-picture/', UserProfileViewSet.as_view({
         'post': 'profile_picture'
     }), name='profile-picture'),
+
+    path("csrf/", set_csrf_token)
 ]

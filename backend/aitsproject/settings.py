@@ -63,15 +63,19 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://aits-alpha.vercel.app",
+    "https://ait-sigma.vercel.app",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://aits-alpha.vercel.app"
-]
+    "https://aits-alpha.vercel.app",
+    "https://ait-sigma.vercel.app"
+    ]
 
 CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False         # Allow JavaScript to read csrftoken
+CSRF_COOKIE_SAMESITE = "None"        # Because we're cross-origin (PythonAnywhere <-> Vercel)
 
 
 ROOT_URLCONF = 'aitsproject.urls'
