@@ -137,9 +137,6 @@ const AcademicRegistrarDashboard = () => {
           </div>
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <div className="absolute right-0 top-0 w-4 h-4 bg-red-500 rounded-full text-xs flex items-center justify-center text-white">
-                3
-              </div>
               <button className="p-2">
                 <span className="sr-only">Notifications</span>
                 <svg
@@ -425,7 +422,7 @@ const AcademicRegistrarDashboard = () => {
                           title="View Details"
                         >
                           <div className="text-sm mb-5">
-                            <div className="space-y-2">
+                            <div className="space-y-2 flex flex-col">
                               <Link to="/assign">
                                 <button
                                   type="button"
@@ -434,13 +431,14 @@ const AcademicRegistrarDashboard = () => {
                                   Assign to lecturer
                                 </button>
                               </Link>
-                              
+                              <Link to= "/resolve">
                               <button
                                 type="button"
                                 className="py-2.5 w-full px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                               >
                                 Resolve
-                              </button>
+                                </button>
+                                </Link>
                             </div>
                           </div>
                         </Model>

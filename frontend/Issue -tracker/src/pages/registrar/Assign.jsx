@@ -43,7 +43,7 @@ const Assign = () => {
                 <p className="text-2xl font-bold text-gray-600">Issue Details</p>
                 <div className="mt-4 mb-4 flex flex-col gap-2 md:flex-row flexgap-4 md:justify-between">
                 <div
-                    class="block p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-blue-950 dark:border-gray-700 dark:hover:bg-gray-700"
+                    class="block p-6 bg-white border border-gray-200 rounded-lg shadow-sm w-full hover:bg-gray-100 dark:bg-blue-950 dark:border-gray-700 dark:hover:bg-gray-700"
                 >
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
                     Student: {name}

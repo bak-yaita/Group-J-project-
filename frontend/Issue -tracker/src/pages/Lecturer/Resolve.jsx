@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router";
+import React, {useState} from "react";
+import { Link } from "react-router-dom";
 
 const Resolve = () => {
   const [formData, setFormData] = useState({
@@ -69,26 +69,26 @@ const Resolve = () => {
         </div>
       </div>
       <div className="bg-blue-950 rounded-lg shadow mb-1">
-        <div class="flex mt-4 md:mt-6">
+        <div className="flex mt-4 md:mt-6">
           <Link
             to="/regdash"
-            class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-gray-900 rounded-lg hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-gray-500 dark:bg-gray-900 dark:hover:bg-gray-500 dark:focus:ring-gray-500"
+            className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-gray-900 rounded-lg hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-gray-500 dark:bg-gray-900 dark:hover:bg-gray-500 dark:focus:ring-gray-500"
           >
             Cancel
           </Link>
-          <button className="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+          <button onClick={handleSubmit} type="submit" className="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
             Mark as resolved 
           </button>
             <div
               id="default-modal"
-              tabindex="-1"
+              tabIndex="-1"
               aria-hidden="true"
-              class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+              className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
             >
-              <div class="relative p-4 w-full max-w-2xl max-h-full">
-                <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+              <div className="relative p-4 w-full max-w-2xl max-h-full">
+                <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                  <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                       Issue resolved
                     </h3>
                     <p className="text-gray-900">The issue has been successfully ressolved</p>
