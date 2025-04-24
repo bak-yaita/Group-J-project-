@@ -10,7 +10,6 @@ import Assign from "./pages/registrar/Assign.jsx";
 import Registrardash from "./pages/registrar/Registrardash.jsx";
 import Dashbord from "./pages/students/Dashbord.jsx";
 import Submission from "./pages/students/Submission.jsx";
-import Issues from "./pages/students/issues.jsx";
 import Profile from "./pages/students/Profile.jsx";
 import Notifications from "./pages/notifications.jsx";
 import Lectdash from "./pages/Lecturer/Lectdash.jsx";
@@ -29,7 +28,6 @@ createRoot(document.getElementById("root")).render(
         <Route path="dashbord/" element={<Dashbord />} />
         <Route path="login/" element={<Login />} />
         <Route path="register/" element={<Register />} />
-        <Route path="issues/" element={<Issues />} />
         <Route path="profile/" element={<Profile />} />
         <Route path="submission/" element={<Submission />} />
         <Route path="regdash/" element={<Registrardash />} />
