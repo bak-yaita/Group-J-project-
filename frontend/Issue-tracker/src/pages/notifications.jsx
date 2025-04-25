@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import Wrapper from '../components/wrapper';
-import { ToastContainer } from 'react-toastify';
-import API from '../API';
+import API from "../API";
+import Wrapper from "../components/wrapper";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -12,7 +12,11 @@ const Notifications = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await API.get('/api/notifications/');
+        const response = await API.get("/api/notifications/");
+        //to make sure we are working with arrays
+        const notificationsData = Array.isArray(response.data)
+          ? response.data
+          : response.data.notifications || [];
         setNotifications(response.data);
       } catch (err) {
         setError(err.message);
@@ -31,12 +35,14 @@ const Notifications = () => {
   return (
     <Wrapper>
       <h2>Your Notifications</h2>
-      {notifications.length > 0 ? (
+      {Array.isArray(notifications) && notifications.length > 0 ? (
         <ul>
-          {notifications.map(notification => (
+          {notifications.map((notification) => (
             <li key={notification.id}>
               <p>{notification.message}</p>
-              <small>{new Date(notification.created_at).toLocaleString()}</small>
+              <small>
+                {new Date(notification.created_at).toLocaleString()}
+              </small>
             </li>
           ))}
         </ul>

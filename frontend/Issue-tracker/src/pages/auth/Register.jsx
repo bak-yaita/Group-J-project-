@@ -1,6 +1,6 @@
 import { Auth } from "../../API";
 import React, { useState } from "react";
-
+import { Link } from "react-router-dom";
 
 // Import the axios instance
 
@@ -48,10 +48,7 @@ export default function RegisterForm() {
     }
 
     try {
-      const response = await Auth.post(
-        "/api/auth/register/",
-        dataToSend
-      );
+      const response = await Auth.post("/api/auth/register/", dataToSend);
       setSuccess(true);
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
@@ -78,10 +75,7 @@ export default function RegisterForm() {
       return (
         <>
           <div className="space-y-2">
-            <label
-              htmlFor="user_number"
-              className="block text-sm font-medium"
-            >
+            <label htmlFor="user_number" className="block text-sm font-medium">
               Student Number
             </label>
             <input
@@ -116,10 +110,7 @@ export default function RegisterForm() {
     } else if (formData.role === "lecturer") {
       return (
         <div className="space-y-2">
-          <label
-            htmlFor="user_number"
-            className="block text-sm font-medium"
-          >
+          <label htmlFor="user_number" className="block text-sm font-medium">
             Lecturer Number
           </label>
           <input
@@ -136,15 +127,32 @@ export default function RegisterForm() {
     } else if (formData.role === "registrar") {
       // No additional fields for registrars
       return null;
-  }
+    }
 
-  return null;
-};
-  
+    return null;
+  };
 
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="px-4 py-6">
+      <div className="flex place-items-end space-x-4">
+        <div className="relative">
+          <Link to="/login">
+            <button className="p-2 bg-blue-950 rounded-full hover:bg-blue-700 transition duration-300 ease-in-out">
+              <span className="sr-only"></span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="20px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#e3e3e3"
+              >
+                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+              </svg>
+            </button>
+          </Link>
+        </div>
+      </div>
         <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
         {success ? (
           <div className="p-4 bg-green-50 text-green-700 rounded-md">

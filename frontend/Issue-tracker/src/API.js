@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 export const API = axios.create({
-  baseURL: import.meta.env.BASE_URL_PROD,
+  baseURL: import.meta.env.VITE_BASE_URL_PROD,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -11,7 +11,7 @@ export const API = axios.create({
 });
 
 export const Auth = axios.create({
-  baseURL: import.meta.env.BASE_URL_PROD,
+  baseURL: import.meta.env.VITE_BASE_URL_PROD,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

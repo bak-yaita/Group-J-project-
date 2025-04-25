@@ -165,7 +165,7 @@ const Lectdash = () => {
 
     setFilteredIssues(result);
   }, [statusFilter, typeFilter, searchQuery, allIssues, activeTab]);
-
+  
   // Reset filters
   const handleReset = () => {
     setStatusFilter("All Statuses");

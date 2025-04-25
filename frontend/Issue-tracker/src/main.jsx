@@ -10,15 +10,15 @@ import Assign from "./pages/registrar/Assign.jsx";
 import Registrardash from "./pages/registrar/Registrardash.jsx";
 import Dashbord from "./pages/students/Dashbord.jsx";
 import Submission from "./pages/students/Submission.jsx";
-import Issues from "./pages/students/issues.jsx";
 import Profile from "./pages/students/Profile.jsx";
 import Notifications from "./pages/notifications.jsx";
 import Lectdash from "./pages/Lecturer/Lectdash.jsx";
-import Details from "./pages/Lecturer/details.jsx";
+import Details from "./pages/Lecturer/Details.jsx";
 import Issuess from "./pages/Lecturer/Issuess.jsx";
 import LProfile from "./pages/Lecturer/LProfile.jsx";
 import RProfile from "./pages/registrar/RProfile.jsx";
 import Resolve from "./pages/Lecturer/Resolve.jsx";
+import Home from "./pages/auth/Home.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -28,7 +28,6 @@ createRoot(document.getElementById("root")).render(
         <Route path="dashbord/" element={<Dashbord />} />
         <Route path="login/" element={<Login />} />
         <Route path="register/" element={<Register />} />
-        <Route path="issues/" element={<Issues />} />
         <Route path="profile/" element={<Profile />} />
         <Route path="submission/" element={<Submission />} />
         <Route path="regdash/" element={<Registrardash />} />
@@ -40,6 +39,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="lprofile/" element={<LProfile />} />
         <Route path="rprofile/" element={<RProfile />} />
         <Route path="resolve/" element={<Resolve />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

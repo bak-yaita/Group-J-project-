@@ -1,5 +1,5 @@
 import React from 'react'
-
+// actual componet
 const Cards = ( {title, number, text}) => {
   return (
     <div>
