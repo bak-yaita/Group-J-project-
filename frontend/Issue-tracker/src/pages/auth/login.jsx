@@ -3,6 +3,7 @@ import issue from "../../assets/issue.jpg";
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import picture from "../../assets/picture.jpg"
 
 function Login() {
   const navigate = useNavigate();
@@ -118,7 +119,7 @@ function Login() {
           </div>
         </div>
         <div className="hidden md:block bg-green-300 rounded-lg overflow-hidden">
-          <img src={issue} alt="issue" className="h-full w-80 grayscale-100" />
+          <img src={picture} alt="picture" className="h-full w-80 grayscale-100" />
         </div>
       </div>
     </div>

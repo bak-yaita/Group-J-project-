@@ -1,11 +1,12 @@
 import study from "../../assets/study.jpeg";
 import React from "react";
 import { Link } from "react-router-dom";
+import somepict from "../../assets/somepict.jpg";
 
 const Home = () => {
   return (
     <div>
-      <header className="bg-blue-950 border-b border-gray-200 px-6 py-4">
+      <header className="bg-blue-950 border-b border-gray-200 mb-0  px-6 py-4">
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-5xl font-bold text-white">
@@ -37,7 +38,7 @@ const Home = () => {
       <div
         className="flex-1 w-full"
         style={{
-          backgroundImage: `url(${study})`,
+          backgroundImage: `url(${somepict})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
