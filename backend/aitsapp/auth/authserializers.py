@@ -1,83 +1,74 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from rest_framework.exceptions import AuthenticationFailed
-from django.contrib.auth import authenticate
 
 User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    full_name = serializers.SerializerMethodField()
+    full_name = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
         fields = [
-            'username', 'password', 'email', 'first_name', 'last_name', 
-            'role', 'user_number', 'registration_number', 'college', 'full_name'
+            'username', 'password', 'email', 
+            'role', 'user_number', 'registration_number', 'college', 'full_name','first_name', 'last_name'
         ]
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
     def get_full_name(self, obj):
-        return f"{obj.first_name} {obj.last_name}"
+        return f"{obj.first_name} {obj.last_name}".strip()
 
-    def validate(self, data):
+    def validate(self, attrs):
         valid_roles = ['student', 'lecturer', 'registrar']
-        role = data.get('role','').lower()
+        role = attrs.get('role', '').lower()
 
         if role not in valid_roles:
-            raise serializers.ValidationError(f"Role must be one of: {','.join(valid_roles)}")
-        
-        data['role'] = role
-        user_number = data.get('user_number')
-        registration_number = data.get('registration_number')
-        college = data.get('college')
+            raise serializers.ValidationError(
+                {"role": f"Role must be one of: {', '.join(valid_roles)}"}
+            )
+        attrs['role'] = role
 
-        if not data.get('first_name'):
-            raise serializers.ValidationError("First name is required.")
-        if not data.get('last_name'):
-            raise serializers.ValidationError("Last name is required.")
+        user_number = attrs.get('user_number')
+        registration_number = attrs.get('registration_number')
+        college = attrs.get('college')
+        
+        first_name = attrs.get('first_name')
+        last_name = attrs.get('last_name')
+        if not attrs.get('first_name'):
+            raise serializers.ValidationError({"first_name": "First name is required."})
+        if not attrs.get('last_name'):
+            raise serializers.ValidationError({"last_name": "Last name is required."})
+        
+        #  Auto-capitalize first name and last name
+        attrs['first_name'] = first_name.capitalize()
+        attrs['last_name'] = last_name.capitalize()
 
         if role == "student":
             if not user_number:
-                raise serializers.ValidationError("Students must provide a student number.")
+                raise serializers.ValidationError({"user_number": "Students must provide a student number."})
             if not registration_number:
-                raise serializers.ValidationError("Students must provide a registration number.")
+                raise serializers.ValidationError({"registration_number": "Students must provide a registration number."})
         
         elif role == "lecturer":
             if not user_number:
-                raise serializers.ValidationError("Lecturers must provide a lecturer number.")
+                raise serializers.ValidationError({"user_number": "Lecturers must provide a lecturer number."})
             if registration_number:
-                raise serializers.ValidationError("Lecturers should not provide a registration number.")
+                raise serializers.ValidationError({"registration_number": "Lecturers should not provide a registration number."})
 
         elif role == "registrar":
             if user_number or registration_number:
-                raise serializers.ValidationError("Registrars should not provide a student or lecturer number.")
+                raise serializers.ValidationError({"detail": "Registrars should not provide a student or lecturer number."})
+
         if not college:
-            raise serializers.ValidationError("College is required.")
-        return data
+            raise serializers.ValidationError({"college": "College is required."})
+
+        return attrs
 
     def create(self, validated_data):
         password = validated_data.pop('password')
-        user = User.objects.create_user(**validated_data)
+        user = User(**validated_data)
         user.set_password(password)
         user.save()
         return user
-class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
-
-    def validate(self, data):
-        request = self.context.get('request')  # Get the request object from the serializer context
-        if not request:
-            raise serializers.ValidationError("Request object is missing.")
-        # Pass the request object to the authenticate function
-        user = authenticate(request=request, username=data['username'], password=data['password'])
-        if user is None:
-            raise AuthenticationFailed("Incorrect credentials")
-        
-        # Instead of returning user, return the validated data
-        data["user"] = user  
-        return data  
-
-    
-
-    

@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from rest_framework.permissions import AllowAny
+from django.conf import settings
 
 User = get_user_model()
 
@@ -19,7 +20,7 @@ class ForgotPasswordViewSet(ViewSet):  # Previously PasswordResetRequestViewSet
         if user:
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
-            reset_link = f"http://localhost:8000/reset-password/{uid}/{token}/"
+            reset_link = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
 
             send_mail(
                 subject="AITS Password Reset",

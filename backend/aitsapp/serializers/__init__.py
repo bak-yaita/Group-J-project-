@@ -3,4 +3,5 @@ from .IssueSerializer import IssueSerializer, IssueAssignmentSerializer, IssueRe
 from .UserProfileSerializer import UserProfileSerializer, PasswordChangeSerializer
 from .notification_serializer import NotificationSerializer
 from .auditlog_serializers import AuditLogSerializer 
+from .CustomTokenObtainPairSerializer import CustomTokenObtainPairSerializer
 
