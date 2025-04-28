@@ -42,6 +42,8 @@ class IssueViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated, IsRegistrar, IsSameCollege]
         elif self.action == 'resolve':
             permission_classes = [IsAuthenticated, CanResolveIssue, IsSameCollege]
+        elif self.action == 'in_progress':
+            permission_classes = [IsAuthenticated, CanResolveIssue, IsSameCollege]
         elif self.action == 'statistics':
             permission_classes = [IsAuthenticated, IsSameCollege]
         else:
@@ -173,3 +175,43 @@ class IssueViewSet(viewsets.ModelViewSet):
         registrars = User.objects.filter(role='registrar', college=issue.student.college)
         for registrar in registrars:
             Notification.objects.create(user=registrar, message=message, is_read=False)
+
+    
+    @action(detail=False, methods=['get'], url_path='lecturer-issues')
+    def lecturer_issues(self, request):
+        user = request.user
+        issues = Issue.objects.filter(assigned_to=user, student__college=user.college)
+        serializer = IssueSerializer(issues, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def in_progress(self, request, pk=None):
+        issue = self.get_object()
+
+        # same permission check as resolve
+        if not (request.user.is_staff
+                or request.user.role == 'registrar'
+                or (issue.assigned_to and issue.assigned_to == request.user)):
+            return Response(
+                {"error": "You do not have permission to update this issue."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        issue.status = 'in_progress'
+        issue.save()
+
+        # notify the student (and maybe registrar/lecturer)
+        self._create_notification_for_user(
+          issue.student,
+          f"Issue '{issue.subject}' is now in progress"
+        )
+        if issue.assigned_to and issue.assigned_to != request.user:
+            self._create_notification_for_user(
+              issue.assigned_to,
+              f"Issue '{issue.subject}' has been picked up by {request.user.get_full_name()}"
+            )
+
+        serializer = self.get_serializer(issue)
+        return Response(serializer.data)
+
+
