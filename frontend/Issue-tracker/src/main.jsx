@@ -18,6 +18,7 @@ import Issuess from "./pages/Lecturer/Issuess.jsx";
 import LProfile from "./pages/Lecturer/LProfile.jsx";
 import RProfile from "./pages/registrar/RProfile.jsx";
 import Resolve from "./pages/Lecturer/Resolve.jsx";
+import RResolve from "./pages/registrar/RResolve.jsx";
 import Home from "./pages/auth/Home.jsx";
 
 createRoot(document.getElementById("root")).render(
@@ -39,6 +40,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="lprofile/" element={<LProfile />} />
         <Route path="rprofile/" element={<RProfile />} />
         <Route path="resolve/" element={<Resolve />} />
+        <Route path="rresolve/" element={<RResolve />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
