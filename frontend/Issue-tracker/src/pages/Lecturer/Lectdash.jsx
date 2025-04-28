@@ -640,17 +640,17 @@ const Lectdash = () => {
                                         </button>
                                       </li>
                                       <li>
-                                        <Link to = "/resolve">
+                                        <Link to= {`/resolve/${issue.id}`}>
                                         <button
                                           className="w-full text-white bg-blue-950 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center justify-center px-5 py-2.5"
-                                          onClick={() =>
-                                            updateIssueStatus(
-                                              issue.id,
-                                              "Resolved"
-                                            )
-                                          }
+                                          // onClick={() =>
+                                          //   updateIssueStatus(
+                                          //     issue.id,
+                                          //     "Resolved"
+                                          //   )
+                                          // }
                                         >
-                                          Mark as Resolved
+                                          Resolve Issue 
                                           </button>
                                           </Link>
                                       </li>
