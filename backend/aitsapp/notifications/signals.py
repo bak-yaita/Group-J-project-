@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from ..models import Issue, Notification
 from .utils import send_notification_email
 from django.contrib.auth import get_user_model
+from ..models.userprofile import Profile
 
 User = get_user_model()
 
@@ -56,3 +57,19 @@ def comprehensive_notification_handler(sender, instance, created, **kwargs):
             user=registrar,
             message=f"Issue '{instance.issue_type}' has been {status_message}."
         )
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    try:
+        if hasattr(instance, 'profile'):
+            instance.profile.save()
+    except Exception as e:
+        # Optional: Log the error if you want
+        print(f"Profile save failed: {e}")
+        pass

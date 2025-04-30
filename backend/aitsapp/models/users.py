@@ -46,6 +46,7 @@ class User(AbstractUser):
     groups = models.ManyToManyField(Group, related_name="custom_user_groups", blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name="custom_user_permissions", blank=True)
     registration_number = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    
 
     profile_picture = models.ImageField(
         upload_to='profile_pictures/', 

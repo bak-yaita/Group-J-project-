@@ -33,7 +33,6 @@ class IsOwnerOrStaff(BasePermission):
             return obj.user == request.user
         return obj == request.user
 
-from rest_framework.permissions import BasePermission
 
 class IsStudent(BasePermission):
     def has_permission(self, request, view):
