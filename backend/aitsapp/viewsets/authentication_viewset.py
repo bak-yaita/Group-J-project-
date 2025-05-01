@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from ..serializers import UserSerializer
 from ..auth.authserializers import RegisterSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
 
@@ -79,3 +80,14 @@ class AuthenticationViewSet(viewsets.ViewSet):
             'registration_number': getattr(user, 'registration_number', None),
             'user_number': getattr(user, 'user_number', None),
         })
+
+
+    @action(detail=False,methods=['post'])
+    def logout(self, request):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
