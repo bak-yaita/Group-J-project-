@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
@@ -17,10 +17,10 @@ function Login() {
   axios.defaults.withCredentials = true;
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { username, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [username]: value,
     });
   };
 
@@ -57,15 +57,15 @@ function Login() {
           <form onSubmit={handleSubmit}>
             <div className="mb-5">
               <label
-                htmlFor="name"
+                htmlFor="usename"
                 className="block mb-2 text-sm text-left font-medium text-gray-600"
               >
                 User Name
               </label>
               <input
                 type="text"
-                id="name"
-                name="name"
+                id="username"
+                name="username"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.name}
                 placeholder="Enter your User Name"

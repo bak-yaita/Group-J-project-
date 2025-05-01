@@ -8,16 +8,16 @@ const Submission = () => {
   const [formData, setFormData] = useState({
     user_number: "",
     registration_number: "",
-    name: "",
+    full_name: "",
     subject: "",
-    coursecode: "",
-    courseid: "",
-    issuetype: "",
+    course_code: "",
+    course_id: "",
+    issue_type: "",
     category: "",
     description: "",
-    yearofstudy: "",
+    year_of_study: "",
     semester: "",
-    lecturername: "",
+    lecturer_name: "",
   });
 
   // Fetch data from backend
@@ -30,7 +30,7 @@ const Submission = () => {
           ...prevData,
           user_number: data.user_number,
           registration_number: data.registration_number,
-          name: data.name,
+          full_name: data.full_name,
         }));
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -44,7 +44,7 @@ const Submission = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [full_name]: value,
     }));
   };
 
@@ -59,16 +59,16 @@ const Submission = () => {
       setFormData({
         user_number: formData.user_number, // Keep pre-filled user data
         registration_number: formData.registration_number,
-        name: formData.name,
+        full_name: formData.full_name,
         subject: "",
-        coursecode: "",
-        courseid: "",
-        issuetype: "",
+        course_code: "",
+        course_id: "",
+        issue_type: "",
         category: "",
         description: "",
-        yearofstudy: "",
+        year_of_study: "",
         semester: "",
-        lecturername: "",
+        lecturer_name: "",
       });
       alert("Issue submitted successfully!");
     } catch (error) {
@@ -136,8 +136,8 @@ const Submission = () => {
               </label>
               <input
                 type="text"
-                id="name"
-                name="name"
+                id="full_name"
+                name="full_name"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.name}
                 placeholder="Full name auto filled"
@@ -165,15 +165,15 @@ const Submission = () => {
             </div>
             <div className="mb-1">
               <label
-                htmlFor="coursecode"
+                htmlFor="course_code"
                 className="block mb-2 text-sm text-left font-medium text-gray-600"
               >
                 Course Code
               </label>
               <input
                 type="text"
-                id="coursecode"
-                name="coursecode"
+                id="course_code"
+                name="course_code"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.coursecode}
                 placeholder="Enter the course code"
@@ -183,15 +183,15 @@ const Submission = () => {
             </div>
             <div className="mb-1">
               <label
-                htmlFor="courseid"
+                htmlFor="course_id"
                 className="block mb-2 text-sm text-left font-medium text-gray-600"
               >
                 Course ID
               </label>
               <input
                 type="text"
-                id="courseid"
-                name="courseid"
+                id="course_id"
+                name="course_id"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.courseid}
                 placeholder="Enter the course ID"
@@ -201,14 +201,14 @@ const Submission = () => {
             </div>
             <div className="mb-1">
               <label
-                htmlFor="issuetype"
+                htmlFor="issue_type"
                 className="block mb-2 text-sm text-left font-medium text-gray-600"
               >
                 Issue Type
               </label>
               <select
-                id="issuetype"
-                name="issuetype"
+                id="issue_type"
+                name="issue_type"
                 value={formData.issuetype}
                 onChange={handleChange}
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -258,15 +258,15 @@ const Submission = () => {
             </div>
             <div className="mb-1">
               <label
-                htmlFor="yearofstudy"
+                htmlFor="year_of_study"
                 className="block mb-2 text-sm text-left font-medium text-gray-600"
               >
                 Year of Study
               </label>
               <input
                 type="text"
-                id="yearofstudy"
-                name="yearofstudy"
+                id="year_of_study"
+                name="year_of_study"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.yearofstudy}
                 placeholder="Enter your year of study"
@@ -294,15 +294,15 @@ const Submission = () => {
             </div>
             <div>
               <label
-                htmlFor="lecturername"
+                htmlFor="lecturer_name"
                 className="block mb-2 text-sm text-left  font-medium text-gray-600"
               >
                 Lecturer Name
               </label>
               <input
                 type="text"
-                id="lecturername"
-                name="lecturername"
+                id="lecturer_name"
+                name="lecturer_name"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.lecturername}
                 placeholder="Enter your Lecturer's name"
