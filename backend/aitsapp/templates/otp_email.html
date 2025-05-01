@@ -1,0 +1,16 @@
+<!-- aitsapp/templates/otp_email.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>OTP Verification</title>
+</head>
+<body>
+  <h2>Hello {{ user.get_full_name }},</h2>
+  <p>Your One-Time Password (OTP) is:</p>
+  <h1 style="color: #2c3e50;">{{ otp }}</h1>
+  <p>This code is valid for <strong>5 minutes</strong>.</p>
+  <p>— AITS Support</p>
+</body>
+</html>
