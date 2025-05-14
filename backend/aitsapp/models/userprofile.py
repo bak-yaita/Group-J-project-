@@ -7,7 +7,7 @@ from django.dispatch import receiver
 
 User = get_user_model()
 
-@receiver(post_save, sender = User)
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     otp_verified = models.BooleanField(default=False)  # Flag to track OTP verification status

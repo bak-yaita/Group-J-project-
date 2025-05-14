@@ -47,6 +47,8 @@ class Issue(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     college = models.CharField(max_length=50, choices=User.COLLEGE_CHOICES, default="UNKNOWN")
+    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
+    
 
     class Meta:
         ordering = ['-created_at']
