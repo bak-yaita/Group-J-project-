@@ -136,6 +136,9 @@ class IssueViewSet(viewsets.ModelViewSet):
         issue.save()
 
         self._create_notification_for_user(hod, f"You have been assigned an issue from your department:{issue.subject}")
+        self._create_notification_for_user(student, f"Your issue has been forwaded to the head of department.")
+
+        return Response({"message":"Issue assigned to HoD susccessfully."}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def resolve(self, request, pk=None):
