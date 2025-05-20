@@ -189,8 +189,8 @@ const Submission = () => {
                 Course ID
               </label>
               <select
-                id="issuetype"
-                name="issuetype"
+                id="courseid"
+                name="courseid"
                 value={formData.courseid}
                 onChange={handleChange}
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -266,16 +266,21 @@ const Submission = () => {
               >
                 Year of Study
               </label>
-              <input
-                type="text"
+              <select
                 id="yearofstudy"
                 name="yearofstudy"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.yearofstudy}
-                placeholder="Enter your year of study"
                 onChange={handleChange}
+                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 required
-              />
+              >
+                <option value="">Select relevant option</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
             </div>
             <div className="mb-1">
               <label
@@ -284,16 +289,19 @@ const Submission = () => {
               >
                 Semester
               </label>
-              <input
-                type="text"
+              <select
                 id="semester"
                 name="semester"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.semester}
-                placeholder="Enter your what semester you're in"
                 onChange={handleChange}
+                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 required
-              />
+              >
+                <option value="">Select relevant option</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="recess">Recess</option>
+              </select>
             </div>
             <div>
               <label
