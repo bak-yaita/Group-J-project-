@@ -1,10 +1,11 @@
 from rest_framework import serializers
-from ..models import Issue
+from ..models import Issue, User
+
 
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
-        read_only_fields = ['student', 'user_number', 'registration_number', 'full_name', 'college']
+        read_only_fields = ['submitted_by', 'user_number', 'registration_number', 'full_name', 'college','department']
         fields = '__all__'
 
     def create(self, validated_data):
@@ -12,6 +13,7 @@ class IssueSerializer(serializers.ModelSerializer):
         validated_data['student'] = user
         validated_data['user_number'] = getattr(user, 'user_number', '')
         validated_data['registration_number'] = getattr(user, 'registration_number', '')
+       
         
         # If the user is not a student, use a default registration number
         if user.role != 'student' and not validated_data['registration_number']:
@@ -19,8 +21,10 @@ class IssueSerializer(serializers.ModelSerializer):
             
         validated_data['full_name'] = f"{user.first_name} {user.last_name}"
 
-        # Ensure the issue is linked to the user's college
-        validated_data['college'] = user.college  # Assuming the user model has a college field
+    
+        validated_data['college'] = user.college  
+
+        validated_data['department'] = user.department
 
         return super().create(validated_data)
 
@@ -28,7 +32,7 @@ class IssueSerializer(serializers.ModelSerializer):
 
 
 class IssueAssignmentSerializer(serializers.Serializer):
-    assigned_to = serializers.IntegerField()
+    assigned_to = serializers.SlugRelatedField(slug_name='username',queryset=User.objects.filter(role='lecturer'))
     notes = serializers.CharField(required=False)
 
 class IssueResolutionSerializer(serializers.Serializer):

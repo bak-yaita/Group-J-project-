@@ -24,7 +24,7 @@ class Issue(models.Model):
             ("can_manage_users", "Can manage users"),
         ]
 
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="issues")
+    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="issues")
     user_number = models.CharField(max_length=20, default="0000000000")  
     registration_number = models.CharField(max_length=20, default="Not Assigned")  
     full_name = models.CharField(max_length=255, default="Unknown") 
