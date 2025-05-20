@@ -82,38 +82,6 @@ class IssueViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['post',])
-    def assign(self, request, pk=None):
-        issue = self.get_object()
-
-        if not request.user.is_staff and request.user.role != 'registrar':
-            return Response({"error": "You do not have permission to assign issues."}, status=status.HTTP_403_FORBIDDEN)
-
-        serializer = IssueAssignmentSerializer(data=request.data)
-        if serializer.is_valid():
-            lecturer_id = serializer.validated_data.get('assigned_to')
-            notes = serializer.validated_data.get('notes', '')
-
-            try:
-                lecturer = User.objects.get(id=lecturer_id)
-
-                if lecturer.role != 'lecturer':
-                    return Response({"error": "Issues can only be assigned to lecturers."}, status=status.HTTP_400_BAD_REQUEST)
-
-                issue.assigned_to = lecturer
-                issue.status = 'assigned'
-                issue.assignment_notes = notes
-                issue.save()
-
-                self._create_notification_for_user(lecturer, f"You have been assigned an issue: {issue.subject}")
-                self._create_notification_for_user(issue.submitted_by, f"Your issue '{issue.subject}' has been assigned to {lecturer.get_full_name()}")
-
-                return Response({"message": "Issue assigned successfully"})
-
-            except User.DoesNotExist:
-                return Response({"error": "Lecturer not found"}, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     @action(detail=True, methods=['post'])
     def assign_to_hod(self,request,pk=None):
@@ -135,10 +103,39 @@ class IssueViewSet(viewsets.ModelViewSet):
         issue.assignment_notes = "Assigned to HoD by registrar."
         issue.save()
 
-        self._create_notification_for_user(hod, f"You have been assigned an issue from your department:{issue.subject}")
+        self._create_notification_for_user(hod, f"You have been assigned an issue from your department:{issue.issue_type}")
         self._create_notification_for_user(student, f"Your issue has been forwaded to the head of department.")
 
         return Response({"message":"Issue assigned to HoD susccessfully."}, status=status.HTTP_200_OK)
+    
+
+    @action(detail=True, methods=['post'])
+    def assign_to_lecturer(self, request, pk=None):
+        issue = self.get_object()
+
+        # Ensure only HoD can perform this assignment
+        if not request.user.is_hod:
+            return Response({"error": "Only the Head of Department can assign this issue."},status=status.HTTP_403_FORBIDDEN)
+
+        # Check if the form contains the lecturer's name
+        if not issue.lecturer_name:
+            return Response({"error": "This issue does not have a lecturer name submitted in the form."},status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            lecturer = User.objects.get(full_name__iexact=issue.lecturer_name, role='lecturer')
+
+            issue.assigned_to = lecturer
+            issue.status = 'assigned'
+            issue.save()
+
+            
+            self._create_notification_for_user(lecturer,f"You have been assigned an issue regarding '{issue.course_unit}' submitted by {issue.submitted_by.get_full_name()}.")
+            self._create_notification_for_user(issue.submitted_by,f"Your issue regarding '{issue.course_unit}' has been assigned to {lecturer.get_full_name()}.")
+
+            return Response({"message": "Issue successfully assigned to lecturer."})
+
+        except User.DoesNotExist:
+            return Response({"error": "Lecturer not found with that name."},status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['post'])
     def resolve(self, request, pk=None):
@@ -154,10 +151,10 @@ class IssueViewSet(viewsets.ModelViewSet):
             issue.resolution_notes = resolution_notes
             issue.save()
 
-            self._create_notification_for_user(issue.submitted_by, f"Your issue '{issue.subject}' has been resolved")
+            self._create_notification_for_user(issue.submitted_by, f"Your issue '{issue.issue_type}' has been resolved")
 
             if issue.assigned_to and issue.assigned_to != request.user:
-                self._create_notification_for_user(issue.assigned_to, f"Issue '{issue.subject}' has been marked as resolved")
+                self._create_notification_for_user(issue.assigned_to, f"Issue '{issue.issue_type}' has been marked as resolved")
 
             return Response({"message": "Issue resolved successfully"})
 
@@ -182,12 +179,12 @@ class IssueViewSet(viewsets.ModelViewSet):
         if user.is_staff or user.role == 'admin':
             data = count_by_status(Issue.objects.all())
         elif user.role == 'student':
-            data = count_by_status(Issue.objects.filter(student=user))
+            data = count_by_status(Issue.objects.filter(submitted_by=user))
         elif user.role == 'lecturer':
             data = count_by_status(Issue.objects.filter(assigned_to=user))
             data["pending"] = 0  # lecturers don't see pending issues
         elif user.role == 'registrar':
-            data = count_by_status(Issue.objects.filter(student__college=user.college))
+            data = count_by_status(Issue.objects.filter(submitted_by__college=user.college))
         else:
             data = {}
 
@@ -197,7 +194,7 @@ class IssueViewSet(viewsets.ModelViewSet):
         Notification.objects.create(user=user, message=message, is_read=False)
 
     def _create_notification_for_registrars(self, issue, message):
-        registrars = User.objects.filter(role='registrar', college=issue.student.college)
+        registrars = User.objects.filter(role='registrar', college=issue.submitted_by.college)
         for registrar in registrars:
             Notification.objects.create(user=registrar, message=message, is_read=False)
 
@@ -205,7 +202,7 @@ class IssueViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='lecturer-issues')
     def lecturer_issues(self, request):
         user = request.user
-        issues = Issue.objects.filter(assigned_to=user, student__college=user.college)
+        issues = Issue.objects.filter(assigned_to=user, submitted_by__college=user.college)
         serializer = IssueSerializer(issues, many=True)
         return Response(serializer.data)
 
@@ -227,13 +224,13 @@ class IssueViewSet(viewsets.ModelViewSet):
 
         # notify the student (and maybe registrar/lecturer)
         self._create_notification_for_user(
-          issue.student,
-          f"Issue '{issue.subject}' is now in progress"
+          issue.submitted_by,
+          f"Issue '{issue.issue_type}' is now in progress"
         )
         if issue.assigned_to and issue.assigned_to != request.user:
             self._create_notification_for_user(
               issue.assigned_to,
-              f"Issue '{issue.subject}' has been picked up by {request.user.get_full_name()}"
+              f"Issue '{issue.issue_type}' has been picked up by {request.user.get_full_name()}"
             )
 
         serializer = self.get_serializer(issue)
