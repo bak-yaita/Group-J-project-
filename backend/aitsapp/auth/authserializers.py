@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from aitsapp.models.department import Department
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -6,12 +7,13 @@ User = get_user_model()
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     full_name = serializers.SerializerMethodField(read_only=True)
+    department= serializers.SlugRelatedField(slug_field='name',queryset=Department.objects.all(),required=False, allow_null=True)
 
     class Meta:
         model = User
         fields = [
             'username', 'password', 'email', 
-            'role', 'user_number', 'registration_number', 'college', 'full_name','first_name', 'last_name'
+            'role', 'user_number', 'registration_number', 'college','department', 'full_name','first_name', 'last_name'
         ]
         extra_kwargs = {
             'password': {'write_only': True}
@@ -63,6 +65,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         if not college:
             raise serializers.ValidationError({"college": "College is required."})
+        
+        
+        department = attrs.get('department')
+        if role in ['student','lecturer'] and not department:
+            raise serializers.ValidationError({"department":"Department is required for students and lecturers."})
 
         return attrs
 

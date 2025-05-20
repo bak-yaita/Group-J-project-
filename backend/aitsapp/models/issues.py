@@ -29,7 +29,7 @@ class Issue(models.Model):
     registration_number = models.CharField(max_length=20, default="Not Assigned")  
     full_name = models.CharField(max_length=255, default="Unknown") 
 
-    subject = models.CharField(max_length=100, default="Unknown") 
+    course_unit = models.CharField(max_length=100, default="Unknown") 
     course_code = models.CharField(max_length=255, default="Unknown") 
     course_id = models.CharField(max_length=255, default="Unknown") 
     issue_type = models.CharField(max_length=20, choices=ISSUE_TYPES)  
