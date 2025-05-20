@@ -188,16 +188,19 @@ const Submission = () => {
               >
                 Course ID
               </label>
-              <input
-                type="text"
-                id="courseid"
-                name="courseid"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              <select
+                id="issuetype"
+                name="issuetype"
                 value={formData.courseid}
-                placeholder="Enter the course ID"
                 onChange={handleChange}
+                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 required
-              />
+              >
+                <option value="">Select relevant option</option>
+                <option value="CSC 1011">CSC 1011</option>
+                <option value="CSC 1200">CSC 1200</option>
+                <option value="CSC 2400+  ">CSC 2400</option>
+              </select>
             </div>
             <div className="mb-1">
               <label
