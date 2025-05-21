@@ -7,10 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from ..models.issues import Issue
 from ..serializers import IssueSerializer, IssueAssignmentSerializer, IssueResolutionSerializer
 from ..models import Notification
-from ..permissions import (
-    IsAdmin, IsLecturer, IsRegistrar,
-    IsOwnerOrStaff, IsStudent, CanResolveIssue, IsSameCollege
-)
+from ..permissions import (IsAdmin, IsLecturer, IsRegistrar,IsOwnerOrStaff, IsStudent, CanResolveIssue, IsSameCollege)
 from django.contrib.auth import get_user_model
 
 User = get_user_model()

@@ -46,6 +46,7 @@ class Issue(models.Model):
     assignment_notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
     college = models.CharField(max_length=50, choices=User.COLLEGE_CHOICES, default="UNKNOWN")
     department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
     
