@@ -7,23 +7,13 @@ import React, { useEffect, useState } from "react";
 
 const StudentDashboard = () => {
     const [allIssues, setAllIssues] = useState();
-    const [filteredIssues, setFilteredIssues] = useState([]);
     const [statistics, setStatistics] = useState({
         totalIssues: 0,
         pendingIssues: 0,
         resolvedIssues: 0,
     });
-    const [statusFilter, setStatusFilter] = useState("All Statuses");
-    const [typeFilter, setTypeFilter] = useState("All Types");
-    const [loading, setLoading] = useState(true);
+   const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [searchQuery, setSearchQuery] = useState("");
-    const handleReset = () => {
-        setStatusFilter("All Statuses");
-        setTypeFilter("All Types");
-        setSearchQuery("");
-        setFilteredIssues(allIssues); // Reset to all issues
-    };
 
     //Fetching statistics
     useEffect(() => {
@@ -55,28 +45,7 @@ const StudentDashboard = () => {
           let endpoint = "/api/issues/";
           let queryParams = [];
 
-          // Add status filter parameter if selected
-          if (statusFilter !== "All Statuses") {
-            queryParams.push(`status=${statusFilter}`);
-          }
-
-          // Add issue type filter parameter if selected
-          if (typeFilter !== "All Types") {
-            queryParams.push(`issue_type=${typeFilter}`);
-          }
-
-          // Add description search parameter if there's a search query
-          if (searchQuery.trim() !== "") {
-            queryParams.push(
-              `description=${encodeURIComponent(searchQuery.trim())}`
-            );
-          }
-
-          // Append all query parameters to the endpoint
-          if (queryParams.length > 0) {
-            endpoint += "?" + queryParams.join("&");
-          }
-
+          
           console.log("Fetching from endpoint:", endpoint);
 
           // Use the imported API object to make the request
@@ -88,7 +57,6 @@ const StudentDashboard = () => {
             : response.data.issues || [];
 
           setAllIssues(issues);
-          setFilteredIssues(issues);
         } catch (err) {
           setError("Failed to fetch issues");
           console.error("Failed to fetch issues:", err);
@@ -111,7 +79,6 @@ const StudentDashboard = () => {
             },
           ];
           setAllIssues(mockIssues);
-          setFilteredIssues(mockIssues);
         } finally {
           setLoading(false);
         }
@@ -119,36 +86,7 @@ const StudentDashboard = () => {
       fetchIssues();
     }, []);
 
-    useEffect(() => {
-        if (!Array.isArray(allIssues)) {
-            setFilteredIssues([]);
-            return;
-        }
-        let result = [...allIssues];
-
-        try {
-            if (statusFilter !== "All Statuses") {
-                result = result.filter((issue) => issue.status === statusFilter);
-            }
-            if (typeFilter !== "All Types") {
-                result = result.filter((issue) => issue.issue_type === typeFilter);
-            }
-            if (searchQuery.trim() !== "") {
-                const query = searchQuery.toLowerCase();
-                result = result.filter(issue =>
-                    (issue.student_name && issue.student_name.toLowerCase().includes(query)) ||
-                    (issue.student_id && issue.student_id.toLowerCase().includes(query)) ||
-                    (issue.description && issue.description.toLowerCase().includes(query))
-                );
-            }
-                
-        
-            setFilteredIssues(result);
-        } catch (err) {
-            console.error("Error filtering issues:", err);
-        }
-    },
-   [allIssues, statusFilter, typeFilter, searchQuery]);
+    
   return (
     <Wrapper>
       <div className="m-2">
@@ -175,75 +113,6 @@ const StudentDashboard = () => {
             text="The Number of Your Resolved Issues"
           />
         </div>
-        <div className="bg-blue-950 rounded-lg shadow mb-8">
-          <div className="p-6">
-            <h2 className="text-lg font-medium text-white mb-4">
-              Filter Issues
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <label className="block text-sm  font-medium text-white mb-1">
-                  Status
-                </label>
-                <select
-                  className="w-full border border-gray-300  bg-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
-                  <option>All Statuses</option>
-                  <option>Submitted</option>
-                  <option>Pending</option>
-                  <option>Assigned</option>
-                  <option>Resolved</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-white mb-1">
-                  Issue Type
-                </label>
-                <select
-                  className="w-full border border-gray-300 bg-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  value={typeFilter}
-                  onChange={(e) => setTypeFilter(e.target.value)}
-                >
-                  <option>All Types</option>
-                  <option>Missing Marks</option>
-                  <option>Registration</option>
-                  <option>Grade Appeal</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-white mb-1">
-                  Search
-                </label>
-                <div className="flex space-x-2">
-                  <div className="relative flex-1">
-                    <input
-                      type="text"
-                      placeholder="Search by student name, ID, or description..."
-                      className="w-full border border-gray-300 bg-white rounded-md pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                      <Search size={16} />
-                    </div>
-                  </div>
-                  <button
-                    className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md text-sm font-medium transition-colors"
-                    onClick={handleReset}
-                  >
-                    Reset
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className="space-y-4">
           <p className="text-2xl font">Recent Issues</p>
           <div className="relative overflow-x-auto shadow-md ">
