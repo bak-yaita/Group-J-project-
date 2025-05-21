@@ -20,6 +20,7 @@ import Registrardash from "./pages/registrar/Registrardash.jsx";
 import Dashbord from "./pages/students/Dashbord.jsx";
 import Profile from "./pages/students/Profile.jsx";
 import Submission from "./pages/students/Submission.jsx";
+import HODdash from "./pages/Lecturer/HODdash.jsx";
 import "flowbite";
 import { initFlowbite } from "flowbite";
 
@@ -44,6 +45,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="rprofile/" element={<RProfile />} />
         <Route path="resolve/" element={<Resolve />} />
         <Route path="rresolve/" element={<RResolve />} />
+        <Route path="hoddash/" element={<HODdash />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
