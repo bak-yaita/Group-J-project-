@@ -165,7 +165,7 @@ const Lectdash = () => {
 
     setFilteredIssues(result);
   }, [statusFilter, typeFilter, searchQuery, allIssues, activeTab]);
-  
+
   // Reset filters
   const handleReset = () => {
     setStatusFilter("All Statuses");
@@ -256,43 +256,23 @@ const Lectdash = () => {
                 <div className="absolute right-0 top-0 w-4 h-4 bg-red-500 rounded-full text-xs flex items-center justify-center text-white">
                   3
                 </div>
-                <button className="p-2">
-                  <a>
-                    <span className="sr-only">Notifications</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                  </a>
-                </button>
+                <Link to="/lnotif">
+                  <button className="p-2">
+                    <a>
+                      <span className="sr-only">Notifications</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#e3e3e3"
+                      >
+                        <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" />
+                      </svg>
+                    </a>
+                  </button>
+                </Link>
               </div>
-              <button className="p-2">
-                <span className="sr-only">Account</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-              </button>
             </div>
           </div>
         </header>
@@ -640,19 +620,19 @@ const Lectdash = () => {
                                         </button>
                                       </li>
                                       <li>
-                                        <Link to= {`/resolve/${issue.id}`}>
-                                        <button
-                                          className="w-full text-white bg-blue-950 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center justify-center px-5 py-2.5"
-                                          // onClick={() =>
-                                          //   updateIssueStatus(
-                                          //     issue.id,
-                                          //     "Resolved"
-                                          //   )
-                                          // }
-                                        >
-                                          Resolve Issue 
+                                        <Link to={`/resolve/${issue.id}`}>
+                                          <button
+                                            className="w-full text-white bg-blue-950 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center justify-center px-5 py-2.5"
+                                            // onClick={() =>
+                                            //   updateIssueStatus(
+                                            //     issue.id,
+                                            //     "Resolved"
+                                            //   )
+                                            // }
+                                          >
+                                            Resolve Issue
                                           </button>
-                                          </Link>
+                                        </Link>
                                       </li>
                                     </ul>
                                   </div>

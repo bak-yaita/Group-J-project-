@@ -1,4 +1,4 @@
-import API from "../API";
+import API from "../../API";
 import WrapL from "../../components/WrapL";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
