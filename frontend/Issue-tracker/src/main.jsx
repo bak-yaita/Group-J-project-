@@ -22,6 +22,7 @@ import Profile from "./pages/students/Profile.jsx";
 import Submission from "./pages/students/Submission.jsx";
 import HODdash from "./pages/Lecturer/HODdash.jsx";
 import Lnotifications from "./pages/Lecturer/Lnotifications.jsx";
+import Rnotifications from "./pages/registrar/Rnotifications.jsx";
 import "flowbite";
 import { initFlowbite } from "flowbite";
 
@@ -48,6 +49,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="rresolve/" element={<RResolve />} />
         <Route path="hoddash/" element={<HODdash />} />
         <Route path="lnotif/" element={<Lnotifications />} />
+        <Route path="rnotif/" element={<Rnotifications />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
