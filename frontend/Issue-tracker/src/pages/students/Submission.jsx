@@ -9,7 +9,7 @@ const Submission = () => {
     user_number: "",
     registration_number: "",
     name: "",
-    subject: "",
+    course_unit: "",
     coursecode: "",
     courseid: "",
     issuetype: "",
@@ -60,7 +60,7 @@ const Submission = () => {
         user_number: formData.user_number, // Keep pre-filled user data
         registration_number: formData.registration_number,
         name: formData.name,
-        courseunit: "",
+        course_unit: "",
         coursecode: "",
         courseid: "",
         issuetype: "",
@@ -147,17 +147,17 @@ const Submission = () => {
             </div>
             <div className="mb-1">
               <label
-                htmlFor="courseunit"
+                htmlFor="course_unit"
                 className="block mb-2 text-sm text-left font-medium text-gray-600"
               >
                 Course Unit
               </label>
               <input
                 type="text"
-                id="courseunit"
-                name="courseunit"
+                id="course_unit"
+                name="course_unit"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                value={formData.courseunitt}
+                value={formData.course_unit}
                 placeholder="Enter the Course Unit"
                 onChange={handleChange}
                 required
