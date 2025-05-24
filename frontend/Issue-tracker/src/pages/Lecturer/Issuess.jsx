@@ -35,7 +35,7 @@ const Issues = () => {
             const mockIssues = [
               {
                 id: 1,
-                subject: "Missing Marks for CSC102",
+                subject: "Missing marks for John Doe",
                 student: "John Doe", // Note: student is a string, not an object
                 course: "CSC101",
                 issueType: "Missing Marks",

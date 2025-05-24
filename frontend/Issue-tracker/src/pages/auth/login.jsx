@@ -1,126 +1,184 @@
 import API from "../../API";
-import issue from "../../assets/issue.jpg";
-import axios from "axios";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import picture from "../../assets/picture.jpg"
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Login() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  // Configure axios to send credentials with requests
-  axios.defaults.withCredentials = true;
+  const [otp, setOtp] = useState("");
+  const [otpRequired, setOtpRequired] = useState(false);
+  const [loadingOtp, setLoadingOtp] = useState(false);
 
   const handleChange = (e) => {
-    const { username, value } = e.target;
-    setFormData({
-      ...formData,
-      [username]: value,
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
+
+  useEffect(() => {
+    if (otp.length === 6) {
+      verifyOtp(otp);
+    }
+  }, [otp]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
-      const response = await API.post(
-        "api/auth/login/",
-        formData,
-      );
+      const response = await API.post("/login/", formData);
 
-      console.log("Login successful:", response.data);
-      navigate("/dashbord"); // Redirect to the dashboard or any other page after login
+      // Save tokens
+      localStorage.setItem("accessToken", response.data.access);
+      localStorage.setItem("refreshToken", response.data.refresh);
 
-      // For session auth, you don't need to store a token
-      // The browser will automatically handle the session cookie
+      // Check OTP requirement
+      if (response.data.otp_required) {
+        setOtpRequired(true);
+        toast.info("OTP verification required", { autoClose: 10000 });
+      } else if (response.data.role) {
+        toast.success("Login successful!", { autoClose: 3000 });
+        handleRoleRedirect(response.data.role);
+      } else {
+        toast.error("User role missing. Contact system admin.", {
+          autoClose: 10000,
+        });
+      }
     } catch (err) {
-      console.error("Login failed:", err);
-      setError(
-        err.response?.data?.message || "Login failed. Please try again."
+      // Safely get error message
+      const errorMessage =
+        err.response?.data?.detail ||
+        "Login failed. Please check your credentials.";
+      console.error("Login Error:", errorMessage);
+      toast.error(errorMessage, { autoClose: 10000 });
+
+      // Make sure no navigation happens on error
+      setOtpRequired(false); // Reset OTP if any
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyOtp = async (otpCode) => {
+    setLoadingOtp(true);
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+
+      const response = await API.post(
+        "/verify-otp/",
+        { code: otpCode },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
-    } 
+
+      localStorage.setItem("accessToken", response.data.access);
+      localStorage.setItem("refreshToken", response.data.refresh);
+      localStorage.setItem("userRole", response.data.user.role);
+
+      toast.success("OTP verified successfully!", { autoClose: 10000 });
+      handleRoleRedirect(response.data.user.role);
+    } catch (err) {
+      console.error("OTP Error:", err);
+      toast.error("Invalid OTP, please try again.", { autoClose: 15000 });
+    } finally {
+      setLoadingOtp(false);
+    }
+  };
+
+  const handleRoleRedirect = (role) => {
+    // Handle invalid role scenario and stay on the login page
+    if (role === "student") {
+      navigate("/studdash");
+    } else if (role === "lecturer") {
+      navigate("/lectdash");
+    } else if (role === "registrar") {
+      navigate("/regdash");
+    } else {
+      toast.error("Invalid user role. Contact system admin.", {
+        autoClose: 10000,
+      });
+      // Do NOT navigate — user stays on login
+    }
   };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-gray-100">
-      <div className="bg-white p-4 flex gap-3 rounded-lg shadow-2xl">
-        <div>
-          <h2 className="text-left mb-4 font-bold text-blue-400">Login</h2>
-
+    <div className="login-container">
+      <div className="login-card">
+        <div className="form-wrapper">
+          <h2 className="form-title">Login</h2>
           <form onSubmit={handleSubmit}>
-            <div className="mb-5">
-              <label
-                htmlFor="usename"
-                className="block mb-2 text-sm text-left font-medium text-gray-600"
-              >
-                User Name
-              </label>
+            <div className="form-group">
+              <label htmlFor="username">Username</label>
               <input
                 type="text"
                 id="username"
                 name="username"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                value={formData.name}
-                placeholder="Enter your User Name"
+                value={formData.username}
                 onChange={handleChange}
                 required
+                placeholder="Enter your Username"
+                className="form-input"
               />
             </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block mb-2 text-sm text-left font-medium text-gray-900"
-              >
-                Password
-              </label>
+
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
               <input
                 type="password"
                 id="password"
                 name="password"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.password}
-                placeholder="Enter your password"
                 onChange={handleChange}
                 required
+                placeholder="Enter your password"
+                className="form-input"
               />
             </div>
-            {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
-            <button
-              type="submit"
-              disabled={loading}
-              className="text-white mt-4 mb-4 bg-blue-950 w-79 hover:bg-blue-950 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center"
-            >
+
+            <button type="submit" disabled={loading} className="login-btn">
               {loading ? "LOGGING IN..." : "L O G I N"}
             </button>
           </form>
-          <div>
-            <div className="flex items-start mb-5">
-              <label
-                htmlFor="terms"
-                className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                You don't have an account?{" "}
-                <Link
-                  to="/register"
-                  className="text-blue-600 hover:underline dark:text-blue-500"
-                >
-                  Register
-                </Link>
-              </label>
-            </div>
+
+          <div className="form-footer">
+            <p>
+              Don't have an account?{" "}
+              <Link to="/register" className="link">
+                Register
+              </Link>
+            </p>
+            <p>
+              <Link to="/forgot-password" className="link">
+                Forgot Password?
+              </Link>
+            </p>
+            <p>
+              <Link to="/" className="link">
+                SIGN OUT
+              </Link>
+            </p>
           </div>
         </div>
-        <div className="hidden md:block bg-green-300 rounded-lg overflow-hidden">
-          <img src={picture} alt="picture" className="h-full w-80 grayscale-100" />
-        </div>
+
+        {/* OTP Modal */}
+        {otpRequired && (
+          <div className="otp-modal">
+            <h2>Enter OTP</h2>
+            <input
+              type="text"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              placeholder="6-digit OTP"
+              maxLength="6"
+              className="otp-input"
+            />
+            {loadingOtp && <p>Verifying OTP...</p>}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -8,11 +8,11 @@ const Submission = () => {
   const [formData, setFormData] = useState({
     user_number: "",
     registration_number: "",
-    full_name: "",
-    subject: "",
-    course_code: "",
-    course_id: "",
-    issue_type: "",
+    name: "",
+    course_unit: "",
+    coursecode: "",
+    courseid: "",
+    issuetype: "",
     category: "",
     description: "",
     year_of_study: "",
@@ -59,11 +59,11 @@ const Submission = () => {
       setFormData({
         user_number: formData.user_number, // Keep pre-filled user data
         registration_number: formData.registration_number,
-        full_name: formData.full_name,
-        subject: "",
-        course_code: "",
-        course_id: "",
-        issue_type: "",
+        name: formData.name,
+        course_unit: "",
+        coursecode: "",
+        courseid: "",
+        issuetype: "",
         category: "",
         description: "",
         year_of_study: "",
@@ -147,18 +147,18 @@ const Submission = () => {
             </div>
             <div className="mb-1">
               <label
-                htmlFor="subject"
+                htmlFor="course_unit"
                 className="block mb-2 text-sm text-left font-medium text-gray-600"
               >
-                Subject
+                Course Unit
               </label>
               <input
                 type="text"
-                id="subject"
-                name="subject"
+                id="course_unit"
+                name="course_unit"
                 className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                value={formData.subject}
-                placeholder="Enter the subject"
+                value={formData.course_unit}
+                placeholder="Enter the Course Unit"
                 onChange={handleChange}
                 required
               />
@@ -188,16 +188,19 @@ const Submission = () => {
               >
                 Course ID
               </label>
-              <input
-                type="text"
-                id="course_id"
-                name="course_id"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              <select
+                id="courseid"
+                name="courseid"
                 value={formData.courseid}
-                placeholder="Enter the course ID"
                 onChange={handleChange}
+                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 required
-              />
+              >
+                <option value="">Select relevant option</option>
+                <option value="CSC 1011">CSC 1011</option>
+                <option value="CSC 1200">CSC 1200</option>
+                <option value="CSC 2400+  ">CSC 2400</option>
+              </select>
             </div>
             <div className="mb-1">
               <label
@@ -263,16 +266,21 @@ const Submission = () => {
               >
                 Year of Study
               </label>
-              <input
-                type="text"
-                id="year_of_study"
-                name="year_of_study"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              <select
+                id="yearofstudy"
+                name="yearofstudy"
                 value={formData.yearofstudy}
-                placeholder="Enter your year of study"
                 onChange={handleChange}
+                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 required
-              />
+              >
+                <option value="">Select relevant option</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
             </div>
             <div className="mb-1">
               <label
@@ -281,16 +289,19 @@ const Submission = () => {
               >
                 Semester
               </label>
-              <input
-                type="text"
+              <select
                 id="semester"
                 name="semester"
-                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={formData.semester}
-                placeholder="Enter your what semester you're in"
                 onChange={handleChange}
+                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 required
-              />
+              >
+                <option value="">Select relevant option</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="recess">Recess</option>
+              </select>
             </div>
             <div>
               <label
