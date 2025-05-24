@@ -32,7 +32,7 @@ class IssueSerializer(serializers.ModelSerializer):
 
 
 class IssueAssignmentSerializer(serializers.Serializer):
-    assigned_to = serializers.SlugRelatedField(slug_name='username',queryset=User.objects.filter(role='lecturer'))
+    assigned_to = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.filter(role='lecturer'))
     notes = serializers.CharField(required=False)
 
 class IssueResolutionSerializer(serializers.Serializer):
