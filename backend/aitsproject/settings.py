@@ -24,9 +24,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "atumathias.pythonanywhere.com",
-    "aits-alpha.vercel.app",
-    "ait-sigma.vercel.app",
+    "aits-nine.vercel.app",
     "group-j-issue-tracker.onrender.com",
+    "atugonza-project.onrender.com",
     "localhost",
     "127.0.0.1"
 ]
@@ -74,9 +74,9 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "https://aits-alpha.vercel.app",
-    "https://ait-sigma.vercel.app",
+    "https://aits-nine.vercel.app",
     "https://group-j-issue-tracker.onrender.com",
+    "https://atugonza-project.onrender.com"
 ]
 
 CORS_ALLOW_CREDENTIALS = True

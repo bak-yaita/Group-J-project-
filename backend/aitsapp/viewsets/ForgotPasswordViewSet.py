@@ -25,7 +25,7 @@ class ForgotPasswordViewSet(ViewSet):  # Previously PasswordResetRequestViewSet
             send_mail(
                 subject="AITS Password Reset",
                 message=f"Click the link to reset your password: {reset_link}",
-                from_email="admin@aits.com",
+                from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[user.email],
                 fail_silently=False,
             )

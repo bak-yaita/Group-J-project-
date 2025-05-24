@@ -33,7 +33,7 @@ def comprehensive_notification_handler(sender, instance, created, **kwargs):
     # Student
     if instance.student and hasattr(instance.student, 'is_student') and instance.student.is_student:
         student_message = base_message + "Your issue has been received and is being processed."
-        send_notification_email(instance.student.email, subject, student_message)
+        send_notification_email(subject, student_message, instance.student.email)
         Notification.objects.create(
             user=instance.student,
             message=f"Your issue '{instance.issue_type}' has been {status_message}."
@@ -42,7 +42,7 @@ def comprehensive_notification_handler(sender, instance, created, **kwargs):
     # Lecturer
     if instance.assigned_to and hasattr(instance.assigned_to, 'is_lecturer') and instance.assigned_to.is_lecturer:
         lecturer_message = base_message + "You have been assigned to handle this issue."
-        send_notification_email(instance.assigned_to.email, subject, lecturer_message)
+        send_notification_email(subject, lecturer_message, instance.assigned_to.email)
         Notification.objects.create(
             user=instance.assigned_to,
             message=f"You have been assigned to issue '{instance.issue_type}'."
@@ -52,7 +52,7 @@ def comprehensive_notification_handler(sender, instance, created, **kwargs):
     registrars = User.objects.filter(role='registrar')
     for registrar in registrars:
         registrar_message = base_message + "This notification is for your information and oversight."
-        send_notification_email(registrar.email, subject, registrar_message)
+        send_notification_email(subject, registrar_message, registrar.email)
         Notification.objects.create(
             user=registrar,
             message=f"Issue '{instance.issue_type}' has been {status_message}."

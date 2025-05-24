@@ -1,4 +1,5 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.exceptions import AuthenticationFailed
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
@@ -6,9 +7,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
 
     def validate(self, attrs):
-        data = super().validate(attrs)
+        try:
+            data = super().validate(attrs)
+        except AuthenticationFailed:
+            raise AuthenticationFailed("Invalid username or password.")
 
-        user = self.user  # user is set after super().validate(attrs)
+        user = self.user  # user is set after successful validation
 
         # Add custom claims
         data.update({
@@ -16,9 +20,9 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             "email": user.email,
             "role": getattr(user, "role", None),
             "college": getattr(user, "college", None),
-            "otp_verified": getattr(user.profile, "otp_verified", False),  # Make sure profile exists
+            "otp_verified": getattr(user.profile, "otp_verified", False),  # Ensure profile exists
         })
 
-        self.user = user  # Set it so that CustomLoginView can access it
+        self.user = user  # So the view can access it
 
         return data

@@ -54,18 +54,13 @@ class IsAdmin(BasePermission):
         return request.user.is_authenticated and request.user.role == 'admin'
     
 class IsOwnerOrStaff(BasePermission):
-    """
-    Object-level permission to only allow owners of an object to edit it.
-    Staff users can edit any object.
-    """
     def has_object_permission(self, request, view, obj):
-        if request.user.is_staff or request.user.role in ['registrar', 'admin']:
-            return True
-        if hasattr(obj, 'student'):
-            return obj.student == request.user
-        if hasattr(obj, 'user'):
-            return obj.user == request.user
-        return obj == request.user
+        user = request.user
+        return (
+            user.is_staff
+            or user == obj.student
+            or user == obj.assigned_to  # ✅ allow assigned lecturer
+        )
     
 class CanResolveIssue(BasePermission):
     """
@@ -101,3 +96,33 @@ class IsSameCollege(BasePermission):
 
         # Default deny
         return False
+class IsIssueViewer(BasePermission):
+    """
+    Custom object-level permission to allow:
+    - Admins and superusers
+    - The student who raised the issue
+    - Assigned lecturer (if same college)
+    - Registrar of the same college
+    """
+
+    def has_object_permission(self, request, view, obj):
+        user = request.user
+
+        # Admins or superusers can access all issues
+        if user.is_superuser or user.role == 'admin':
+            return True
+
+        # Student who created the issue
+        if hasattr(obj, 'student') and obj.student == user:
+            return True
+
+        # Assigned lecturer from the same college
+        if user.role == 'lecturer' and obj.assigned_to == user and obj.college == user.college:
+            return True
+
+        # Registrar from the same college
+        if user.role == 'registrar' and obj.student.college == user.college:
+            return True
+
+        return False
+

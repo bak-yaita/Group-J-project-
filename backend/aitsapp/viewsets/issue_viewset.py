@@ -9,7 +9,7 @@ from ..serializers import IssueSerializer, IssueAssignmentSerializer, IssueResol
 from ..models import Notification
 from ..permissions import (
     IsAdmin, IsLecturer, IsRegistrar,
-    IsOwnerOrStaff, IsStudent, CanResolveIssue, IsSameCollege
+    IsOwnerOrStaff, IsStudent, CanResolveIssue, IsSameCollege, IsIssueViewer
 )
 from django.contrib.auth import get_user_model
 
@@ -35,7 +35,7 @@ class IssueViewSet(viewsets.ModelViewSet):
         elif self.action == 'list':
             permission_classes = [IsAuthenticated, IsSameCollege]
         elif self.action in ['retrieve', 'update', 'partial_update']:
-            permission_classes = [IsAuthenticated, IsOwnerOrStaff, IsSameCollege]
+            permission_classes = [IsAuthenticated, IsOwnerOrStaff,CanResolveIssue,IsIssueViewer, IsSameCollege]
         elif self.action == 'destroy':
             permission_classes = [IsAuthenticated, IsAdmin]
         elif self.action == 'assign':
@@ -47,7 +47,7 @@ class IssueViewSet(viewsets.ModelViewSet):
         elif self.action == 'statistics':
             permission_classes = [IsAuthenticated, IsSameCollege]
         else:
-            permission_classes = [IsAuthenticated]
+            permission_classes = [IsAuthenticated, IsIssueViewer]
 
         return [permission() for permission in permission_classes]
 
@@ -213,5 +213,4 @@ class IssueViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(issue)
         return Response(serializer.data)
-
 
