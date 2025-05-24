@@ -24,12 +24,12 @@ class Issue(models.Model):
             ("can_manage_users", "Can manage users"),
         ]
 
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="issues")
+    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="issues")
     user_number = models.CharField(max_length=20, default="0000000000")  
     registration_number = models.CharField(max_length=20, default="Not Assigned")  
     full_name = models.CharField(max_length=255, default="Unknown") 
 
-    subject = models.CharField(max_length=100, default="Unknown") 
+    course_unit = models.CharField(max_length=100, default="Unknown") 
     course_code = models.CharField(max_length=255, default="Unknown") 
     course_id = models.CharField(max_length=255, default="Unknown") 
     issue_type = models.CharField(max_length=20, choices=ISSUE_TYPES)  
@@ -46,7 +46,10 @@ class Issue(models.Model):
     assignment_notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
     college = models.CharField(max_length=50, choices=User.COLLEGE_CHOICES, default="UNKNOWN")
+    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
+    
 
     class Meta:
         ordering = ['-created_at']

@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from ..serializers import UserSerializer
 from ..auth.authserializers import RegisterSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
 
@@ -79,3 +80,6 @@ class AuthenticationViewSet(viewsets.ViewSet):
             'registration_number': getattr(user, 'registration_number', None),
             'user_number': getattr(user, 'user_number', None),
         })
+
+
+ 

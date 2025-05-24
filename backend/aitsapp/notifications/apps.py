@@ -6,3 +6,10 @@ class NotificationsConfig(AppConfig):
     
     def ready(self):
         import aitsapp.notifications.signals
+
+class AitsappConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutofield'
+    name = 'aitsapp'
+
+    def ready(self):
+        import aitsapp.models.userprofile
