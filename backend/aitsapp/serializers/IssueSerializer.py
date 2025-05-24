@@ -5,7 +5,7 @@ from ..models import Issue, User
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
-        read_only_fields = ['submitted_by', 'user_number', 'registration_number', 'full_name', 'college','department']
+        read_only_fields = ['student', 'user_number', 'registration_number', 'full_name', 'college','department']
         fields = '__all__'
 
     def create(self, validated_data):
@@ -32,7 +32,7 @@ class IssueSerializer(serializers.ModelSerializer):
 
 
 class IssueAssignmentSerializer(serializers.Serializer):
-    assigned_to = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.filter(role='lecturer'))
+    assigned_to = serializers.IntegerField()
     notes = serializers.CharField(required=False)
 
 class IssueResolutionSerializer(serializers.Serializer):

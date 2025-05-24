@@ -6,6 +6,7 @@ from .viewsets.userprofile_viewset import UserProfileViewSet
 from .viewsets.dashboard_viewset import DashboardViewSet
 from .viewsets.auditlog_viewset import AuditLogViewSet
 from .viewsets import ForgotPasswordViewSet, PasswordResetConfirmViewSet
+from .views import CustomLoginView, verify_otp, LogoutView
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
@@ -16,7 +17,6 @@ router.register(r'dashboard', DashboardViewSet, basename='dashboard')
 router.register(r'audit-logs',AuditLogViewSet, basename='auditlog')
 router.register(r'forgot-password', ForgotPasswordViewSet, basename='forgot-password')
 router.register(r'reset-password', PasswordResetConfirmViewSet, basename='reset-password')
-from .views import CustomLoginView, verify_otp, LogoutView
 
 urlpatterns = [
     path('api/', include(router.urls)),
