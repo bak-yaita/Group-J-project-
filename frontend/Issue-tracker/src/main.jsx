@@ -12,7 +12,7 @@ import Resolve from "./pages/Lecturer/Resolve.jsx";
 import Home from "./pages/auth/Home.jsx";
 import Register from "./pages/auth/Register.jsx";
 import Login from "./pages/auth/login.jsx";
-import Notifications from "./pages/notifications.jsx";
+import Notifications from "./pages/Notifications.jsx";
 import Assign from "./pages/registrar/Assign.jsx";
 import RProfile from "./pages/registrar/RProfile.jsx";
 import RResolve from "./pages/registrar/RResolve.jsx";
