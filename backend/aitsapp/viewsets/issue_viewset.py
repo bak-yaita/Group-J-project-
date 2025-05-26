@@ -81,34 +81,7 @@ class IssueViewSet(viewsets.ModelViewSet):
             return Response({"message": "Issue submitted successfully!"}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    
-    @action(detail=True, methods=['post'])
-    def assign_to_hod(self,request,pk=None):
-        issue = self.get_objects()
-
-        if request.user.role != 'registrar':
-            return Response({"error":"Only Registrars can assign issues."},status=status.HTTP_403_FORBIDDEN)
-        
-        student = issue.student
-        department = student.department
-
-        try:
-            hod = User.objects.get(department=department, is_hod=True)
-        except User.DoesNotExist:
-            return Response({"error":"No head of department found for this department."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        issue.assign_to = hod
-        issue.status = 'assigned'
-        issue.assignment_notes = "Assigned to HoD by registrar."
-        issue.save()
-
-        self._create_notification_for_user(hod, f"You have been assigned an issue from your department:{issue.issue_type}")
-        self._create_notification_for_user(student, f"Your issue has been forwaded to the head of department.")
-
-        return Response({"message":"Issue assigned to HoD susccessfully."}, status=status.HTTP_200_OK)
-    
-
+    q
     @action(detail=True, methods=['post',])
     def assign(self, request, pk=None):
         issue = self.get_object()
