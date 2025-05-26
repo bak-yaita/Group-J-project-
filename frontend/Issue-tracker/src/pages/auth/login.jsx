@@ -1,8 +1,8 @@
 import API from "../../API";
+import logo from "../../assets/logo.jpeg";
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import logo from "../../assets/logo.jpeg"; 
 
 function Login() {
   const navigate = useNavigate();
@@ -110,12 +110,12 @@ function Login() {
     <div className="h-screen flex justify-center items-center bg-gray-100">
       <div className="bg-white p-4 flex gap-3 rounded-lg shadow-2xl">
         <div>
-          <h2 className="text-left mb-4 font-bold text-blue-400">Login</h2>
+          <h2 className="text-left mb-4 font-bold text-2xl text-blue-900">Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-5">
               <label
                 htmlFor="name"
-                className="block mb-2 text-sm text-left font-medium text-gray-600"
+                className="block mb-2 text-sm text-left font-medium text-blue-900"
               >
                 Username
               </label>
@@ -133,7 +133,7 @@ function Login() {
             <div>
               <label
                 htmlFor="password"
-                className="block mb-2 text-sm text-left font-medium text-gray-900"
+                className="block mb-2 text-sm text-left font-medium text-blue-900"
               >
                 Password
               </label>
@@ -167,23 +167,23 @@ function Login() {
                   Register
                 </Link>
               </p>
-              </div>
-              <div className="mb-1">
-                <p>
-                  <Link
-                    to="/forgot-password"
-                    className=" text-blue-600 hover:underline dark:text-blue-700"
-                  >
-                    Forgot Password?
-                  </Link>
-                </p>
-              </div>
             </div>
+            <div className="mb-1">
+              <p>
+                <Link
+                  to="/forgot-password"
+                  className=" text-blue-600 hover:underline dark:text-blue-900"
+                >
+                  Forgot Password?
+                </Link>
+              </p>
+            </div>
+          </div>
           <div>
             <p>
               <Link
                 to="/"
-                className="text-blue-600 hover:underline dark:text-blue-700"
+                className="text-blue-600 hover:underline dark:text-blue-900"
               >
                 SIGN OUT
               </Link>
@@ -208,8 +208,8 @@ function Login() {
         )}
       </div>
       <div className="hidden md:block bg-blue-300 rounded-lg overflow-hidden">
-          <img src={logo} alt="logo" className="h-100 w-80 " />
-        </div>
+        <img src={logo} alt="logo" className="h-100 w-80 " />
+      </div>
     </div>
   );
 }
