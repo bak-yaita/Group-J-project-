@@ -1,7 +1,7 @@
 import study from "../../assets/study.jpeg";
 import React from "react";
 import { Link } from "react-router-dom";
-import somepict from "../../assets/somepict.jpg";
+import muk from "../../assets/muk.jpg";
 
 const Home = () => {
   return (
@@ -38,7 +38,7 @@ const Home = () => {
       <div
         className="flex-1 w-full"
         style={{
-          backgroundImage: `url(${somepict})`,
+          backgroundImage: `url(${muk})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
