@@ -2,6 +2,7 @@ import API from "../../API";
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import logo from "../../assets/logo.jpeg"; 
 
 function Login() {
   const navigate = useNavigate();
@@ -106,13 +107,18 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="form-wrapper">
-          <h2 className="form-title">Login</h2>
+    <div className="h-screen flex justify-center items-center bg-gray-100">
+      <div className="bg-white p-4 flex gap-3 rounded-lg shadow-2xl">
+        <div>
+          <h2 className="text-left mb-4 font-bold text-blue-400">Login</h2>
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
+            <div className="mb-5">
+              <label
+                htmlFor="name"
+                className="block mb-2 text-sm text-left font-medium text-gray-600"
+              >
+                Username
+              </label>
               <input
                 type="text"
                 id="username"
@@ -121,12 +127,16 @@ function Login() {
                 onChange={handleChange}
                 required
                 placeholder="Enter your Username"
-                className="form-input"
+                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               />
             </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
+            <div>
+              <label
+                htmlFor="password"
+                className="block mb-2 text-sm text-left font-medium text-gray-900"
+              >
+                Password
+              </label>
               <input
                 type="password"
                 id="password"
@@ -135,29 +145,46 @@ function Login() {
                 onChange={handleChange}
                 required
                 placeholder="Enter your password"
-                className="form-input"
+                className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               />
             </div>
-
-            <button type="submit" disabled={loading} className="login-btn">
+            <button
+              type="submit"
+              disabled={loading}
+              className="text-white mt-4 mb-4 bg-blue-950 w-79 hover:bg-blue-950 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center"
+            >
               {loading ? "LOGGING IN..." : "L O G I N"}
             </button>
           </form>
-
-          <div className="form-footer">
+          <div>
+            <div className="flex items-start mb-5">
+              <p className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                Don't have an account?{" "}
+                <Link
+                  to="/register"
+                  className="text-blue-600 hover:underline dark:text-blue-500"
+                >
+                  Register
+                </Link>
+              </p>
+              </div>
+              <div className="mb-1">
+                <p>
+                  <Link
+                    to="/forgot-password"
+                    className=" text-blue-600 hover:underline dark:text-blue-700"
+                  >
+                    Forgot Password?
+                  </Link>
+                </p>
+              </div>
+            </div>
+          <div>
             <p>
-              Don't have an account?{" "}
-              <Link to="/register" className="link">
-                Register
-              </Link>
-            </p>
-            <p>
-              <Link to="/forgot-password" className="link">
-                Forgot Password?
-              </Link>
-            </p>
-            <p>
-              <Link to="/" className="link">
+              <Link
+                to="/"
+                className="text-blue-600 hover:underline dark:text-blue-700"
+              >
                 SIGN OUT
               </Link>
             </p>
@@ -180,6 +207,9 @@ function Login() {
           </div>
         )}
       </div>
+      <div className="hidden md:block bg-blue-300 rounded-lg overflow-hidden">
+          <img src={logo} alt="logo" className="h-100 w-80 " />
+        </div>
     </div>
   );
 }
