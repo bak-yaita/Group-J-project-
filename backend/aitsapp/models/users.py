@@ -46,8 +46,8 @@ class User(AbstractUser):
     groups = models.ManyToManyField(Group, related_name="custom_user_groups", blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name="custom_user_permissions", blank=True)
     registration_number = models.CharField(max_length=20, unique=True, blank=True, null=True)
-    is_hod = models.BooleanField(default=False)
-    department = models.ForeignKey('Department',on_delete=models.SET_NULL, null=True,blank=True)
+
+
 
     profile_picture = models.ImageField(
         upload_to='profile_pictures/', 

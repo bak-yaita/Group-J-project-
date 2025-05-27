@@ -1,9 +1,7 @@
 from rest_framework import serializers
 from ..models import User
-from aitsapp.models.department import Department
 
 class UserSerializer(serializers.ModelSerializer):
-    department = serializers.SlugRelatedField(slug_field='name', read_only=True)
     full_name = serializers.SerializerMethodField()
 
     class Meta:

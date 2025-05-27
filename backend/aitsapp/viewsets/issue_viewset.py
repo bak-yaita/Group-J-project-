@@ -81,7 +81,7 @@ class IssueViewSet(viewsets.ModelViewSet):
             return Response({"message": "Issue submitted successfully!"}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    q
+    
     @action(detail=True, methods=['post',])
     def assign(self, request, pk=None):
         issue = self.get_object()

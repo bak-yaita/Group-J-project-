@@ -5,7 +5,7 @@ from ..models import Issue, User
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
-        read_only_fields = ['student', 'user_number', 'registration_number', 'full_name', 'college','department']
+        read_only_fields = ['student', 'user_number', 'registration_number', 'full_name', 'college']
         fields = '__all__'
 
     def create(self, validated_data):
@@ -23,8 +23,6 @@ class IssueSerializer(serializers.ModelSerializer):
 
     
         validated_data['college'] = user.college  
-
-        validated_data['department'] = user.department
 
         return super().create(validated_data)
 

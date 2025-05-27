@@ -48,7 +48,6 @@ class Issue(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     resolved_at = models.DateTimeField(null=True, blank=True)
     college = models.CharField(max_length=50, choices=User.COLLEGE_CHOICES, default="UNKNOWN")
-    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
     
 
     class Meta:
